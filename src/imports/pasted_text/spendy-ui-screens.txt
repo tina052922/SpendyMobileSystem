@@ -1,0 +1,95 @@
+Create a complete set of high-fidelity mobile UI screens and functional wireframes for "Spendy – Budget Tracker", a clean, modern, dark-mode-first personal finance mobile application for Android/iOS. The design must exactly match the style, colors, layout, typography, and components shown in the provided screenshots.
+
+### Branding & Style Rules (Follow Exactly):
+- Overall Theme: Modern dark UI with deep navy blue (#0A1428 / #0F1B38) as primary background
+- Accent Color: Bright blue (#00B2FF / #00A8E8) for primary buttons, active states, and highlights
+- Secondary Accent: Red (#FF3B5C) for Withdraw, negative amounts, and danger actions
+- Positive amounts (income/savings): Green (#00D4A5)
+- Cards & Panels: Semi-transparent dark overlays with subtle blur or soft shadows
+- Typography: Clean sans-serif (Inter or SF Pro style), bold for titles and amounts
+- Status Bar: Dark with white icons (time 9:41, 100% battery)
+- Bottom Navigation Bar: 4 tabs – Home, Transactions (list), Savings (piggy bank), Settings (gear). Active tab highlighted in blue.
+- Profile Picture: Use the same circular photo of the girl with long dark hair shown in the screenshots
+- Currency: Philippine Peso (₱)
+
+### Required Screens (Create all in one Figma file, clearly labeled):
+
+1. **Splash / Open App Screen**  
+   Dark blue background with centered white stylized "S" Spendy logo
+
+2. **Sign In Screen** (NEW)  
+   Dark blue header with "Sign In" title  
+   White/gray card in the center containing:  
+   - Email address field  
+   - Password field (with eye icon to toggle visibility)  
+   - "Forgot Password?" link (in blue)  
+   - Big blue "Sign In" button  
+   - "Or" divider  
+   - "Sign in with Google" button (with Google logo)  
+   - "Don't have an account? Sign up" link at the bottom (Sign up in blue)
+
+3. **Sign Up / Create Account Screen**  
+   White card on dark blue header. Fields: First name, Last name, Birthday (dropdowns: Aug, 23, 2025), Email, Password (with eye icon), Terms & Conditions checkbox, big blue "Sign up" button, "Sign up with Google" button, "Already have an account?" link.
+
+4. **Dashboard / Home Screen**  
+   Available balance ₱10,867.50 in large font.  
+   Toggle buttons: Expenses (blue, active) | Income  
+   Total Expenditure ₱5,020 (in red)  
+   Date: Sat, 13 September  
+   List of recent transactions (Food, Traffic, Shopping, Grocery) with negative amounts in red and time.  
+   Blue circular floating + button at bottom right.
+
+5. **Statistics / Analytics Screen**  
+   Available balance ₱10,867.50 at top  
+   Toggle: Expenses (active) | Income  
+   Bar chart for September 2025  
+   Category breakdown list: Food ₱2,560, Traffic ₱820, Shopping ₱2,560
+
+6. **Savings Screen**  
+   Header: "Savings" with "Ended" in red at top right  
+   Multiple identical "Gaming PC" saving plans: ₱30,000 / ₱40,000 (90% complete blue progress bar), Target Date: Dec 31, 2025  
+   Blue circular + button at bottom right
+
+7. **Draw / Save Plan Detail Screen**  
+   Title: Draw / Save Plan  
+   Plan: "Gaming PC" ₱30,000 / ₱40,000 with blue progress bar  
+   "Enter amount" field with ₱ icon  
+   Two large buttons side by side: "Save Money" (blue) and "Withdraw" (red)  
+   Transaction History list with dates (2025-09-18 etc.), green positive and red negative amounts
+
+8. **Edit Saving Plan Screen**  
+   Title: Edit Saving Plan  
+   Plan name: Gaming PC  
+   Target amount: 40,000  
+   Calendar with "Start Date" selected, date 10 highlighted in blue  
+   Duration: 1 Month  
+   Blue "Save Plan" button at bottom
+
+9. **Add Transaction Screen**  
+   Title: Add Transaction  
+   Toggle: Expenses (blue, active) | Income  
+   Amount field with ₱ icon  
+   Notes field  
+   Category icon grid (Food, Traffic, Shopping, etc.)  
+   Date picker with date 10 highlighted  
+   Blue "Save Transaction" button at bottom
+
+10. **Profile Screen**  
+    Large circular profile photo of Vilia Crestene  
+    Name: Vilia Crestene (@_crestn)  
+    Editable fields with pencil icons: Name, Email (viliagelaga@gmail.com), Phone (+63 997 6430394), Birthday (February 21, 2005), Gender (Female), Address (Canbanua, Argao, Cebu)
+
+11. **Settings Screen**  
+    List options: Profile, Language (English), Currency (PHP)  
+    Expandable "Update Password" section with Current Password, New Password, Confirm Password fields  
+    "Log out" option at the bottom
+
+### Additional Requirements:
+- All screens must use consistent dark theme, spacing, corner radius, shadows, and button styles from the reference screenshots.
+- Make every button, field, and interactive element look functional and clickable.
+- Use exact colors: deep navy blue background, bright blue accents, red for negative/withdraw, green for positive.
+- Label each frame clearly in Figma (e.g., “01. Splash Screen”, “02. Sign In”, “03. Sign Up”, “04. Dashboard”, “05. Statistics”, etc.).
+- Use portrait mobile size (recommended 390 × 844 px).
+- Make the wireframes high-fidelity so they look like real app screens (thesis / portfolio quality).
+
+Generate all 11 screens in a single well-organized Figma file with proper artboard naming.

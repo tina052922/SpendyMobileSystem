@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.GetStartedPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
+    <Grid>
+        <Grid RowDefinitions="*,Auto">
+            <ScrollView Grid.Row="0">
+                <VerticalStackLayout Padding="24,48,24,24" Spacing="24" VerticalOptions="Center">
+                    <!-- Phone mockup asset (Resources/Images/phone.png) -->
+                    <Image Source="phone.png"
+                           Aspect="AspectFit"
+                           HeightRequest="280"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+
+                    <Label Text="Spendy – Budget Tracker"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="32"
+                           TextColor="{StaticResource SpendyNavy}"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="Manage your money wisely with ease."
+                           FontSize="16"
+                           TextColor="#666666"
+                           HorizontalTextAlignment="Center"
+                           Padding="8,0" />
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <Grid Grid.Row="1">
+                <Border StrokeThickness="0"
+                        BackgroundColor="{StaticResource SpendyNavy}"
+                        HeightRequest="200"
+                        VerticalOptions="End">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="50,50,0,0" />
+                    </Border.StrokeShape>
+                </Border>
+                <VerticalStackLayout Padding="24,32,24,40" VerticalOptions="End">
+                    <Button Text="Get Started"
+                            BackgroundColor="#0335A3"
+                            TextColor="White"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="18"
+                            CornerRadius="28"
+                            Padding="0,16"
+                            Clicked="OnGetStartedClicked" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

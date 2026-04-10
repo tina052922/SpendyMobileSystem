@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.AddSavingPlanPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#0A1428">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#01143D" Offset="0" />
+            <GradientStop Color="#0335A3" Offset="1" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" Padding="16,12,16,8">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#01143D" Offset="0" />
+                    <GradientStop Color="#0335A3" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <VerticalStackLayout Spacing="10">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Border WidthRequest="44"
+                        HeightRequest="44"
+                        StrokeThickness="0"
+                        BackgroundColor="#1AFFFFFF">
+                    <Border.StrokeShape>
+                        <Ellipse />
+                    </Border.StrokeShape>
+                    <Image Source="{Binding ProfilePhoto}"
+                           Aspect="AspectFill" />
+                </Border>
+                <ImageButton Grid.Column="2"
+                             Source="whitenotificon.png"
+                             BackgroundColor="Transparent"
+                             WidthRequest="34"
+                             HeightRequest="34"
+                             Aspect="AspectFit"
+                             Clicked="OnNotifications" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Text="&#x2039;"
+                        FontSize="28"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        WidthRequest="44"
+                        Clicked="OnBack" />
+                <Label Grid.Column="1"
+                       Text="Add Savings Plan"
+                       TextColor="White"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="20"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center" />
+                <BoxView Grid.Column="2"
+                         WidthRequest="44"
+                         HeightRequest="44"
+                         Color="Transparent" />
+            </Grid>
+            </VerticalStackLayout>
+        </Grid>
+
+        <ScrollView Grid.Row="1" Padding="24,16">
+            <VerticalStackLayout Spacing="18">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Plan Name" TextColor="White" FontSize="14" />
+                    <Entry Placeholder="Plan name"
+                           PlaceholderColor="#99FFFFFF"
+                           Text="{Binding PlanName, Mode=TwoWay}"
+                           TextColor="White"
+                           BackgroundColor="#3E4E65"
+                           HeightRequest="52" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Target Amount" TextColor="White" FontSize="14" />
+                    <Entry Placeholder="Amount"
+                           Keyboard="Numeric"
+                           PlaceholderColor="#99FFFFFF"
+                           Text="{Binding TargetAmountText, Mode=TwoWay}"
+                           TextColor="White"
+                           BackgroundColor="#3E4E65"
+                           HeightRequest="52" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Duration (target date)" TextColor="White" FontSize="14" />
+                    <Picker Title="Duration"
+                            ItemsSource="{Binding DurationOptions}"
+                            SelectedIndex="{Binding SelectedDurationIndex, Mode=TwoWay}"
+                            TextColor="White"
+                            BackgroundColor="#3E4E65"
+                            HeightRequest="52" />
+                </VerticalStackLayout>
+
+                <Button Text="Save Plan"
+                        Command="{Binding CreateCommand}"
+                        BackgroundColor="{StaticResource SpendyAccent}"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="28"
+                        HeightRequest="56"
+                        Margin="0,22,0,32" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

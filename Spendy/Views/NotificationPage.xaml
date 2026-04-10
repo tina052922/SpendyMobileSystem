@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.NotificationPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource SpendyPageBg}">
+    <Grid RowDefinitions="Auto,*">
+        <Grid Padding="16,12" BackgroundColor="{StaticResource SpendyNavy}">
+            <Grid ColumnDefinitions="Auto,*">
+                <Button Text="&#x2039;"
+                        FontSize="28"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        WidthRequest="44"
+                        Clicked="OnBack" />
+                <Label Grid.Column="1"
+                       Text="Notifications"
+                       TextColor="White"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="20"
+                       VerticalOptions="Center" />
+            </Grid>
+        </Grid>
+
+        <ScrollView Grid.Row="1" Padding="16,16">
+            <VerticalStackLayout Spacing="10">
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="14">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14" />
+                    </Border.StrokeShape>
+                    <Label Text="Payment reminder: your Gaming PC goal is due soon."
+                           TextColor="{StaticResource SpendyNavy}"
+                           FontSize="14" />
+                </Border>
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="14">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14" />
+                    </Border.StrokeShape>
+                    <Label Text="New expense logged: Food ₱80"
+                           TextColor="{StaticResource SpendyNavy}"
+                           FontSize="14" />
+                </Border>
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="14">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14" />
+                    </Border.StrokeShape>
+                    <Label Text="Budget tip: you are on track for September."
+                           TextColor="{StaticResource SpendyNavy}"
+                           FontSize="14" />
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

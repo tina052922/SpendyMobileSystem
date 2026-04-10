@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.SignUpPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" Padding="24,56,24,20" MinimumHeightRequest="180">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#001A3F" Offset="0" />
+                    <GradientStop Color="#0335A3" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Label Text="Create Your Account"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="28"
+                   TextColor="White"
+                   VerticalOptions="Start" />
+        </Grid>
+
+        <ScrollView Grid.Row="1" Margin="0,-24,0,0">
+            <Border BackgroundColor="White"
+                    StrokeThickness="0"
+                    Padding="24,28,24,32">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="28,28,0,0" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="First name" TextColor="#222" FontSize="13" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Entry Placeholder="First name"
+                               Grid.Column="0"
+                               BackgroundColor="{StaticResource SpendyInputBg}"
+                               TextColor="#222"
+                               HeightRequest="48" />
+                        <Entry Placeholder="Last name"
+                               Grid.Column="1"
+                               BackgroundColor="{StaticResource SpendyInputBg}"
+                               TextColor="#222"
+                               HeightRequest="48" />
+                    </Grid>
+
+                    <Label Text="Birthday" TextColor="#222" FontSize="13" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                        <Picker x:Name="MonthPicker" Title="Month" BackgroundColor="{StaticResource SpendyInputBg}" />
+                        <Picker x:Name="DayPicker" Title="Day" BackgroundColor="{StaticResource SpendyInputBg}" />
+                        <Picker x:Name="YearPicker" Title="Year" BackgroundColor="{StaticResource SpendyInputBg}" />
+                    </Grid>
+
+                    <Label Text="Email address" TextColor="#222" FontSize="13" FontAttributes="Bold" />
+                    <Entry Placeholder="Enter your email"
+                           Keyboard="Email"
+                           BackgroundColor="{StaticResource SpendyInputBg}"
+                           TextColor="#222"
+                           HeightRequest="48" />
+
+                    <Label Text="Password" TextColor="#222" FontSize="13" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry x:Name="PasswordEntry"
+                               Placeholder="Password"
+                               IsPassword="True"
+                               BackgroundColor="{StaticResource SpendyInputBg}"
+                               TextColor="#222"
+                               HeightRequest="48" />
+                        <ImageButton Grid.Column="1"
+                                     x:Name="PasswordEyeButton"
+                                     Source="unhideicon.png"
+                                     BackgroundColor="Transparent"
+                                     WidthRequest="34"
+                                     HeightRequest="34"
+                                     Margin="0,0,6,0"
+                                     Aspect="AspectFit"
+                                     Clicked="OnTogglePassword" />
+                    </Grid>
+
+                    <HorizontalStackLayout Spacing="10" Margin="0,4,0,0">
+                        <CheckBox x:Name="TermsCheck" Color="{StaticResource SpendyAccent}" />
+                        <Label VerticalOptions="Center" FontSize="13" TextColor="#666">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="I agree to the " />
+                                    <Span Text="Terms &amp; Conditions"
+                                          TextColor="{StaticResource SpendyAccent}"
+                                          TextDecorations="Underline">
+                                        <Span.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnTerms" />
+                                        </Span.GestureRecognizers>
+                                    </Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                    <Button Text="Sign up"
+                            Style="{StaticResource SpendyPrimaryButton}"
+                            Margin="0,12,0,0"
+                            Clicked="OnSignUp" />
+
+                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="8" Margin="0,8">
+                        <BoxView Grid.Column="0" HeightRequest="1" Color="#D0D0D0" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="Or" TextColor="#888" FontSize="13" />
+                        <BoxView Grid.Column="2" HeightRequest="1" Color="#D0D0D0" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Button Text="Sign up with Google"
+                            ImageSource="google.png"
+                            ContentLayout="Left,12"
+                            BackgroundColor="White"
+                            TextColor="#333"
+                            BorderColor="#CCCCCC"
+                            BorderWidth="1"
+                            CornerRadius="14"
+                            FontSize="15"
+                            HeightRequest="52"
+                            Clicked="OnGoogle" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4" Margin="0,12,0,0">
+                        <Label Text="Already have an account?" TextColor="#666" FontSize="14" />
+                        <Label Text="Sign in"
+                               TextColor="{StaticResource SpendyAccent}"
+                               FontAttributes="Bold"
+                               FontSize="14">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSignIn" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </ScrollView>
+    </Grid>
+</ContentPage>

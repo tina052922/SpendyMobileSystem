@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution>
+  <!-- Same app as ../Spendy.slnx — use this file when the working directory is Spendy/. -->
+  <Folder Name="/Spendy/">
+    <Project Path="Spendy.csproj" DisplayName="Spendy" />
+  </Folder>
+</Solution>

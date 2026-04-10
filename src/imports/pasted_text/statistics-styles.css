@@ -1,0 +1,1517 @@
+/* Statistics  */
+
+position: relative;
+width: 393px;
+height: 852px;
+
+background: #E7EBEE;
+
+
+/* Group 87 */
+
+position: absolute;
+width: 420px;
+height: 218px;
+left: -10px;
+top: -2px;
+
+
+
+/* Green_and_Black_Illustrative_Financial_Company_Logo__5_-removebg-preview 1 */
+
+position: absolute;
+width: 347px;
+height: 114px;
+left: 22px;
+top: 102px;
+
+background: url(Green_and_Black_Illustrative_Financial_Company_Logo__5_-removebg-preview.png);
+
+
+/* Available balance */
+
+position: absolute;
+width: 126px;
+height: 18px;
+left: 37px;
+top: 118px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 15px;
+line-height: 18px;
+/* identical to box height */
+
+color: rgba(239, 234, 234, 0.7);
+
+
+
+/* ₱10,867.50 */
+
+position: absolute;
+width: 191px;
+height: 34px;
+left: 37px;
+top: 152px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 36px;
+line-height: 34px;
+/* identical to box height, or 94% */
+letter-spacing: -0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Status bar and Menu bar- iPad */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 4px 26px;
+gap: 966px;
+
+position: absolute;
+width: 420px;
+height: 46px;
+left: -10px;
+top: -2px;
+
+
+
+/* Left */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 2px 0px;
+gap: 8px;
+
+margin: 0 auto;
+width: 26px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Time */
+
+width: 26px;
+height: 14px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 12px;
+line-height: 14px;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Date */
+
+display: none;
+width: 61px;
+height: 14px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 12px;
+line-height: 14px;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Right */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 5px 0px;
+gap: 4px;
+
+margin: 0 auto;
+width: 102.05px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Combined Shape */
+
+width: 16.5px;
+height: 10px;
+
+background: #000000;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Combined Shape */
+
+width: 14.05px;
+height: 10px;
+
+background: #000000;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 100% */
+
+width: 33px;
+height: 14px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 12px;
+line-height: 14px;
+/* identical to box height, or 117% */
+text-align: right;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Battery Icon */
+
+width: 26.5px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Combined Shape */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 26.5px;
+height: 12px;
+right: 0px;
+top: 6px;
+
+mix-blend-mode: normal;
+opacity: 0.4;
+border: 1px solid #000000;
+
+
+/* Border */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 24px;
+height: 12px;
+right: 2.5px;
+top: 6px;
+
+mix-blend-mode: normal;
+opacity: 0.4;
+border: 1px solid #000000;
+border-radius: 3.25px;
+
+
+/* Combined Shape */
+
+position: absolute;
+width: 1.5px;
+height: 3.87px;
+right: 0px;
+top: 10.06px;
+
+background: rgba(0, 0, 0, 0.5);
+
+
+/* Capacity */
+
+position: absolute;
+width: 20px;
+height: 8px;
+right: 4.5px;
+top: 8px;
+
+background: #000000;
+border-radius: 1.5px;
+
+
+/* Ellipse 6 */
+
+position: absolute;
+width: 40px;
+height: 40px;
+left: 16px;
+top: 62px;
+
+background: url(561254334_1876598046287321_7267068338342996976_n);
+
+
+/* Group */
+
+position: absolute;
+left: 84.73%;
+right: 5.09%;
+top: 7.28%;
+bottom: 88.03%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 84.73%;
+right: 5.09%;
+top: 7.28%;
+bottom: 88.03%;
+
+background: #01143D;
+
+
+/* stats */
+
+position: absolute;
+width: 369px;
+height: 509px;
+left: 12px;
+top: 225px;
+
+
+
+/* Group 12 */
+
+position: absolute;
+width: 280.9px;
+height: 139.04px;
+left: 54.82px;
+top: 182.47px;
+
+transform: rotate(180deg);
+
+
+/* Line 1 */
+
+position: absolute;
+width: 280.9px;
+height: 0px;
+left: 54.82px;
+top: 321.51px;
+
+background: linear-gradient(180deg, #022268 0%, #EFEAEA 100%);
+border: 2px solid #01143D;
+transform: rotate(180deg);
+
+
+/* Rectangle 5 */
+
+position: absolute;
+width: 280.9px;
+height: 139.04px;
+left: 54.82px;
+top: 182.47px;
+
+background: linear-gradient(180deg, #022268 0%, #EFEAEA 100%);
+opacity: 0.6;
+transform: rotate(180deg);
+
+
+/* September 2025 */
+
+position: absolute;
+width: 124px;
+height: 34px;
+left: 14px;
+top: 334px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 15px;
+line-height: 34px;
+/* identical to box height, or 227% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Green_and_Black_Illustrative_Financial_Company_Logo__6_-removebg-preview 1 */
+
+position: absolute;
+width: 326px;
+height: 326px;
+left: 21px;
+top: 50px;
+
+background: url(Green_and_Black_Illustrative_Financial_Company_Logo__6_-removebg-preview.png);
+
+
+/* Rectangle 85 */
+
+position: absolute;
+width: 172px;
+height: 51px;
+left: 10px;
+top: 0px;
+
+background: #022268;
+border-radius: 30px;
+
+
+/* Rectangle 86 */
+
+position: absolute;
+width: 172px;
+height: 51px;
+left: 187px;
+top: 0px;
+
+background: rgba(62, 78, 101, 0.9);
+border-radius: 30px;
+
+
+/* Expenses */
+
+position: absolute;
+width: 114px;
+height: 30px;
+left: 48px;
+top: 11px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 30px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Income */
+
+position: absolute;
+width: 94px;
+height: 30px;
+left: 234px;
+top: 11px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 30px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Group 33 */
+
+position: absolute;
+width: 40px;
+height: 40px;
+left: 304px;
+top: 62px;
+
+
+
+/* Ellipse 1 */
+
+position: absolute;
+width: 40px;
+height: 40px;
+left: 304px;
+top: 62px;
+
+background: #01143D;
+
+
+/* calendar-clock 1 */
+
+position: absolute;
+width: 24px;
+height: 24px;
+left: 312px;
+top: 70px;
+
+background: url(calendar-clock.png);
+
+
+/* statsss */
+
+position: absolute;
+width: 369px;
+height: 153px;
+left: 0px;
+top: 356px;
+overflow-y: scroll;
+
+
+
+/* transaction */
+
+position: absolute;
+width: 341px;
+height: 290px;
+left: 14px;
+top: 6px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 79 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 104px;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 104px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 104px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Shopping */
+
+position: absolute;
+width: 67px;
+height: 34px;
+left: 64px;
+top: 110px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱2,560 */
+
+position: absolute;
+width: 45px;
+height: 34px;
+left: 297px;
+top: 110px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 29px;
+top: 114px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 29px;
+top: 114px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.76%;
+right: 85.84%;
+top: 79.08%;
+bottom: 10.8%;
+
+background: #FFFFFF;
+
+
+/* Group 81 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 202px;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 202px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 202px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Shopping */
+
+position: absolute;
+width: 67px;
+height: 34px;
+left: 64px;
+top: 208px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱2,560 */
+
+position: absolute;
+width: 45px;
+height: 34px;
+left: 297px;
+top: 208px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 29px;
+top: 212px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 29px;
+top: 212px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.76%;
+right: 85.84%;
+top: 143.14%;
+bottom: -53.25%;
+
+background: #FFFFFF;
+
+
+/* Group 78 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 55px;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 55px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 55px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 44px;
+height: 34px;
+left: 64px;
+top: 61px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱820 */
+
+position: absolute;
+width: 34px;
+height: 34px;
+left: 309px;
+top: 61px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 55px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 55px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 44px;
+height: 34px;
+left: 64px;
+top: 61px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱820 */
+
+position: absolute;
+width: 34px;
+height: 34px;
+left: 309px;
+top: 61px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 31px;
+top: 63px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 31px;
+top: 63px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 10.3%;
+right: 84.99%;
+top: 46.41%;
+bottom: 45.02%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 10.3%;
+right: 84.99%;
+top: 46.41%;
+bottom: 45.02%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.85%;
+right: 86.79%;
+top: 54.33%;
+bottom: 45.03%;
+
+background: #FFFFFF;
+
+
+/* Group 82 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 251px;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 251px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 251px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 44px;
+height: 34px;
+left: 64px;
+top: 257px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱820 */
+
+position: absolute;
+width: 34px;
+height: 34px;
+left: 309px;
+top: 257px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 251px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 251px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 44px;
+height: 34px;
+left: 64px;
+top: 257px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱820 */
+
+position: absolute;
+width: 34px;
+height: 34px;
+left: 309px;
+top: 257px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 31px;
+top: 259px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 31px;
+top: 259px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 10.3%;
+right: 84.99%;
+top: 174.51%;
+bottom: -83.08%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 10.3%;
+right: 84.99%;
+top: 174.51%;
+bottom: -83.08%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.85%;
+right: 86.79%;
+top: 182.43%;
+bottom: -83.08%;
+
+background: #FFFFFF;
+
+
+/* Group 77 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 6px;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 6px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 6px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Food */
+
+position: absolute;
+width: 35px;
+height: 34px;
+left: 64px;
+top: 12px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱2,560 */
+
+position: absolute;
+width: 45px;
+height: 34px;
+left: 297px;
+top: 12px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱2,560 */
+
+position: absolute;
+width: 45px;
+height: 34px;
+left: 297px;
+top: 12px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 47 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 30px;
+top: 14px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 30px;
+top: 14px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 9.76%;
+right: 85.5%;
+top: 13.07%;
+bottom: 75.71%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 12.51%;
+right: 87.13%;
+top: 14.24%;
+bottom: 84.66%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.73%;
+right: 87.88%;
+top: 14.6%;
+bottom: 84.34%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.11%;
+right: 88.44%;
+top: 14.11%;
+bottom: 85.03%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.57%;
+right: 86.11%;
+top: 18.37%;
+bottom: 79.01%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.77%;
+right: 85.52%;
+top: 21.19%;
+bottom: 75.71%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.77%;
+right: 85.51%;
+top: 18.33%;
+bottom: 78.38%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.77%;
+right: 85.51%;
+top: 13.07%;
+bottom: 83.02%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.76%;
+right: 85.5%;
+top: 16.58%;
+bottom: 81.58%;
+
+background: #FFFFFF;
+
+
+/* Group 80 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 153px;
+
+
+
+/* Group 7 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 153px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 341px;
+height: 45px;
+left: 14px;
+top: 153px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Grocery */
+
+position: absolute;
+width: 55px;
+height: 34px;
+left: 64px;
+top: 159px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱820 */
+
+position: absolute;
+width: 34px;
+height: 34px;
+left: 309px;
+top: 159px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 30px;
+top: 161px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 30px;
+top: 161px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.03%;
+right: 85.57%;
+top: 109.8%;
+bottom: -19.92%;
+
+background: #FFFFFF;
+
+
+/* navbar */
+
+position: absolute;
+width: 348px;
+height: 94px;
+left: 22px;
+top: 726px;
+
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 37.23%;
+bottom: 0%;
+
+background: #01143D;
+border-radius: 25px;
+
+
+/* Group 71 */
+
+position: absolute;
+width: 85px;
+height: 53.41px;
+left: 95px;
+top: 19.59px;
+
+
+
+/* Ellipse 8 */
+
+position: absolute;
+width: 85px;
+height: 53.41px;
+left: 95px;
+top: 19.59px;
+
+background: #E7EBEE;
+
+
+/* Ellipse 8 */
+
+position: absolute;
+left: 33.05%;
+right: 54.02%;
+top: 21.28%;
+bottom: 30.85%;
+
+background: #01143D;
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 79.02%;
+right: 15.23%;
+top: 58.51%;
+bottom: 20.21%;
+
+background: url(settings (5).png), url(settings (5).png);
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 57.76%;
+right: 36.49%;
+top: 58.51%;
+bottom: 20.21%;
+
+background: url(piggy-bank (1).png);
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 36.49%;
+right: 57.76%;
+top: 35.11%;
+bottom: 43.62%;
+
+background: url(chart-simple-horizontal (1).png);
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 14.66%;
+right: 79.6%;
+top: 58.51%;
+bottom: 20.21%;
+
+background: url(home (2).png);

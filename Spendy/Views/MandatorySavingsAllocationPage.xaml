@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:Spendy.Converters"
+             x:Class="Spendy.Views.MandatorySavingsAllocationPage"
+             x:Name="PageRoot"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#0A1428">
+    <ContentPage.Resources>
+        <conv:BoolToDoubleConverter x:Key="SelStrokeConv" TrueValue="3" FalseValue="0" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" Padding="20,20,20,16">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#01143D" Offset="0" />
+                    <GradientStop Color="#0335A3" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Allocate Mandatory Savings"
+                       TextColor="White"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="22" />
+                <Label Text="Required for income ₱20,000 or more"
+                       TextColor="#B3FFFFFF"
+                       FontSize="13" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <ScrollView Grid.Row="1" Padding="20,12,20,24">
+            <VerticalStackLayout Spacing="16">
+                <Border BackgroundColor="#1B2B42"
+                        StrokeThickness="0"
+                        Padding="16,14">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding MessageText}"
+                           TextColor="White"
+                           FontSize="17"
+                           FontAttributes="Bold"
+                           LineBreakMode="WordWrap" />
+                    <Label Text="{Binding SubtitleText}"
+                           TextColor="#B3FFFFFF"
+                           FontSize="14"
+                           Margin="0,8,0,0"
+                           LineBreakMode="WordWrap" />
+                </Border>
+
+                <Label Text="Select a saving goal"
+                       TextColor="#99FFFFFF"
+                       FontSize="14"
+                       FontAttributes="Bold" />
+
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNoGoals}">
+                    <Label Text="Add an active goal on the Savings tab, then tap Refresh."
+                           TextColor="#CCFF6B6B"
+                           FontSize="13"
+                           LineBreakMode="WordWrap" />
+                    <Button Text="Refresh goals"
+                            Command="{Binding RefreshGoalsCommand}"
+                            BackgroundColor="#993E4E65"
+                            TextColor="White"
+                            CornerRadius="22"
+                            FontAttributes="Bold" />
+                    <Button Text="Go back without saving income"
+                            Command="{Binding CancelWithoutSavingCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#99FFFFFF"
+                            FontSize="14"
+                            Margin="0,4,0,0" />
+                </VerticalStackLayout>
+
+                <CollectionView ItemsSource="{Binding GoalRows}"
+                                SelectionMode="None"
+                                IsVisible="{Binding HasGoals}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="White"
+                                    Stroke="{StaticResource SpendyAccent}"
+                                    StrokeThickness="{Binding IsSelected, Converter={StaticResource SelStrokeConv}}"
+                                    Padding="18">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.SelectGoalCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="{Binding Plan.Name}"
+                                           TextColor="{StaticResource SpendyNavy}"
+                                           FontAttributes="Bold"
+                                           FontSize="16" />
+                                    <Label Text="{Binding Plan.AmountLine}"
+                                           TextColor="{StaticResource SpendyNavy}"
+                                           FontSize="15"
+                                           FontAttributes="Bold" />
+                                    <ProgressBar Progress="{Binding Plan.Progress}"
+                                                 ProgressColor="{StaticResource SpendyAccent}"
+                                                 BackgroundColor="#D9D9D9"
+                                                 HeightRequest="8" />
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding Plan.TargetDate, StringFormat='Target Date: {0}'}"
+                                               FontSize="12"
+                                               TextColor="#99011D3D" />
+                                        <Label Grid.Column="1"
+                                               FontSize="12"
+                                               TextColor="#99011D3D"
+                                               HorizontalTextAlignment="End">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Plan.ProgressPercent, StringFormat='{0:F0}'}" />
+                                                    <Span Text="% Complete" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="Confirm Allocation"
+                        Command="{Binding ConfirmAllocationCommand}"
+                        IsEnabled="{Binding CanConfirm}"
+                        BackgroundColor="{StaticResource SpendyAccent}"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="26"
+                        HeightRequest="52"
+                        Margin="0,8,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

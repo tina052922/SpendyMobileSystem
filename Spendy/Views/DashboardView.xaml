@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.DashboardView">
+    <Grid BackgroundColor="{StaticResource SpendyPageBg}">
+        <ScrollView>
+            <VerticalStackLayout Spacing="0" Padding="0,0,0,120">
+                <!-- Top bar ONLY (no big gradient container behind) -->
+                <Grid Padding="24,16,24,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="#1AFFFFFF">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
+                    </Border>
+                    <Border Grid.Column="2"
+                            WidthRequest="46"
+                            HeightRequest="46"
+                            BackgroundColor="White"
+                            StrokeThickness="0"
+                            Padding="9">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <ImageButton Source="darkbluenotificon.png"
+                                     BackgroundColor="Transparent"
+                                     Aspect="AspectFit"
+                                     Command="{Binding OpenNotificationsCommand}" />
+                    </Border>
+                </Grid>
+
+                <!-- Balance card (gradient) sits directly under top bar -->
+                <Border Margin="24,0,24,14"
+                        StrokeThickness="0"
+                        Padding="16"
+                        HeightRequest="96">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22" />
+                    </Border.StrokeShape>
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#0B1B3A" Offset="0" />
+                            <GradientStop Color="#01143D" Offset="0.55" />
+                            <GradientStop Color="#0335A3" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid>
+                        <Border HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                WidthRequest="150"
+                                HeightRequest="120"
+                                Margin="0,-28,-36,0"
+                                StrokeThickness="0"
+                                Opacity="0.45"
+                                Rotation="-18">
+                            <Border.StrokeShape>
+                                <Ellipse />
+                            </Border.StrokeShape>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#66FFFFFF" Offset="0" />
+                                    <GradientStop Color="#00FFFFFF" Offset="0.65" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Available balance"
+                                   TextColor="#B3FFFFFF"
+                                   FontSize="14" />
+                            <Label Text="{Binding AvailableBalance}"
+                                   TextColor="White"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="34" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Main content card -->
+                <Border BackgroundColor="White"
+                        StrokeThickness="0"
+                        Margin="0,0,0,0"
+                        Padding="24,22,24,22">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="34,34,0,0" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Button Text="Expenses"
+                                    Command="{Binding SelectExpenseCommand}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="18"
+                                    CornerRadius="26"
+                                    HeightRequest="52"
+                                    BackgroundColor="{Binding ExpenseButtonBackground}" />
+                            <Button Grid.Column="1"
+                                    Text="Income"
+                                    Command="{Binding SelectIncomeCommand}"
+                                    TextColor="White"
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="18"
+                                    CornerRadius="26"
+                                    HeightRequest="52"
+                                    BackgroundColor="{Binding IncomeButtonBackground}" />
+                        </Grid>
+
+                        <Border BackgroundColor="#F1F3F5"
+                                StrokeThickness="0"
+                                Padding="16,14">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="18" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding SummaryLabel}"
+                                       TextColor="#475467"
+                                       FontSize="14"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding SummaryAmount}"
+                                       TextColor="{Binding SummaryColor}"
+                                       FontSize="14"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+
+                        <Border BackgroundColor="{StaticResource SpendyNavy}"
+                                StrokeThickness="0"
+                                Padding="16,10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="22" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding DateLabel}"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       VerticalOptions="Center" />
+                                <Border Grid.Column="1"
+                                        WidthRequest="36"
+                                        HeightRequest="36"
+                                        Stroke="#BFD0E3"
+                                        StrokeThickness="1.2"
+                                        BackgroundColor="{StaticResource SpendyNavy}">
+                                    <Border.StrokeShape>
+                                        <Ellipse />
+                                    </Border.StrokeShape>
+                                    <Image Source="calendar.png"
+                                           WidthRequest="18"
+                                           HeightRequest="18"
+                                           Aspect="AspectFit"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <Grid BackgroundColor="Transparent">
+                            <VerticalStackLayout IsVisible="{Binding ShowEmptyState}"
+                                                 Padding="0,24,0,40"
+                                                 Spacing="10"
+                                                 HorizontalOptions="Fill">
+                                <Label Text="No transactions yet"
+                                       TextColor="{StaticResource SpendyNavy}"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="18"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Tap the + button to add your first transaction."
+                                       TextColor="{StaticResource SpendyMutedText}"
+                                       FontSize="14"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+
+                            <CollectionView ItemsSource="{Binding Transactions}"
+                                            IsVisible="{Binding HasTransactions}"
+                                            SelectionMode="None">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BackgroundColor="#F8FAFC"
+                                                StrokeThickness="0"
+                                                Padding="12">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="16" />
+                                            </Border.StrokeShape>
+                                            <Border.Shadow>
+                                                <Shadow Brush="#1A000000" Offset="0,2" Radius="10" Opacity="0.35" />
+                                            </Border.Shadow>
+                                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                                <Border WidthRequest="36"
+                                                        HeightRequest="36"
+                                                        BackgroundColor="{StaticResource SpendyNavy}"
+                                                        StrokeThickness="0">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="10" />
+                                                    </Border.StrokeShape>
+                                                    <Label Text="{Binding Icon}"
+                                                           FontSize="18"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Category}"
+                                                       TextColor="{StaticResource SpendyNavy}"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center" />
+                                                <VerticalStackLayout Grid.Column="2" HorizontalOptions="End">
+                                                    <Label Text="{Binding FormattedAmount}"
+                                                           TextColor="{Binding AmountColor}"
+                                                           FontSize="14"
+                                                           HorizontalTextAlignment="End" />
+                                                    <Label Text="{Binding Time}"
+                                                           TextColor="{StaticResource SpendyMutedText}"
+                                                           FontSize="14"
+                                                           HorizontalTextAlignment="End" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button Text="+"
+                FontSize="28"
+                TextColor="White"
+                WidthRequest="56"
+                HeightRequest="56"
+                CornerRadius="28"
+                BackgroundColor="{StaticResource SpendyAccent}"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="0,0,24,96"
+                Command="{Binding AddTransactionCommand}" />
+    </Grid>
+</ContentView>

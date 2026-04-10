@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.SplashPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource SpendyNavy}">
+    <Grid>
+        <!-- We animate these from code-behind -->
+        <HorizontalStackLayout x:Name="LogoRow"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Spacing="12">
+            <Image x:Name="SymbolLogo"
+                   Source="logo_white.png"
+                   HeightRequest="110"
+                   Aspect="AspectFit" />
+            <Label x:Name="WordMark"
+                   Text="SPENDY"
+                   Opacity="0"
+                   FontFamily="OpenSansSemibold"
+                   FontSize="30"
+                   TextColor="White"
+                   CharacterSpacing="3"
+                   VerticalOptions="Center" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

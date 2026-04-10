@@ -1,0 +1,46 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / VS Code
+.vs/
+*.user
+*.userosscache
+*.suo
+*.cache
+*.pidb
+*.svclog
+*.pdb
+*.opendb
+*.VC.db
+.vscode/*
+!.vscode/settings.json
+
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+# MAUI / Xamarin
+*.apk
+*.aab
+*.ipa
+*.app
+*.dSYM/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+
+# Others
+*.log
+*.tmp

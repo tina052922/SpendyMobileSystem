@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!-- Spendy palette (matches Spendy UI references) -->
+    <Color x:Key="SpendyNavy">#01143D</Color>
+    <Color x:Key="SpendyNavyDark">#022268</Color>
+    <Color x:Key="SpendyBlueDeep">#0335A3</Color>
+    <Color x:Key="SpendyAccent">#00B2FF</Color>
+    <Color x:Key="SpendyAccentSoft">#43B3EF</Color>
+    <Color x:Key="SpendyPageBg">#E7EBEE</Color>
+    <Color x:Key="SpendyCard">#FFFFFF</Color>
+    <Color x:Key="SpendyRed">#FF3B5C</Color>
+    <Color x:Key="SpendyRedAmount">#FF0000</Color>
+    <Color x:Key="SpendyGreen">#00D4A5</Color>
+    <Color x:Key="SpendyGreenAlt">#05B325</Color>
+    <Color x:Key="SpendyMutedText">#949292</Color>
+    <Color x:Key="SpendyToggleInactive">#993E4E65</Color>
+    <Color x:Key="SpendyInputBg">#F5F5F5</Color>
+    <Color x:Key="SpendyPanel">#3E4E65</Color>
+    <Color x:Key="SpendyNavBar">#01143D</Color>
+    <Color x:Key="SpendyBalanceSubtle">#E1F1FE99</Color>
+    <Color x:Key="SpendyGrayIcon">#9CA3AF</Color>
+
+    <LinearGradientBrush x:Key="SpendyHeaderGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#01143D" Offset="0" />
+        <GradientStop Color="#0335A3" Offset="1" />
+    </LinearGradientBrush>
+
+    <Style x:Key="SpendyPrimaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource SpendyNavy}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+
+    <Style x:Key="SpendyAccentButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource SpendyAccent}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+</ResourceDictionary>

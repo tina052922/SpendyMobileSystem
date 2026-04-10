@@ -1,0 +1,2405 @@
+/* Dashboard */
+
+position: relative;
+width: 393px;
+height: 852px;
+
+background: #E7EBEE;
+
+
+/* Rectangle 111 */
+
+position: absolute;
+width: 413px;
+height: 340px;
+left: -10px;
+top: -2px;
+
+background: linear-gradient(180deg, #01143D 9%, #0335A3 100%);
+
+
+/* Rectangle 20 */
+
+position: absolute;
+width: 393px;
+height: 633px;
+left: 0px;
+top: 222px;
+
+background: #E7EBEE;
+border-radius: 35px 35px 0px 0px;
+
+
+/* Ellipse 3 */
+
+position: absolute;
+width: 40px;
+height: 40px;
+left: 16px;
+top: 62px;
+
+background: url(561254334_1876598046287321_7267068338342996976_n);
+
+
+/* Group */
+
+position: absolute;
+left: 84.73%;
+right: 5.09%;
+top: 7.28%;
+bottom: 88.03%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 84.73%;
+right: 5.09%;
+top: 7.28%;
+bottom: 88.03%;
+
+background: #E7EBEE;
+
+
+/* Available balance */
+
+position: absolute;
+width: 138px;
+height: 23px;
+left: 127px;
+top: 115px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+/* identical to box height */
+
+color: rgba(225, 241, 254, 0.6);
+
+
+
+/* ₱10,867.50 */
+
+position: absolute;
+width: 180px;
+height: 34px;
+left: 106px;
+top: 150px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 36px;
+line-height: 34px;
+/* identical to box height, or 94% */
+letter-spacing: -0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Status bar and Menu bar- iPad */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 4px 26px;
+gap: 966px;
+
+position: absolute;
+width: 420px;
+height: 46px;
+left: -10px;
+top: -2px;
+
+
+
+/* Left */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 2px 0px;
+gap: 8px;
+
+margin: 0 auto;
+width: 26px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Time */
+
+width: 26px;
+height: 14px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 12px;
+line-height: 14px;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Date */
+
+display: none;
+width: 61px;
+height: 14px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 12px;
+line-height: 14px;
+
+color: #000000;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Right */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 5px 0px;
+gap: 4px;
+
+margin: 0 auto;
+width: 102.05px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Combined Shape */
+
+width: 16.5px;
+height: 10px;
+
+background: #FFFFFF;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Combined Shape */
+
+width: 14.05px;
+height: 10px;
+
+background: #FFFFFF;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 100% */
+
+width: 33px;
+height: 14px;
+
+font-family: 'SF Pro';
+font-style: normal;
+font-weight: 510;
+font-size: 12px;
+line-height: 14px;
+/* identical to box height, or 117% */
+text-align: right;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Battery Icon */
+
+width: 26.5px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Combined Shape */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 26.5px;
+height: 12px;
+right: 0px;
+top: 6px;
+
+mix-blend-mode: normal;
+opacity: 0.4;
+border: 1px solid #FFFFFF;
+
+
+/* Border */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 24px;
+height: 12px;
+right: 2.5px;
+top: 6px;
+
+mix-blend-mode: normal;
+opacity: 0.4;
+border: 1px solid #000000;
+border-radius: 3.25px;
+
+
+/* Combined Shape */
+
+position: absolute;
+width: 1.5px;
+height: 3.87px;
+right: 0px;
+top: 10.06px;
+
+background: rgba(0, 0, 0, 0.5);
+
+
+/* Capacity */
+
+position: absolute;
+width: 20px;
+height: 8px;
+right: 4.5px;
+top: 8px;
+
+background: #FFFFFF;
+border-radius: 1.5px;
+
+
+/* dashboard */
+
+position: absolute;
+width: 393px;
+height: 639px;
+left: 0px;
+top: 213px;
+
+
+
+/* Group 33 */
+
+position: absolute;
+width: 348px;
+height: 52px;
+left: 24px;
+top: 76px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 52px;
+left: 24px;
+top: 76px;
+
+background: #FFFFFF;
+border-radius: 20px;
+
+
+/* Total Expenditure */
+
+position: absolute;
+width: 120.78px;
+height: 39.29px;
+left: 40.33px;
+top: 85.52px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* ₱5,020 */
+
+position: absolute;
+width: 45px;
+height: 34px;
+left: 313px;
+top: 85px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* Rectangle 85 */
+
+position: absolute;
+width: 348px;
+height: 43px;
+left: 24px;
+top: 147px;
+
+background: #01143D;
+border-radius: 20px;
+
+
+/* Sat, 13 September */
+
+position: absolute;
+width: 142px;
+height: 34px;
+left: 40px;
+top: 152px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 34px;
+/* identical to box height, or 212% */
+letter-spacing: -0.01em;
+
+color: #FFFFFF;
+
+
+
+/* Group 65 */
+
+position: absolute;
+width: 172px;
+height: 51px;
+left: 23px;
+top: 15px;
+
+
+
+/* Rectangle 82 */
+
+position: absolute;
+width: 172px;
+height: 51px;
+left: 23px;
+top: 15px;
+
+background: #022268;
+border-radius: 30px;
+
+
+/* Expenses */
+
+position: absolute;
+width: 114px;
+height: 30px;
+left: 61px;
+top: 26px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 30px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* Group 43 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 333px;
+top: 153px;
+
+
+
+/* Ellipse 1 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 333px;
+top: 153px;
+
+background: #01143D;
+border: 1px solid #FFFFFF;
+
+
+/* calendar-clock 1 */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: 339px;
+top: 159px;
+
+background: url(calendar-clock.png);
+
+
+/* Group 66 */
+
+position: absolute;
+width: 172px;
+height: 51px;
+left: 200px;
+top: 15px;
+
+
+
+/* Rectangle 84 */
+
+position: absolute;
+width: 172px;
+height: 51px;
+left: 200px;
+top: 15px;
+
+background: rgba(62, 78, 101, 0.9);
+border-radius: 30px;
+
+
+/* Income */
+
+position: absolute;
+width: 94px;
+height: 30px;
+left: 247px;
+top: 26px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 30px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+
+/* history */
+
+position: absolute;
+width: 375px;
+height: 329px;
+left: 13px;
+top: 198px;
+overflow-y: scroll;
+
+
+
+/* Group 74 */
+
+position: absolute;
+width: 348px;
+height: 552px;
+left: 11px;
+top: 0px;
+
+
+
+/* Group 33 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 0px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 1px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 1px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Food */
+
+position: absolute;
+width: 35.72px;
+height: 34px;
+left: 62.03px;
+top: 7px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* -₱80 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 0px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 12:00 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 17px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 9px;
+
+
+
+/* Group 47 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 9px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 9px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Chicken Burger Recipes - iconSvg.co */
+
+position: absolute;
+width: 20px;
+height: 20px;
+left: 28px;
+top: 14px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group */
+
+position: absolute;
+left: 6.27%;
+right: 6.27%;
+top: 7.36%;
+bottom: 6.85%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 57.02%;
+right: 36.37%;
+top: 16.32%;
+bottom: 75.28%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 42.77%;
+right: 50.05%;
+top: 19.06%;
+bottom: 72.82%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 31.32%;
+right: 60.53%;
+top: 15.29%;
+bottom: 78.15%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 39.66%;
+right: 17.55%;
+top: 47.89%;
+bottom: 32.03%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.49%;
+right: 6.49%;
+top: 69.45%;
+bottom: 6.85%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.49%;
+right: 6.48%;
+top: 47.6%;
+bottom: 27.25%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.49%;
+right: 6.48%;
+top: 7.36%;
+bottom: 62.75%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.27%;
+right: 6.27%;
+top: 34.22%;
+bottom: 51.74%;
+
+background: #FFFFFF;
+
+
+/* Group 34 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 56px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 57px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 57px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 57px;
+height: 34px;
+left: 62px;
+top: 63px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 49 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 65px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 65px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 65px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 22.19%;
+bottom: 73.83%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 22.19%;
+bottom: 73.83%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.51%;
+right: 89.14%;
+top: 25.87%;
+bottom: 73.83%;
+
+background: #FFFFFF;
+
+
+/* -₱80 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 56px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 13:00 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 73px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 49 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 112px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 113px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 113px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Shopping */
+
+position: absolute;
+width: 83px;
+height: 34px;
+left: 62px;
+top: 119px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* -₱1,530 */
+
+position: absolute;
+width: 58px;
+height: 34px;
+left: 286px;
+top: 112px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 13:50 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 129px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 72 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 121px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 121px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 121px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.66%;
+top: 38.91%;
+bottom: 56.39%;
+
+background: #FFFFFF;
+
+
+/* Group 50 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 168px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 169px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 169px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Grocery */
+
+position: absolute;
+width: 57px;
+height: 34px;
+left: 62px;
+top: 175px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* -₱3,250 */
+
+position: absolute;
+width: 56px;
+height: 34px;
+left: 288px;
+top: 168px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 14:00 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 185px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 73 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 177px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 177px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 177px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 8%;
+right: 87.66%;
+top: 55.93%;
+bottom: 39.37%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.66%;
+top: 55.93%;
+bottom: 39.37%;
+
+background: #FFFFFF;
+
+
+/* Group 51 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 223px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 224px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 224px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 57px;
+height: 34px;
+left: 62px;
+top: 230px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 49 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 232px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 232px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 232px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 72.95%;
+bottom: 23.07%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 72.95%;
+bottom: 23.07%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.51%;
+right: 89.14%;
+top: 76.63%;
+bottom: 23.07%;
+
+background: #FFFFFF;
+
+
+/* -₱80 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 223px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 14:30 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 240px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 52 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 278px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 279px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 279px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Food */
+
+position: absolute;
+width: 35.72px;
+height: 34px;
+left: 62.03px;
+top: 285px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* -₱80 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 278px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 12:00 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 295px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 287px;
+
+
+
+/* Group 47 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 287px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 287px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Chicken Burger Recipes - iconSvg.co */
+
+position: absolute;
+width: 20px;
+height: 20px;
+left: 28px;
+top: 292px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group */
+
+position: absolute;
+left: 6.27%;
+right: 6.27%;
+top: 7.36%;
+bottom: 6.85%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 57.02%;
+right: 36.37%;
+top: 16.32%;
+bottom: 75.28%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 42.77%;
+right: 50.05%;
+top: 19.06%;
+bottom: 72.82%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 31.32%;
+right: 60.53%;
+top: 15.29%;
+bottom: 78.15%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 39.66%;
+right: 17.55%;
+top: 47.89%;
+bottom: 32.03%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.49%;
+right: 6.49%;
+top: 69.45%;
+bottom: 6.85%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.49%;
+right: 6.48%;
+top: 47.6%;
+bottom: 27.25%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.49%;
+right: 6.48%;
+top: 7.36%;
+bottom: 62.75%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.27%;
+right: 6.27%;
+top: 34.22%;
+bottom: 51.74%;
+
+background: #FFFFFF;
+
+
+/* Group 53 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 334px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 335px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 335px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 57px;
+height: 34px;
+left: 62px;
+top: 341px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 49 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 343px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 343px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 343px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 106.69%;
+bottom: -10.67%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 106.69%;
+bottom: -10.67%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.51%;
+right: 89.14%;
+top: 110.37%;
+bottom: -10.67%;
+
+background: #FFFFFF;
+
+
+/* -₱80 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 334px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 13:00 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 351px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 54 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 390px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 391px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 391px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Shopping */
+
+position: absolute;
+width: 83px;
+height: 34px;
+left: 62px;
+top: 397px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* -₱1,530 */
+
+position: absolute;
+width: 58px;
+height: 34px;
+left: 286px;
+top: 390px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 13:50 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 407px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 72 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 399px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 399px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 399px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.66%;
+top: 123.71%;
+bottom: -28.41%;
+
+background: #FFFFFF;
+
+
+/* Group 55 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 446px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 447px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 447px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Grocery */
+
+position: absolute;
+width: 57px;
+height: 34px;
+left: 62px;
+top: 453px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* -₱3,250 */
+
+position: absolute;
+width: 56px;
+height: 34px;
+left: 288px;
+top: 446px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 14:00 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 463px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 73 */
+
+position: absolute;
+width: 30px;
+height: 36.53px;
+left: 23px;
+top: 455px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 455px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 455px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 8%;
+right: 87.66%;
+top: 140.73%;
+bottom: -49.4%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.66%;
+top: 140.73%;
+bottom: -45.43%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.5%;
+right: 89.31%;
+top: 148.25%;
+bottom: -49.4%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.07%;
+right: 88.73%;
+top: 148.25%;
+bottom: -49.4%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.92%;
+right: 89.89%;
+top: 148.25%;
+bottom: -49.4%;
+
+background: #FFFFFF;
+
+
+/* Group 56 */
+
+position: absolute;
+width: 348px;
+height: 51px;
+left: 11px;
+top: 501px;
+
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+
+/* Group 7 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 502px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 348px;
+height: 45px;
+left: 11px;
+top: 502px;
+
+background: #FFFFFF;
+border-radius: 13px;
+
+
+/* Traffic */
+
+position: absolute;
+width: 57px;
+height: 34px;
+left: 62px;
+top: 508px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #01143D;
+
+
+
+/* Group 49 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 510px;
+
+
+
+/* Group 48 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 510px;
+
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 23px;
+top: 510px;
+
+background: #01143D;
+border-radius: 10px;
+
+
+/* Group */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 157.45%;
+bottom: -61.43%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8%;
+right: 87.37%;
+top: 157.45%;
+bottom: -61.43%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.51%;
+right: 89.14%;
+top: 161.13%;
+bottom: -61.43%;
+
+background: #FFFFFF;
+
+
+/* -₱80 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 501px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+text-align: right;
+letter-spacing: -0.01em;
+
+color: #FF0000;
+
+
+
+/* 14:30 */
+
+position: absolute;
+width: 33.68px;
+height: 34px;
+left: 310.01px;
+top: 518px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 34px;
+/* identical to box height, or 243% */
+letter-spacing: -0.01em;
+
+color: #949292;
+
+
+
+/* Group 75 */
+
+position: absolute;
+width: 50px;
+height: 50.47px;
+left: 313px;
+top: 487.58px;
+
+
+
+/* Ellipse 5 */
+
+position: absolute;
+width: 28px;
+height: 28px;
+left: 324px;
+top: 494px;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 79.64%;
+right: 7.63%;
+top: 76.3%;
+bottom: 15.8%;
+
+background: #295DC7;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* navbar */
+
+position: absolute;
+width: 348px;
+height: 94px;
+left: 22px;
+top: 726px;
+
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 37.23%;
+bottom: 0%;
+
+background: #01143D;
+border-radius: 25px;
+
+
+/* Rectangle 107 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 37.23%;
+bottom: 0%;
+
+background: #01143D;
+border-radius: 25px;
+
+
+/* Group 71 */
+
+position: absolute;
+width: 85px;
+height: 53.41px;
+left: 21px;
+top: 19.59px;
+
+
+
+/* Subtract */
+
+position: absolute;
+width: 85px;
+height: 53.41px;
+left: 21px;
+top: 19.59px;
+
+background: #E7EBEE;
+
+
+/* Ellipse 8 */
+
+position: absolute;
+left: 11.78%;
+right: 75.29%;
+top: 21.28%;
+bottom: 30.85%;
+
+background: #01143D;
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 79.02%;
+right: 15.23%;
+top: 58.51%;
+bottom: 20.21%;
+
+background: url(settings (5).png), url(settings (5).png);
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 57.76%;
+right: 36.49%;
+top: 58.51%;
+bottom: 20.21%;
+
+background: url(piggy-bank (1).png);
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 36.49%;
+right: 57.76%;
+top: 58.51%;
+bottom: 20.21%;
+
+background: url(chart-simple-horizontal (1).png);
+
+
+/* Rectangle 106 */
+
+position: absolute;
+left: 15.23%;
+right: 79.02%;
+top: 35.11%;
+bottom: 43.62%;
+
+background: url(home (2).png);

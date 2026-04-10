@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Spendy.Views.EndedSavingsPage"
+             x:Name="PageRoot"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource SpendyPageBg}">
+    <Grid RowDefinitions="Auto,*">
+        <Grid Padding="16,12" BackgroundColor="{StaticResource SpendyNavy}">
+            <Grid ColumnDefinitions="Auto,*">
+                <Button Text="&#x2039;"
+                        FontSize="28"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        WidthRequest="44"
+                        Clicked="OnBack" />
+                <Label Grid.Column="1"
+                       Text="Ended"
+                       TextColor="White"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="20"
+                       VerticalOptions="Center" />
+            </Grid>
+        </Grid>
+
+        <ScrollView Grid.Row="1" Padding="24,16">
+            <VerticalStackLayout Spacing="14">
+                <Label Text="No ended goals yet. Open a plan and use “Mark as ended”, or end it from the plan screen."
+                       TextColor="#99011D3D"
+                       FontSize="14"
+                       LineBreakMode="WordWrap"
+                       IsVisible="{Binding ShowEmptyState}" />
+
+                <Label Text="Unfinished"
+                       TextColor="{StaticResource SpendyRed}"
+                       FontAttributes="Bold"
+                       IsVisible="{Binding HasUnfinished}" />
+                <CollectionView ItemsSource="{Binding Unfinished}"
+                                SelectionMode="None"
+                                IsVisible="{Binding HasUnfinished}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="White"
+                                    StrokeThickness="0"
+                                    Padding="16">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPlanTapped" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="{StaticResource SpendyNavy}"
+                                               FontAttributes="Bold" />
+                                        <Label Grid.Column="1"
+                                               Text="Unfinished"
+                                               TextColor="{StaticResource SpendyRed}"
+                                               FontAttributes="Bold"
+                                               FontSize="12" />
+                                    </Grid>
+                                    <Label Text="{Binding AmountLine}"
+                                           TextColor="{StaticResource SpendyNavy}" />
+                                    <ProgressBar Progress="{Binding Progress}"
+                                                 ProgressColor="{StaticResource SpendyAccent}"
+                                                 BackgroundColor="#D9D9D9"
+                                                 HeightRequest="6" />
+                                    <Label Text="{Binding TargetDate, StringFormat='Target Date: {0}'}"
+                                           FontSize="12"
+                                           TextColor="#99011D3D" />
+                                    <Button Text="Restore to active"
+                                            FontSize="13"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource SpendyAccent}"
+                                            Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.RestoreToActiveCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="Finished"
+                       TextColor="{StaticResource SpendyGreen}"
+                       FontAttributes="Bold"
+                       Margin="0,8,0,0"
+                       IsVisible="{Binding HasFinished}" />
+                <CollectionView ItemsSource="{Binding Finished}"
+                                SelectionMode="None"
+                                IsVisible="{Binding HasFinished}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="White"
+                                    StrokeThickness="0"
+                                    Padding="16">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPlanTapped" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="{StaticResource SpendyNavy}"
+                                               FontAttributes="Bold" />
+                                        <Label Grid.Column="1"
+                                               Text="Finished"
+                                               TextColor="{StaticResource SpendyGreen}"
+                                               FontAttributes="Bold"
+                                               FontSize="12" />
+                                    </Grid>
+                                    <Label Text="{Binding AmountLine}"
+                                           TextColor="{StaticResource SpendyGreen}" />
+                                    <ProgressBar Progress="{Binding Progress}"
+                                                 ProgressColor="{StaticResource SpendyGreen}"
+                                                 BackgroundColor="#D9D9D9"
+                                                 HeightRequest="6" />
+                                    <Label Text="{Binding TargetDate, StringFormat='Target Date: {0}'}"
+                                           FontSize="12"
+                                           TextColor="#99011D3D" />
+                                    <Button Text="Restore to active"
+                                            FontSize="13"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource SpendyAccent}"
+                                            Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.RestoreToActiveCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

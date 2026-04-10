@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution>
+  <!-- Spendy Budget Tracker — .NET MAUI app (SQLite/EF Core, MVVM, mandatory 2% savings). -->
+  <!-- Open this file from the SpendyMobile folder. Build: dotnet build Spendy.slnx -->
+  <Folder Name="/Spendy/">
+    <Project Path="Spendy/Spendy.csproj" DisplayName="Spendy" />
+  </Folder>
+</Solution>
