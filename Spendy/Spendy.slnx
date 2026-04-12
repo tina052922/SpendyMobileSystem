@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Solution>
   <!-- Same app as ../Spendy.slnx — use this file when the working directory is Spendy/. -->
+  <!-- Vite + React shell lives one level up; paths are relative to this file. -->
   <Folder Name="/Spendy/">
     <Project Path="Spendy.csproj" DisplayName="Spendy" />
+  </Folder>
+  <Folder Name="/Web (Vite)/">
+    <File Path="../package.json" />
+    <File Path="../vite.config.ts" />
+    <File Path="../tsconfig.json" />
+    <File Path="../tsconfig.node.json" />
+    <File Path="../index.html" />
   </Folder>
 </Solution>
