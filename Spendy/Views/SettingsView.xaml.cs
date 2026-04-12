@@ -67,7 +67,7 @@ public partial class SettingsView : ContentView
 	async void OnUpdatePassword(object? sender, EventArgs e)
 	{
 		if (Shell.Current is { } shell)
-			await shell.DisplayAlertAsync("Spendy", "Password updated (demo).", "OK");
+			await shell.DisplayAlert("Spendy", "Password updated (demo).", "OK");
 	}
 
 	void OnLogout(object? sender, EventArgs e) => AppNavigation.GoToSignInStack();

@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -6,7 +5,7 @@ using Spendy.Services;
 
 namespace Spendy.ViewModels;
 
-public partial class AddSavingPlanViewModel : ObservableObject
+public partial class AddSavingPlanViewModel : SavingPlanCalendarViewModelBase
 {
 	readonly ISpendyDataService _data;
 	readonly IProfilePhotoService _profilePhoto;
@@ -18,14 +17,6 @@ public partial class AddSavingPlanViewModel : ObservableObject
 
 	[ObservableProperty]
 	private string _targetAmountText = string.Empty;
-
-	[ObservableProperty]
-	private int _selectedDurationIndex;
-
-	public ObservableCollection<string> DurationOptions { get; } =
-		new(["1 Month", "3 Months", "6 Months", "1 Year"]);
-
-	static readonly int[] DurationMonths = [1, 3, 6, 12];
 
 	public AddSavingPlanViewModel(ISpendyDataService data)
 	{
@@ -62,11 +53,14 @@ public partial class AddSavingPlanViewModel : ObservableObject
 			return;
 		}
 
-		var idx = Math.Clamp(SelectedDurationIndex, 0, DurationMonths.Length - 1);
-		var months = DurationMonths[idx];
-		var targetDate = DateTime.Today.AddMonths(months);
+		if (EndDate.Date < StartDate.Date)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", "End date must be on or after the start date.", "OK");
+			return;
+		}
 
-		await _data.CreateSavingGoalAsync(PlanName.Trim(), target, targetDate);
+		await _data.CreateSavingGoalAsync(PlanName.Trim(), target, EndDate.Date);
 		await AppNavigation.PopAsync();
 	}
 }

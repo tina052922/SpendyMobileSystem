@@ -5,7 +5,7 @@ using Spendy.Services;
 
 namespace Spendy.ViewModels;
 
-public partial class EditSavingPlanViewModel : ObservableObject
+public partial class EditSavingPlanViewModel : SavingPlanCalendarViewModelBase
 {
 	readonly ISpendyDataService _data;
 	readonly int _planId;
@@ -18,9 +18,6 @@ public partial class EditSavingPlanViewModel : ObservableObject
 
 	[ObservableProperty]
 	private string _targetAmountText = string.Empty;
-
-	[ObservableProperty]
-	private DateTime _targetDate = DateTime.Today;
 
 	public EditSavingPlanViewModel(ISpendyDataService data, int planId)
 	{
@@ -44,7 +41,13 @@ public partial class EditSavingPlanViewModel : ObservableObject
 
 		Name = plan.Name;
 		TargetAmountText = plan.Target.ToString("0.##", CultureInfo.InvariantCulture);
-		TargetDate = plan.TargetDateValue;
+		var end = plan.TargetDateValue.Date;
+		EndDate = end;
+		var start = end.AddMonths(-1);
+		if (start >= end)
+			start = end.AddDays(-14);
+		StartDate = start;
+		CalendarMonth = new DateTime(end.Year, end.Month, 1);
 	}
 
 	[RelayCommand]
@@ -74,7 +77,14 @@ public partial class EditSavingPlanViewModel : ObservableObject
 			return;
 		}
 
-		await _data.UpdateSavingGoalAsync(_planId, Name.Trim(), target, TargetDate);
+		if (EndDate.Date < StartDate.Date)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", "End date must be on or after the start date.", "OK");
+			return;
+		}
+
+		await _data.UpdateSavingGoalAsync(_planId, Name.Trim(), target, EndDate.Date);
 		await AppNavigation.PopAsync();
 	}
 }

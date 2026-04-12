@@ -51,7 +51,7 @@ public partial class ProfilePage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlertAsync("Spendy", $"Could not update photo: {ex.Message}", "OK");
+			await DisplayAlert("Spendy", $"Could not update photo: {ex.Message}", "OK");
 		}
 	}
 }

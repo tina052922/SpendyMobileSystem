@@ -143,7 +143,7 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 		if (HasGoals || Shell.Current is null)
 			return;
 
-		var ok = await Shell.Current.DisplayAlertAsync(
+		var ok = await Shell.Current.DisplayAlert(
 			"Go back without saving?",
 			"This income will not be saved. Add a saving goal on the Savings tab, then try again with a lower amount or after creating a goal.",
 			"Go back",
@@ -171,14 +171,14 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 
 		if (HasGoals)
 		{
-			await Shell.Current.DisplayAlertAsync(
+			await Shell.Current.DisplayAlert(
 				"Allocate Mandatory Savings",
 				"Select a saving goal, then tap Confirm Allocation to continue.",
 				"OK");
 			return;
 		}
 
-		var ok = await Shell.Current.DisplayAlertAsync(
+		var ok = await Shell.Current.DisplayAlert(
 			"Go back without saving?",
 			"This income will not be saved. Add a saving goal on the Savings tab, then try again.",
 			"Go back",

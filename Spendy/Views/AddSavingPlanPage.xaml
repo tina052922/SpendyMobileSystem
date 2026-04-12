@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Spendy.ViewModels"
              x:Class="Spendy.Views.AddSavingPlanPage"
+             x:Name="PageRoot"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0A1428">
@@ -20,78 +22,203 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <VerticalStackLayout Spacing="10">
-            <Grid ColumnDefinitions="Auto,*,Auto">
-                <Border WidthRequest="44"
-                        HeightRequest="44"
-                        StrokeThickness="0"
-                        BackgroundColor="#1AFFFFFF">
-                    <Border.StrokeShape>
-                        <Ellipse />
-                    </Border.StrokeShape>
-                    <Image Source="{Binding ProfilePhoto}"
-                           Aspect="AspectFill" />
-                </Border>
-                <ImageButton Grid.Column="2"
-                             Source="whitenotificon.png"
-                             BackgroundColor="Transparent"
-                             WidthRequest="34"
-                             HeightRequest="34"
-                             Aspect="AspectFit"
-                             Clicked="OnNotifications" />
-            </Grid>
-            <Grid ColumnDefinitions="Auto,*,Auto">
-                <Button Text="&#x2039;"
-                        FontSize="28"
-                        TextColor="White"
-                        BackgroundColor="Transparent"
-                        WidthRequest="44"
-                        Clicked="OnBack" />
-                <Label Grid.Column="1"
-                       Text="Add Savings Plan"
-                       TextColor="White"
-                       FontFamily="OpenSansSemibold"
-                       FontSize="20"
-                       HorizontalTextAlignment="Center"
-                       VerticalOptions="Center" />
-                <BoxView Grid.Column="2"
-                         WidthRequest="44"
-                         HeightRequest="44"
-                         Color="Transparent" />
-            </Grid>
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="#1AFFFFFF">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Image Source="{Binding ProfilePhoto}"
+                               Aspect="AspectFill" />
+                    </Border>
+                    <ImageButton Grid.Column="2"
+                                 Source="whitenotificon.png"
+                                 BackgroundColor="Transparent"
+                                 WidthRequest="34"
+                                 HeightRequest="34"
+                                 Aspect="AspectFit"
+                                 Clicked="OnNotifications" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Button Text="&#x2039;"
+                            FontSize="28"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            WidthRequest="44"
+                            Clicked="OnBack" />
+                    <Label Grid.Column="1"
+                           Text="Add Savings Plan"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="20"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center" />
+                    <BoxView Grid.Column="2"
+                             WidthRequest="44"
+                             HeightRequest="44"
+                             Color="Transparent" />
+                </Grid>
             </VerticalStackLayout>
         </Grid>
 
         <ScrollView Grid.Row="1" Padding="24,16">
             <VerticalStackLayout Spacing="18">
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Plan Name" TextColor="White" FontSize="14" />
+                <Border StrokeThickness="0"
+                        BackgroundColor="#3E4E65"
+                        Padding="16,4,16,4">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
                     <Entry Placeholder="Plan name"
                            PlaceholderColor="#99FFFFFF"
                            Text="{Binding PlanName, Mode=TwoWay}"
                            TextColor="White"
-                           BackgroundColor="#3E4E65"
-                           HeightRequest="52" />
-                </VerticalStackLayout>
+                           BackgroundColor="Transparent"
+                           HeightRequest="48" />
+                </Border>
 
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Target Amount" TextColor="White" FontSize="14" />
-                    <Entry Placeholder="Amount"
-                           Keyboard="Numeric"
-                           PlaceholderColor="#99FFFFFF"
-                           Text="{Binding TargetAmountText, Mode=TwoWay}"
-                           TextColor="White"
-                           BackgroundColor="#3E4E65"
-                           HeightRequest="52" />
-                </VerticalStackLayout>
-
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Duration (target date)" TextColor="White" FontSize="14" />
-                    <Picker Title="Duration"
-                            ItemsSource="{Binding DurationOptions}"
-                            SelectedIndex="{Binding SelectedDurationIndex, Mode=TwoWay}"
-                            TextColor="White"
+                <Grid>
+                    <Border StrokeThickness="0"
                             BackgroundColor="#3E4E65"
-                            HeightRequest="52" />
+                            Padding="16,4,48,4">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24" />
+                        </Border.StrokeShape>
+                        <Entry Placeholder="Amount"
+                               Keyboard="Numeric"
+                               PlaceholderColor="#99FFFFFF"
+                               Text="{Binding TargetAmountText, Mode=TwoWay}"
+                               TextColor="White"
+                               BackgroundColor="Transparent"
+                               HeightRequest="48" />
+                    </Border>
+                    <Border WidthRequest="36"
+                            HeightRequest="36"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"
+                            Margin="0,0,10,0"
+                            BackgroundColor="#5F6D81"
+                            StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Label Text="₱"
+                               TextColor="#A3B5CC"
+                               FontAttributes="Bold"
+                               FontSize="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               InputTransparent="True" />
+                    </Border>
+                </Grid>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Select Date"
+                           TextColor="White"
+                           FontSize="15"
+                           FontFamily="OpenSansSemibold" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button Text="Start Date"
+                                Command="{Binding SelectStartModeCommand}"
+                                BackgroundColor="{Binding StartToggleBg}"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="22"
+                                HeightRequest="48" />
+                        <Button Grid.Column="1"
+                                Text="End Date"
+                                Command="{Binding SelectEndModeCommand}"
+                                BackgroundColor="{Binding EndToggleBg}"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="22"
+                                HeightRequest="48" />
+                    </Grid>
+
+                    <Border BackgroundColor="#3E4E65"
+                            StrokeThickness="0"
+                            Padding="12,14">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Button Text="&#x2039;"
+                                        Command="{Binding PrevMonthCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="White"
+                                        FontSize="22"
+                                        WidthRequest="44"
+                                        Padding="0" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding CalendarTitle}"
+                                       TextColor="White"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="16"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalOptions="Center" />
+                                <Button Grid.Column="2"
+                                        Text="&#x203A;"
+                                        Command="{Binding NextMonthCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="White"
+                                        FontSize="22"
+                                        WidthRequest="44"
+                                        Padding="0" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="0">
+                                <Label Text="Sun" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="1" Text="Mon" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="2" Text="Tue" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="3" Text="Wed" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="4" Text="Thu" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="5" Text="Fri" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="6" Text="Sat" FontSize="11" TextColor="#99FFFFFF" HorizontalTextAlignment="Center" />
+                            </Grid>
+                            <CollectionView ItemsSource="{Binding CalendarDays}"
+                                            SelectionMode="None"
+                                            HeightRequest="252">
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout Orientation="Vertical"
+                                                     Span="7"
+                                                     HorizontalItemSpacing="2"
+                                                     VerticalItemSpacing="4" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:CalendarDayCell">
+                                        <Button Text="{Binding DayText}"
+                                                TextColor="{Binding TextColor}"
+                                                BackgroundColor="{Binding CellBackground}"
+                                                FontSize="14"
+                                                HeightRequest="40"
+                                                CornerRadius="20"
+                                                Padding="0"
+                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.SelectDayCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Duration"
+                           TextColor="White"
+                           FontSize="15"
+                           FontFamily="OpenSansSemibold" />
+                    <Border StrokeThickness="0"
+                            BackgroundColor="#3E4E65"
+                            Padding="16,14">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24" />
+                        </Border.StrokeShape>
+                        <Label Text="{Binding DurationText}"
+                               TextColor="#CCFFFFFF"
+                               FontSize="16" />
+                    </Border>
                 </VerticalStackLayout>
 
                 <Button Text="Save Plan"

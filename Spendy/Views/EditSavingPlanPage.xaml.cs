@@ -15,7 +15,10 @@ public partial class EditSavingPlanPage : ContentPage
 	{
 		base.OnAppearing();
 		if (BindingContext is EditSavingPlanViewModel vm)
+		{
 			await vm.LoadAsync();
+			vm.RefreshCalendar();
+		}
 	}
 
 	async void OnBack(object? sender, EventArgs e) => await AppNavigation.PopAsync();

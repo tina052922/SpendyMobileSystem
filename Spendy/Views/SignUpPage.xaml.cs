@@ -34,12 +34,12 @@ public partial class SignUpPage : ContentPage
 	}
 
 	async void OnTerms(object? sender, TappedEventArgs e) =>
-		await DisplayAlertAsync("Spendy", "Terms & Conditions placeholder.", "OK");
+		await DisplayAlert("Spendy", "Terms & Conditions placeholder.", "OK");
 
 	void OnSignUp(object? sender, EventArgs e) => AppNavigation.GoToMainShell();
 
 	async void OnGoogle(object? sender, EventArgs e) =>
-		await DisplayAlertAsync("Spendy", "Google sign-up would continue here.", "OK");
+		await DisplayAlert("Spendy", "Google sign-up would continue here.", "OK");
 
 	async void OnSignIn(object? sender, TappedEventArgs e)
 	{

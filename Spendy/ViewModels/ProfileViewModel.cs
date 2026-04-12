@@ -80,7 +80,7 @@ public partial class ProfileViewModel : ObservableObject
 		});
 
 		if (Shell.Current is not null)
-			await Shell.Current.DisplayAlertAsync("Spendy", "Profile saved.", "OK");
+			await Shell.Current.DisplayAlert("Spendy", "Profile saved.", "OK");
 	}
 
 	public void ApplyLocalPhoto(string filePath)

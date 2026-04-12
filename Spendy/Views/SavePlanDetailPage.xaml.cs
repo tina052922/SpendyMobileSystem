@@ -14,8 +14,10 @@ public partial class SavePlanDetailPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		if (BindingContext is SavePlanDetailViewModel vm)
-			await vm.LoadAsync();
+		if (BindingContext is not SavePlanDetailViewModel vm)
+			return;
+
+		await vm.LoadAsync();
 	}
 
 	async void OnBack(object? sender, EventArgs e) => await AppNavigation.PopAsync();

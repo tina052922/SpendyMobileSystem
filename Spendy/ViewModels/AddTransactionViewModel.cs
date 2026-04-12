@@ -114,14 +114,14 @@ public partial class AddTransactionViewModel : ObservableObject
 			&& !decimal.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out amt))
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlertAsync("Spendy", "Enter a valid amount.", "OK");
+				await Shell.Current.DisplayAlert("Spendy", "Enter a valid amount.", "OK");
 			return;
 		}
 
 		if (amt <= 0)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlertAsync("Spendy", "Amount must be greater than zero.", "OK");
+				await Shell.Current.DisplayAlert("Spendy", "Amount must be greater than zero.", "OK");
 			return;
 		}
 
@@ -130,7 +130,7 @@ public partial class AddTransactionViewModel : ObservableObject
 		if (cat is null)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlertAsync("Spendy", "Pick a category.", "OK");
+				await Shell.Current.DisplayAlert("Spendy", "Pick a category.", "OK");
 			return;
 		}
 

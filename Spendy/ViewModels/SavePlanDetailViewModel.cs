@@ -84,7 +84,7 @@ public partial class SavePlanDetailViewModel : ObservableObject
 		if (!HasIncome)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlertAsync("Spendy", "Add an income transaction first to use saving plans.", "OK");
+				await Shell.Current.DisplayAlert("Spendy", "Add an income transaction first to use saving plans.", "OK");
 			return;
 		}
 		var (ok, amt) = await TryParseAmountAsync();
@@ -102,7 +102,7 @@ public partial class SavePlanDetailViewModel : ObservableObject
 		if (!HasIncome)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlertAsync("Spendy", "Add an income transaction first to use saving plans.", "OK");
+				await Shell.Current.DisplayAlert("Spendy", "Add an income transaction first to use saving plans.", "OK");
 			return;
 		}
 		var (ok, amt) = await TryParseAmountAsync();

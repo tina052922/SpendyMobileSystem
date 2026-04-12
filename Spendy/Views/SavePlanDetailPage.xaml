@@ -4,8 +4,15 @@
              x:Class="Spendy.Views.SavePlanDetailPage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="{StaticResource SpendyPageBg}">
+             BackgroundColor="#01143D">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#01143D" Offset="0" />
+            <GradientStop Color="#0335A3" Offset="1" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <Grid RowDefinitions="Auto,*">
+        <!-- Header (same gradient stops as theme / add-plan pages) -->
         <Grid Grid.Row="0"
               Padding="0,0,0,0"
               RowDefinitions="Auto,Auto">
@@ -57,136 +64,155 @@
             </VerticalStackLayout>
         </Grid>
 
-        <ScrollView Grid.Row="1"
-                    BackgroundColor="{StaticResource SpendyPageBg}">
-            <VerticalStackLayout Spacing="16" Padding="0,0,0,24">
-                <Border Margin="24,-12,24,0"
-                        BackgroundColor="#1B2B42"
-                        StrokeThickness="0"
-                        Padding="16">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="30,30,0,0" />
-                    </Border.StrokeShape>
-                    <VerticalStackLayout Spacing="12">
-                        <Label Text="{Binding PlanTitle}"
-                               TextColor="White"
-                               FontAttributes="Bold"
-                               FontSize="18"
-                               HorizontalTextAlignment="Center" />
-                        <Label Text="{Binding AmountLine}"
-                               TextColor="White"
-                               FontSize="20"
-                               HorizontalTextAlignment="Center" />
-                        <ProgressBar Progress="{Binding Progress}"
-                                     ProgressColor="{StaticResource SpendyAccent}"
-                                     BackgroundColor="#D9D9D9"
-                                     HeightRequest="8" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <VerticalStackLayout Padding="24,0" Spacing="12" IsVisible="{Binding CanTransact}">
-                    <Grid>
-                        <Border BackgroundColor="#3E4E65"
-                                StrokeThickness="0"
-                                HeightRequest="48"
-                                Padding="16,0,52,0">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="24" />
-                            </Border.StrokeShape>
-                            <Entry Placeholder="Enter amount"
-                                   PlaceholderColor="#99FFFFFF"
-                                   Text="{Binding AmountInput, Mode=TwoWay}"
+        <!-- Main sheet: SpendyPageBg, rounded top (reference layout) -->
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource SpendyPageBg}"
+                StrokeThickness="0"
+                Margin="0,-16,0,0"
+                VerticalOptions="Fill"
+                HorizontalOptions="Fill">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="28,28,0,0" />
+            </Border.StrokeShape>
+            <ScrollView BackgroundColor="Transparent"
+                        VerticalOptions="Fill">
+                <VerticalStackLayout Spacing="18" Padding="20,20,20,28">
+                    <!-- Goal summary card -->
+                    <Border BackgroundColor="#1B2B42"
+                            StrokeThickness="0"
+                            Padding="22,20">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="16">
+                            <Label Text="{Binding PlanTitle}"
                                    TextColor="White"
-                                   Keyboard="Numeric"
-                                   VerticalOptions="Center" />
-                        </Border>
-                        <Border WidthRequest="36"
-                                HeightRequest="36"
-                                HorizontalOptions="End"
-                                VerticalOptions="Center"
-                                Margin="0,0,8,0"
-                                BackgroundColor="#5F6D81"
-                                StrokeThickness="0">
-                            <Border.StrokeShape>
-                                <Ellipse />
-                            </Border.StrokeShape>
-                            <Label Text="₱"
-                                   TextColor="#A3B5CC"
                                    FontAttributes="Bold"
                                    FontSize="18"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center" />
-                        </Border>
-                    </Grid>
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="{Binding AmountLine}"
+                                   TextColor="White"
+                                   FontSize="20"
+                                   HorizontalTextAlignment="Center" />
+                            <ProgressBar Progress="{Binding Progress}"
+                                         ProgressColor="{StaticResource SpendyAccent}"
+                                         BackgroundColor="#D9D9D9"
+                                         HeightRequest="8" />
+                        </VerticalStackLayout>
+                    </Border>
 
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                        <Button Text="Save Money"
-                                Command="{Binding SaveMoneyCommand}"
+                    <VerticalStackLayout Spacing="14" IsVisible="{Binding CanTransact}">
+                        <Grid>
+                            <Border BackgroundColor="#3E4E65"
+                                    StrokeThickness="0"
+                                    HeightRequest="52"
+                                    Padding="16,0,52,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="26" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="Enter amount"
+                                       PlaceholderColor="#99FFFFFF"
+                                       Text="{Binding AmountInput, Mode=TwoWay}"
+                                       TextColor="White"
+                                       Keyboard="Numeric"
+                                       BackgroundColor="Transparent"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            <Border WidthRequest="36"
+                                    HeightRequest="36"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    Margin="0,0,10,0"
+                                    BackgroundColor="#5F6D81"
+                                    StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <Ellipse />
+                                </Border.StrokeShape>
+                                <Label Text="₱"
+                                       TextColor="#A3B5CC"
+                                       FontAttributes="Bold"
+                                       FontSize="18"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Button Text="Save Money"
+                                    Command="{Binding SaveMoneyCommand}"
+                                    BackgroundColor="{StaticResource SpendyAccent}"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    CornerRadius="24"
+                                    HeightRequest="52" />
+                            <Button Grid.Column="1"
+                                    Text="Withdraw"
+                                    Command="{Binding WithdrawCommand}"
+                                    BackgroundColor="#BB0000"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    CornerRadius="24"
+                                    HeightRequest="52" />
+                        </Grid>
+
+                        <Button Text="Mark as ended"
+                                Command="{Binding EndGoalCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource SpendyNavy}"
+                                BorderColor="{StaticResource SpendyNavy}"
+                                BorderWidth="1"
+                                FontAttributes="Bold"
+                                CornerRadius="22" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="12" IsVisible="{Binding ShowRestoreGoal}">
+                        <Button Text="Restore to active"
+                                Command="{Binding RestoreGoalCommand}"
                                 BackgroundColor="{StaticResource SpendyAccent}"
                                 TextColor="White"
                                 FontAttributes="Bold"
                                 CornerRadius="22" />
-                        <Button Grid.Column="1"
-                                Text="Withdraw"
-                                Command="{Binding WithdrawCommand}"
-                                BackgroundColor="#BB0000"
-                                TextColor="White"
-                                FontAttributes="Bold"
-                                CornerRadius="22" />
-                    </Grid>
+                    </VerticalStackLayout>
 
-                    <Button Text="Mark as ended"
-                            Command="{Binding EndGoalCommand}"
-                            BackgroundColor="Transparent"
-                            TextColor="{StaticResource SpendyNavy}"
-                            BorderColor="{StaticResource SpendyNavy}"
-                            BorderWidth="1"
-                            FontAttributes="Bold"
-                            CornerRadius="22" />
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Transaction History"
+                               TextColor="{StaticResource SpendyNavy}"
+                               FontAttributes="Bold"
+                               FontSize="18"
+                               Margin="0,4,0,0" />
+
+                        <CollectionView ItemsSource="{Binding History}"
+                                        SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BackgroundColor="#CCFFFFFF"
+                                            StrokeThickness="0"
+                                            Padding="16,14">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="16" />
+                                        </Border.StrokeShape>
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="{Binding DateText}"
+                                                   TextColor="{StaticResource SpendyNavy}"
+                                                   FontSize="15"
+                                                   VerticalOptions="Center" />
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding AmountText}"
+                                                   TextColor="{Binding AmountColor}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="15"
+                                                   VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-
-                <VerticalStackLayout Padding="24,8,24,0" Spacing="12" IsVisible="{Binding ShowRestoreGoal}">
-                    <Button Text="Restore to active"
-                            Command="{Binding RestoreGoalCommand}"
-                            BackgroundColor="{StaticResource SpendyAccent}"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="22" />
-                </VerticalStackLayout>
-
-                <VerticalStackLayout Padding="24,0" Spacing="12">
-                    <Label Text="Transaction History"
-                           TextColor="{StaticResource SpendyNavy}"
-                           FontAttributes="Bold"
-                           FontSize="18"
-                           Margin="0,8,0,0" />
-
-                    <CollectionView ItemsSource="{Binding History}"
-                                    SelectionMode="None">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Border BackgroundColor="#CCFFFFFF"
-                                        StrokeThickness="0"
-                                        Padding="12,10">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="13" />
-                                    </Border.StrokeShape>
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <Label Text="{Binding DateText}"
-                                               TextColor="{StaticResource SpendyNavy}" />
-                                        <Label Grid.Column="1"
-                                               Text="{Binding AmountText}"
-                                               TextColor="{Binding AmountColor}" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-        </ScrollView>
+            </ScrollView>
+        </Border>
     </Grid>
 </ContentPage>
