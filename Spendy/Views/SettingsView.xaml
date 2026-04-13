@@ -130,7 +130,7 @@
                                            BackgroundColor="Transparent"
                                            HeightRequest="44" />
                                     <ImageButton Grid.Column="1"
-                                                 Source="unhideicon.png"
+                                                 Source="unhide.png"
                                                  BackgroundColor="Transparent"
                                                  WidthRequest="28"
                                                  HeightRequest="28"
@@ -147,7 +147,7 @@
                                            BackgroundColor="Transparent"
                                            HeightRequest="44" />
                                     <ImageButton Grid.Column="1"
-                                                 Source="unhideicon.png"
+                                                 Source="unhide.png"
                                                  BackgroundColor="Transparent"
                                                  WidthRequest="28"
                                                  HeightRequest="28"
@@ -164,7 +164,7 @@
                                            BackgroundColor="Transparent"
                                            HeightRequest="44" />
                                     <ImageButton Grid.Column="1"
-                                                 Source="unhideicon.png"
+                                                 Source="unhide.png"
                                                  BackgroundColor="Transparent"
                                                  WidthRequest="28"
                                                  HeightRequest="28"

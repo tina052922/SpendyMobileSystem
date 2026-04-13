@@ -9,8 +9,11 @@ public partial class SignInPage : ContentPage
 		InitializeComponent();
 	}
 
-	void OnTogglePassword(object? sender, EventArgs e) =>
+	void OnTogglePasswordEye(object? sender, TappedEventArgs e)
+	{
 		PasswordEntry.IsPassword = !PasswordEntry.IsPassword;
+		PasswordEyeImage.Source = PasswordEntry.IsPassword ? "unhide.png" : "hideicon.png";
+	}
 
 	async void OnForgot(object? sender, TappedEventArgs e) =>
 		await DisplayAlertAsync("Spendy", "Forgot password flow would open here.", "OK");

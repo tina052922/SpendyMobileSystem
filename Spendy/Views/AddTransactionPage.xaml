@@ -69,13 +69,14 @@
 
             <ScrollView>
                 <VerticalStackLayout Spacing="16" Padding="0,0,0,18">
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Button Text="Expenses"
                                 Command="{Binding SelectExpenseCommand}"
                                 TextColor="White"
                                 FontFamily="OpenSansSemibold"
                                 FontSize="18"
                                 CornerRadius="26"
+                                HeightRequest="52"
                                 BackgroundColor="{Binding ExpenseAccentBackground}" />
                         <Button Grid.Column="1"
                                 Text="Income"
@@ -84,6 +85,7 @@
                                 FontFamily="OpenSansSemibold"
                                 FontSize="18"
                                 CornerRadius="26"
+                                HeightRequest="52"
                                 BackgroundColor="{Binding IncomeAccentBackground}" />
                     </Grid>
 
@@ -141,10 +143,10 @@
                            FontSize="14"
                            FontFamily="OpenSansSemibold" />
 
-            <CollectionView ItemsSource="{Binding ExpensePicker}"
-                                    SelectedItem="{Binding SelectedExpenseCategory, Mode=TwoWay}"
-                                    SelectionMode="Single"
-                                    IsVisible="{Binding IsExpenseMode}">
+                    <CollectionView ItemsSource="{Binding ExpensePicker}"
+                                      SelectedItem="{Binding SelectedExpenseCategory, Mode=TwoWay}"
+                                      SelectionMode="Single"
+                                      IsVisible="{Binding IsExpenseMode}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical"
                                              Span="5"
@@ -156,11 +158,11 @@
                                 <VerticalStackLayout Padding="2,2"
                                                      Spacing="8"
                                                      HorizontalOptions="Fill">
-                            <Border HorizontalOptions="Center"
+                                    <Border HorizontalOptions="Center"
                                             WidthRequest="72"
                                             HeightRequest="72"
                                             BackgroundColor="#2A3B55"
-                                    Stroke="#0335A3"
+                                            Stroke="#0335A3"
                                             StrokeThickness="{Binding IsSelected, Converter={StaticResource CatSelStroke}}">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="22" />
@@ -181,7 +183,7 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
-            <CollectionView ItemsSource="{Binding IncomePicker}"
+                    <CollectionView ItemsSource="{Binding IncomePicker}"
                                     SelectedItem="{Binding SelectedIncomeCategory, Mode=TwoWay}"
                                     SelectionMode="Single"
                                     IsVisible="{Binding IsIncomeMode}">
@@ -196,7 +198,7 @@
                                 <VerticalStackLayout Padding="2,2"
                                                      Spacing="8"
                                                      HorizontalOptions="Fill">
-                            <Border HorizontalOptions="Center"
+                                    <Border HorizontalOptions="Center"
                                             WidthRequest="72"
                                             HeightRequest="72"
                                             BackgroundColor="#2A3B55"

@@ -8,7 +8,7 @@ public partial class SignUpPage : ContentPage
 	{
 		InitializeComponent();
 		LoadPickers();
-		PasswordEyeButton.Source = "unhideicon.png";
+		PasswordEyeImage.Source = "unhide.png";
 	}
 
 	void LoadPickers()
@@ -25,12 +25,10 @@ public partial class SignUpPage : ContentPage
 			YearPicker.SelectedIndex = 0;
 	}
 
-	void OnTogglePassword(object? sender, EventArgs e)
+	void OnTogglePasswordEye(object? sender, TappedEventArgs e)
 	{
 		PasswordEntry.IsPassword = !PasswordEntry.IsPassword;
-		// When hidden, show "unhide" icon; when visible, show "hide" icon.
-		if (PasswordEyeButton is not null)
-			PasswordEyeButton.Source = PasswordEntry.IsPassword ? "unhideicon.png" : "hideicon.png";
+		PasswordEyeImage.Source = PasswordEntry.IsPassword ? "unhide.png" : "hideicon.png";
 	}
 
 	async void OnTerms(object? sender, TappedEventArgs e) =>
