@@ -69,26 +69,26 @@
             </Border.StrokeShape>
 
             <ScrollView Margin="0,0,2,0">
-                <VerticalStackLayout Spacing="12" Padding="0,0,0,16">
+                <VerticalStackLayout Spacing="16" Padding="0,0,0,18">
 
                     <!-- Type selector -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Button Text="Expenses"
                                 Command="{Binding SelectExpenseCommand}"
                                 TextColor="White"
                                 FontFamily="OpenSansSemibold"
-                                FontSize="15"
-                                CornerRadius="22"
-                                HeightRequest="44"
+                                FontSize="18"
+                                CornerRadius="26"
+                                HeightRequest="52"
                                 BackgroundColor="{Binding ExpenseAccentBackground}" />
                         <Button Grid.Column="1"
                                 Text="Income"
                                 Command="{Binding SelectIncomeCommand}"
                                 TextColor="White"
                                 FontFamily="OpenSansSemibold"
-                                FontSize="15"
-                                CornerRadius="22"
-                                HeightRequest="44"
+                                FontSize="18"
+                                CornerRadius="26"
+                                HeightRequest="52"
                                 BackgroundColor="{Binding IncomeAccentBackground}" />
                     </Grid>
 
@@ -165,10 +165,10 @@
                                                      Spacing="6"
                                                      HorizontalOptions="Fill">
                                     <Border HorizontalOptions="Center"
-                                            WidthRequest="64"
-                                            HeightRequest="64"
-                                            BackgroundColor="#324D6E"
-                                            Stroke="#4A90D9"
+                                            WidthRequest="72"
+                                            HeightRequest="72"
+                                            BackgroundColor="#2A3B55"
+                                            Stroke="#0335A3"
                                             StrokeThickness="{Binding IsSelected, Converter={StaticResource CatSelStroke}}">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="22" />
@@ -206,10 +206,10 @@
                                                      Spacing="6"
                                                      HorizontalOptions="Fill">
                                     <Border HorizontalOptions="Center"
-                                            WidthRequest="64"
-                                            HeightRequest="64"
-                                            BackgroundColor="#324D6E"
-                                            Stroke="#4A90D9"
+                                            WidthRequest="72"
+                                            HeightRequest="72"
+                                            BackgroundColor="#2A3B55"
+                                            Stroke="#0335A3"
                                             StrokeThickness="{Binding IsSelected, Converter={StaticResource CatSelStroke}}">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="22" />

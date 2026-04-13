@@ -45,7 +45,7 @@ public partial class SettingsView : ContentView
 		_showCurrent = !_showCurrent;
 		CurrentPassword.IsPassword = !_showCurrent;
 		if (sender is ImageButton b)
-			b.Source = _showCurrent ? "hideicon.png" : "unhideicon.png";
+			b.Source = _showCurrent ? "hideicon.png" : "unhide.png";
 	}
 
 	void OnToggleNew(object? sender, EventArgs e)
@@ -53,7 +53,7 @@ public partial class SettingsView : ContentView
 		_showNew = !_showNew;
 		NewPassword.IsPassword = !_showNew;
 		if (sender is ImageButton b)
-			b.Source = _showNew ? "hideicon.png" : "unhideicon.png";
+			b.Source = _showNew ? "hideicon.png" : "unhide.png";
 	}
 
 	void OnToggleConfirm(object? sender, EventArgs e)
@@ -61,7 +61,7 @@ public partial class SettingsView : ContentView
 		_showConfirm = !_showConfirm;
 		ConfirmPassword.IsPassword = !_showConfirm;
 		if (sender is ImageButton b)
-			b.Source = _showConfirm ? "hideicon.png" : "unhideicon.png";
+			b.Source = _showConfirm ? "hideicon.png" : "unhide.png";
 	}
 
 	async void OnUpdatePassword(object? sender, EventArgs e)

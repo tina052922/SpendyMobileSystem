@@ -25,15 +25,20 @@
                             WidthRequest="46"
                             HeightRequest="46"
                             BackgroundColor="White"
-                            StrokeThickness="0"
-                            Padding="9">
+                            StrokeThickness="0">
                         <Border.StrokeShape>
                             <Ellipse />
                         </Border.StrokeShape>
-                        <ImageButton Source="darkbluenotificon.png"
-                                     BackgroundColor="Transparent"
-                                     Aspect="AspectFit"
-                                     Command="{Binding OpenNotificationsCommand}" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                        </Border.GestureRecognizers>
+                        <Image Source="darkbluenotificon.png"
+                               Aspect="AspectFit"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               InputTransparent="True" />
                     </Border>
                 </Grid>
 

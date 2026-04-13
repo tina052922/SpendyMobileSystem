@@ -59,7 +59,6 @@
 		<!-- Project `images` folder: nav strips, icons, phone mockup, logos (bundled as Maui drawables) -->
 		<MauiImage Include="images\*.png"
 		           Exclude="images\Windows 10 Settings - iconSvg.co.png;images\profile.png" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
