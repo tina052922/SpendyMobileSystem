@@ -61,13 +61,15 @@ public partial class SettingsView : ContentView
 			b.Source = _showConfirm ? "hideicon.png" : "unhide.png";
 	}
 
-	async void OnUpdatePassword(object? sender, EventArgs e)
+	void OnLogout(object? sender, EventArgs e)
 	{
-		if (Shell.Current is { } shell)
-			await shell.DisplayAlert("Spendy", "Password updated (demo).", "OK");
+		Ioc.Services.GetRequiredService<IAuthService>().Logout();
+		AppNavigation.GoToSignInStack();
 	}
 
-	void OnLogout(object? sender, EventArgs e) => AppNavigation.GoToSignInStack();
-
-	void OnLogoutTapped(object? sender, TappedEventArgs e) => AppNavigation.GoToSignInStack();
+	void OnLogoutTapped(object? sender, TappedEventArgs e)
+	{
+		Ioc.Services.GetRequiredService<IAuthService>().Logout();
+		AppNavigation.GoToSignInStack();
+	}
 }

@@ -8,10 +8,15 @@ public interface ISpendyDataService
 {
 	event EventHandler? DataChanged;
 
+	void NotifyDataChanged();
+
 	Task<decimal> GetBalanceAsync(CancellationToken cancellationToken = default);
 	Task<bool> HasAnyIncomeAsync(CancellationToken cancellationToken = default);
 
 	Task<UserEntity?> GetCurrentUserAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>Trimmed display name for headers, or null if none stored.</summary>
+	Task<string?> GetUserDisplayNameAsync(CancellationToken cancellationToken = default);
 
 	Task UpsertUserAsync(UserEntity user, CancellationToken cancellationToken = default);
 

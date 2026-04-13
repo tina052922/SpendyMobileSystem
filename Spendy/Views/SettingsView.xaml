@@ -1,236 +1,576 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Spendy.Views.SettingsView">
+
+             xmlns:vm="clr-namespace:Spendy.ViewModels"
+
+             x:Class="Spendy.Views.SettingsView"
+
+             x:DataType="vm:SettingsViewModel">
+
     <ScrollView BackgroundColor="{StaticResource SpendyPageBg}">
+
         <VerticalStackLayout Padding="0,0,0,120" Spacing="0">
+
             <Grid Padding="16,12,16,18">
+
                 <Grid.Background>
+
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+
                         <GradientStop Color="#01143D" Offset="0" />
+
                         <GradientStop Color="#0335A3" Offset="1" />
+
                     </LinearGradientBrush>
+
                 </Grid.Background>
+
                 <Grid ColumnDefinitions="Auto,*,Auto">
+
                     <Border WidthRequest="44"
+
                             HeightRequest="44"
+
                             StrokeThickness="0"
+
                             BackgroundColor="#1AFFFFFF"
+
                             VerticalOptions="Center">
+
                         <Border.StrokeShape>
+
                             <Ellipse />
+
                         </Border.StrokeShape>
+
                         <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
+
                     </Border>
-                    <Label Grid.Column="1"
-                           Text="Settings"
-                           TextColor="White"
-                           FontFamily="OpenSansSemibold"
-                           FontSize="20"
-                           VerticalOptions="Center"
-                           Margin="12,0,0,0" />
+
+                    <VerticalStackLayout Grid.Column="1"
+
+                                         Spacing="0"
+
+                                         VerticalOptions="Center"
+
+                                         Margin="12,0,0,0">
+
+                        <Label Text="Settings"
+
+                               TextColor="White"
+
+                               FontFamily="OpenSansSemibold"
+
+                               FontSize="20" />
+
+                        <Label Text="{Binding UserGreeting}"
+
+                               IsVisible="{Binding HasUserGreeting}"
+
+                               TextColor="#B3FFFFFF"
+
+                               FontSize="12" />
+
+                    </VerticalStackLayout>
+
                     <Border Grid.Column="2"
+
                             WidthRequest="44"
+
                             HeightRequest="44"
+
                             StrokeThickness="0"
+
                             BackgroundColor="White"
+
                             VerticalOptions="Center"
+
                             HorizontalOptions="End">
+
                         <Border.StrokeShape>
+
                             <Ellipse />
+
                         </Border.StrokeShape>
+
                         <Border.GestureRecognizers>
+
                             <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+
                         </Border.GestureRecognizers>
+
                         <Image Source="darkbluenotificon.png"
+
                                WidthRequest="24"
+
                                HeightRequest="24"
+
                                Aspect="AspectFit"
+
                                HorizontalOptions="Center"
+
                                VerticalOptions="Center"
+
                                InputTransparent="True" />
+
                     </Border>
+
                 </Grid>
+
             </Grid>
 
+
+
             <VerticalStackLayout Padding="24,14,24,0" Spacing="14">
+
                 <!-- Single clean list card like reference -->
+
                 <Border BackgroundColor="White"
+
                         StrokeThickness="0"
+
                         Padding="0">
+
                     <Border.StrokeShape>
+
                         <RoundRectangle CornerRadius="18" />
+
                     </Border.StrokeShape>
 
+
+
                     <VerticalStackLayout Spacing="0">
+
                         <!-- Profile -->
+
                         <Grid Padding="16" ColumnDefinitions="*,Auto">
+
                             <Grid.GestureRecognizers>
+
                                 <TapGestureRecognizer Tapped="OnProfileTapped" />
+
                             </Grid.GestureRecognizers>
+
                             <Label Text="Profile"
+
                                    TextColor="{StaticResource SpendyNavy}"
+
                                    FontFamily="OpenSansSemibold"
+
                                    FontSize="15"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="1"
+
                                    Text="›"
+
                                    TextColor="#98A2B3"
+
                                    FontSize="22"
+
                                    VerticalOptions="Center" />
+
                         </Grid>
+
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
+
+
 
                         <!-- Language (English only) -->
+
                         <Grid Padding="16" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="6">
+
                             <Label Text="Language"
+
                                    TextColor="{StaticResource SpendyNavy}"
+
                                    FontFamily="OpenSansSemibold"
+
                                    FontSize="15"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="1"
+
                                    Text="English"
+
                                    TextColor="#667085"
+
                                    FontSize="14"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="2"
+
                                    Text="›"
+
                                    TextColor="#98A2B3"
+
                                    FontSize="22"
+
                                    VerticalOptions="Center" />
+
                         </Grid>
+
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
+
+
 
                         <!-- Currency -->
+
                         <Grid Padding="16" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="6">
+
                             <Grid.GestureRecognizers>
+
                                 <TapGestureRecognizer Tapped="OnCurrencyTapped" />
+
                             </Grid.GestureRecognizers>
+
                             <Label Text="Currency"
+
                                    TextColor="{StaticResource SpendyNavy}"
+
                                    FontFamily="OpenSansSemibold"
+
                                    FontSize="15"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="1"
+
                                    Text="{Binding SelectedCurrency}"
+
                                    TextColor="#667085"
+
                                    FontSize="14"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="2"
+
                                    Text="›"
+
                                    TextColor="#98A2B3"
+
                                    FontSize="22"
+
                                    VerticalOptions="Center" />
+
                         </Grid>
+
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
+
+
 
                         <!-- Update Password (expand/collapse) -->
+
                         <Grid Padding="16" ColumnDefinitions="*,Auto">
+
                             <Grid.GestureRecognizers>
+
                                 <TapGestureRecognizer Tapped="OnTogglePassword" />
+
                             </Grid.GestureRecognizers>
+
                             <Label Text="Update Password"
+
                                    TextColor="{StaticResource SpendyNavy}"
+
                                    FontFamily="OpenSansSemibold"
+
                                    FontSize="15"
+
                                    VerticalOptions="Center" />
+
                             <Label x:Name="Chevron"
+
                                    Grid.Column="1"
+
                                    Text="›"
+
                                    TextColor="#98A2B3"
+
                                    FontSize="22"
+
                                    VerticalOptions="Center" />
+
                         </Grid>
+
+
+
+                        <!-- Dark panel: high-contrast light text on dark blue (matches Add Transaction) -->
 
                         <VerticalStackLayout x:Name="PasswordFields"
+
                                              IsVisible="False"
-                                             Padding="16,0,16,16"
-                                             Spacing="10">
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+
+                                             BackgroundColor="{StaticResource SpendyDarkSheet}"
+
+                                             Padding="16,14,16,18"
+
+                                             Spacing="12">
+
+                            <Label Text="Current password"
+
+                                   TextColor="{StaticResource SpendyDarkLabel}"
+
+                                   FontFamily="OpenSansSemibold"
+
+                                   FontSize="14" />
+
+                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+
+                                    StrokeThickness="0"
+
+                                    Padding="14,0"
+
+                                    HeightRequest="48">
+
+                                <Border.StrokeShape>
+
+                                    <RoundRectangle CornerRadius="22" />
+
+                                </Border.StrokeShape>
+
                                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+
                                     <Entry x:Name="CurrentPassword"
+
+                                           Text="{Binding CurrentPassword}"
+
                                            IsPassword="True"
-                                           Placeholder="Current Password"
+
+                                           Placeholder="Enter current password"
+
+                                           PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+
+                                           TextColor="{StaticResource SpendyDarkLabel}"
+
                                            BackgroundColor="Transparent"
+
                                            HeightRequest="44" />
+
                                     <ImageButton Grid.Column="1"
+
                                                  Source="unhide.png"
+
                                                  BackgroundColor="Transparent"
+
                                                  WidthRequest="28"
+
                                                  HeightRequest="28"
+
                                                  Clicked="OnToggleCurrent" />
+
                                 </Grid>
+
                             </Border>
 
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+
+
+                            <Label Text="New password"
+
+                                   TextColor="{StaticResource SpendyDarkLabel}"
+
+                                   FontFamily="OpenSansSemibold"
+
+                                   FontSize="14" />
+
+                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+
+                                    StrokeThickness="0"
+
+                                    Padding="14,0"
+
+                                    HeightRequest="48">
+
+                                <Border.StrokeShape>
+
+                                    <RoundRectangle CornerRadius="22" />
+
+                                </Border.StrokeShape>
+
                                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+
                                     <Entry x:Name="NewPassword"
+
+                                           Text="{Binding NewPassword}"
+
                                            IsPassword="True"
-                                           Placeholder="New Password"
+
+                                           Placeholder="Enter new password"
+
+                                           PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+
+                                           TextColor="{StaticResource SpendyDarkLabel}"
+
                                            BackgroundColor="Transparent"
+
                                            HeightRequest="44" />
+
                                     <ImageButton Grid.Column="1"
+
                                                  Source="unhide.png"
+
                                                  BackgroundColor="Transparent"
+
                                                  WidthRequest="28"
+
                                                  HeightRequest="28"
+
                                                  Clicked="OnToggleNew" />
+
                                 </Grid>
+
                             </Border>
 
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+
+
+                            <Label Text="Confirm new password"
+
+                                   TextColor="{StaticResource SpendyDarkLabel}"
+
+                                   FontFamily="OpenSansSemibold"
+
+                                   FontSize="14" />
+
+                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+
+                                    StrokeThickness="0"
+
+                                    Padding="14,0"
+
+                                    HeightRequest="48">
+
+                                <Border.StrokeShape>
+
+                                    <RoundRectangle CornerRadius="22" />
+
+                                </Border.StrokeShape>
+
                                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+
                                     <Entry x:Name="ConfirmPassword"
+
+                                           Text="{Binding ConfirmNewPassword}"
+
                                            IsPassword="True"
-                                           Placeholder="Confirm Password"
+
+                                           Placeholder="Re-enter new password"
+
+                                           PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+
+                                           TextColor="{StaticResource SpendyDarkLabel}"
+
                                            BackgroundColor="Transparent"
+
                                            HeightRequest="44" />
+
                                     <ImageButton Grid.Column="1"
+
                                                  Source="unhide.png"
+
                                                  BackgroundColor="Transparent"
+
                                                  WidthRequest="28"
+
                                                  HeightRequest="28"
+
                                                  Clicked="OnToggleConfirm" />
+
                                 </Grid>
+
                             </Border>
+
+
+
+                            <Label Text="{Binding NewPasswordStrengthLabel}"
+
+                                   FontSize="12"
+
+                                   FontFamily="OpenSansSemibold"
+
+                                   TextColor="{Binding NewPasswordStrengthColor}" />
+
+
 
                             <Button Text="Update Password"
-                                    BackgroundColor="{StaticResource SpendyAccent}"
+
+                                    BackgroundColor="{StaticResource SpendyBlueDeep}"
+
                                     TextColor="White"
-                                    CornerRadius="18"
+
+                                    FontFamily="OpenSansSemibold"
+
+                                    CornerRadius="26"
+
                                     HeightRequest="48"
-                                    Clicked="OnUpdatePassword" />
+
+                                    Command="{Binding UpdatePasswordCommand}" />
+
                         </VerticalStackLayout>
+
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
 
+
+
                         <!-- Log out (neutral) -->
+
                         <Grid Padding="16" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
                             <Grid.GestureRecognizers>
+
                                 <TapGestureRecognizer Tapped="OnLogoutTapped" />
+
                             </Grid.GestureRecognizers>
+
                             <Image Source="logouticon.png"
+
                                    WidthRequest="20"
+
                                    HeightRequest="20"
+
                                    Aspect="AspectFit"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="1"
+
                                    Text="Log out"
+
                                    TextColor="{StaticResource SpendyNavy}"
+
                                    FontFamily="OpenSansSemibold"
+
                                    FontSize="15"
+
                                    VerticalOptions="Center" />
+
                             <Label Grid.Column="2"
+
                                    Text="›"
+
                                    TextColor="#98A2B3"
+
                                    FontSize="22"
+
                                    VerticalOptions="Center" />
+
                         </Grid>
+
                     </VerticalStackLayout>
+
                 </Border>
+
             </VerticalStackLayout>
+
         </VerticalStackLayout>
+
     </ScrollView>
+
 </ContentView>
+

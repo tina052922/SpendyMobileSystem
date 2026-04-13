@@ -6,6 +6,25 @@
   <Folder Name="/Spendy/">
     <Project Path="Spendy/Spendy.csproj" DisplayName="Spendy" />
   </Folder>
+  <Folder Name="/Spendy/Auth and security/">
+    <File Path="Spendy/Services/IUserSession.cs" />
+    <File Path="Spendy/Services/UserSession.cs" />
+    <File Path="Spendy/Services/IPasswordHasher.cs" />
+    <File Path="Spendy/Services/PasswordHasher.cs" />
+    <File Path="Spendy/Services/PasswordPolicy.cs" />
+    <File Path="Spendy/Services/IAuthService.cs" />
+    <File Path="Spendy/Services/AuthService.cs" />
+    <File Path="Spendy/ViewModels/SignInViewModel.cs" />
+    <File Path="Spendy/ViewModels/SignUpViewModel.cs" />
+    <File Path="Spendy/Views/SignInPage.xaml" />
+    <File Path="Spendy/Views/SignInPage.xaml.cs" />
+    <File Path="Spendy/Views/SignUpPage.xaml" />
+    <File Path="Spendy/Views/SignUpPage.xaml.cs" />
+    <File Path="Spendy/Views/SplashPage.xaml" />
+    <File Path="Spendy/Views/SplashPage.xaml.cs" />
+    <File Path="Spendy/Views/GetStartedPage.xaml" />
+    <File Path="Spendy/Views/GetStartedPage.xaml.cs" />
+  </Folder>
   <Folder Name="/Spendy/Views (main tabs)/">
     <File Path="Spendy/Views/DashboardView.xaml" />
     <File Path="Spendy/Views/DashboardView.xaml.cs" />
@@ -16,7 +35,22 @@
     <File Path="Spendy/Views/SettingsView.xaml" />
     <File Path="Spendy/Views/SettingsView.xaml.cs" />
   </Folder>
+  <Folder Name="/Spendy/Savings plans (pages + viewmodels)/">
+    <File Path="Spendy/Views/AddSavingPlanPage.xaml" />
+    <File Path="Spendy/Views/AddSavingPlanPage.xaml.cs" />
+    <File Path="Spendy/Views/EditSavingPlanPage.xaml" />
+    <File Path="Spendy/Views/EditSavingPlanPage.xaml.cs" />
+    <File Path="Spendy/Views/SavePlanDetailPage.xaml" />
+    <File Path="Spendy/Views/SavePlanDetailPage.xaml.cs" />
+    <File Path="Spendy/Views/EndedSavingsPage.xaml" />
+    <File Path="Spendy/Views/EndedSavingsPage.xaml.cs" />
+    <File Path="Spendy/ViewModels/SavingsViewModel.cs" />
+    <File Path="Spendy/ViewModels/AddSavingPlanViewModel.cs" />
+    <File Path="Spendy/ViewModels/EditSavingPlanViewModel.cs" />
+    <File Path="Spendy/ViewModels/EndedSavingsViewModel.cs" />
+  </Folder>
   <Folder Name="/Spendy/Core (data, navigation, tab bar)/">
+    <File Path="Spendy/Resources/Styles/SpendyTheme.xaml" />
     <File Path="Spendy/Services/ISpendyDataService.cs" />
     <File Path="Spendy/Services/SpendyDataService.cs" />
     <File Path="Spendy/Services/AppNavigation.cs" />

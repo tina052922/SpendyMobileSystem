@@ -17,7 +17,15 @@ public partial class SavingsViewModel : ObservableObject
 	[ObservableProperty]
 	private bool _hasPlans;
 
+	[ObservableProperty]
+	private string _userGreeting = "";
+
 	public ObservableCollection<SavingPlan> Plans { get; } = new();
+
+	public bool HasUserGreeting => !string.IsNullOrWhiteSpace(UserGreeting);
+
+	partial void OnUserGreetingChanged(string value) =>
+		OnPropertyChanged(nameof(HasUserGreeting));
 
 	public SavingsViewModel(ISpendyDataService data)
 	{
@@ -33,6 +41,8 @@ public partial class SavingsViewModel : ObservableObject
 
 	async Task LoadAsync()
 	{
+		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+
 		Plans.Clear();
 		foreach (var p in await _data.GetSavingPlansAsync(endedOnly: false))
 			Plans.Add(p);

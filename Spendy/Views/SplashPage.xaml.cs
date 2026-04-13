@@ -15,6 +15,13 @@ public partial class SplashPage : ContentPage
 		base.OnAppearing();
 		await Ioc.Services.GetRequiredService<SpendyDbInitializer>().InitializeAsync();
 
+		var auth = Ioc.Services.GetRequiredService<IAuthService>();
+		if (await auth.TryRestoreSessionAsync())
+		{
+			AppNavigation.GoToMainShell();
+			return;
+		}
+
 		// Animation: show big symbol, then slide left and reveal wordmark.
 		try
 		{

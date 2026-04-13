@@ -25,9 +25,15 @@ public static class MauiProgram
 			options.UseSqlite($"Data Source={dbPath}"));
 
 		builder.Services.AddSingleton<SpendyDbInitializer>();
-		builder.Services.AddSingleton<IProfilePhotoService, ProfilePhotoService>();
+		builder.Services.AddSingleton<IUserSession, UserSession>();
+		builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 		builder.Services.AddSingleton<ICurrencyService, CurrencyService>();
 		builder.Services.AddSingleton<ISpendyDataService, SpendyDataService>();
+		builder.Services.AddSingleton<IProfilePhotoService, ProfilePhotoService>();
+		builder.Services.AddSingleton<IAuthService, AuthService>();
+
+		builder.Services.AddTransient<SignInViewModel>();
+		builder.Services.AddTransient<SignUpViewModel>();
 
 		builder.Services.AddSingleton<DashboardViewModel>();
 		builder.Services.AddSingleton<StatisticsViewModel>();

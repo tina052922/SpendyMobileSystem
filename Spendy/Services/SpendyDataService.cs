@@ -7,53 +7,88 @@ namespace Spendy.Services;
 
 public sealed class SpendyDataService(
 	IDbContextFactory<SpendyDbContext> dbFactory,
-	ICurrencyService currency) : ISpendyDataService
+	ICurrencyService currency,
+	IUserSession session) : ISpendyDataService
 {
 	public event EventHandler? DataChanged;
 
+	public void NotifyDataChanged() =>
+		DataChanged?.Invoke(this, EventArgs.Empty);
+
+	int? CurrentUserIdOrNull() => session.CurrentUserId;
+
 	public async Task<decimal> GetBalanceAsync(CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return 0;
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		var income = await db.Transactions.AsNoTracking()
-			.Where(t => t.Type == TransactionKind.Income)
+			.Where(t => t.UserId == uid && t.Type == TransactionKind.Income)
 			.SumAsync(t => (decimal?)t.Amount, cancellationToken) ?? 0;
 		var expense = await db.Transactions.AsNoTracking()
-			.Where(t => t.Type == TransactionKind.Expense)
+			.Where(t => t.UserId == uid && t.Type == TransactionKind.Expense)
 			.SumAsync(t => (decimal?)t.Amount, cancellationToken) ?? 0;
 		return income - expense;
 	}
 
 	public async Task<bool> HasAnyIncomeAsync(CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return false;
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		return await db.Transactions.AsNoTracking()
-			.AnyAsync(t => t.Type == TransactionKind.Income, cancellationToken);
+			.AnyAsync(t => t.UserId == uid && t.Type == TransactionKind.Income, cancellationToken);
 	}
 
 	public async Task<UserEntity?> GetCurrentUserAsync(CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return null;
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		return await db.Users.AsNoTracking().OrderBy(u => u.Id).FirstOrDefaultAsync(cancellationToken);
+		return await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == uid, cancellationToken);
+	}
+
+	public async Task<string?> GetUserDisplayNameAsync(CancellationToken cancellationToken = default)
+	{
+		var u = await GetCurrentUserAsync(cancellationToken);
+		return string.IsNullOrWhiteSpace(u?.Name) ? null : u.Name.Trim();
 	}
 
 	public async Task UpsertUserAsync(UserEntity user, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
+		var email = (user.Email ?? string.Empty).Trim().ToLowerInvariant();
+		if (string.IsNullOrWhiteSpace(email) || !email.Contains('@', StringComparison.Ordinal))
+			throw new InvalidOperationException("Valid email is required.");
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		var existing = await db.Users.OrderBy(u => u.Id).FirstOrDefaultAsync(cancellationToken);
-		if (existing is null)
-		{
-			db.Users.Add(user);
-		}
-		else
-		{
-			existing.Name = user.Name;
-			existing.Email = user.Email;
-			existing.Phone = user.Phone;
-			existing.Birthday = user.Birthday;
-			existing.Gender = user.Gender;
-			existing.Address = user.Address;
-			existing.Handle = user.Handle;
-		}
+
+		if (await db.Users.AnyAsync(
+			    u => u.Id != uid && u.Email == email,
+			    cancellationToken))
+			throw new InvalidOperationException("This email is already used by another account.");
+
+		var existing = await db.Users.FirstOrDefaultAsync(u => u.Id == uid, cancellationToken)
+			?? throw new InvalidOperationException("User not found.");
+
+		existing.Name = (user.Name ?? string.Empty).Trim();
+		existing.Email = email;
+		existing.Phone = (user.Phone ?? string.Empty).Trim();
+		existing.Birthday = user.Birthday ?? string.Empty;
+		existing.Gender = user.Gender ?? string.Empty;
+		existing.Address = (user.Address ?? string.Empty).Trim();
+		existing.Handle = string.IsNullOrWhiteSpace(user.Handle) ? null : user.Handle.Trim();
+		existing.ProfilePhotoPath = string.IsNullOrWhiteSpace(user.ProfilePhotoPath)
+			? null
+			: user.ProfilePhotoPath.Trim();
 
 		await db.SaveChangesAsync(cancellationToken);
 		DataChanged?.Invoke(this, EventArgs.Empty);
@@ -61,16 +96,20 @@ public sealed class SpendyDataService(
 
 	public async Task<DashboardData> GetDashboardAsync(DateTime day, TransactionKind kind, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
 		var start = day.Date;
 		var end = start.AddDays(1);
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		var query = db.Transactions.AsNoTracking()
-			.Include(t => t.Category)
-			.Where(t => t.Date >= start && t.Date < end && t.Type == kind)
-			.OrderBy(t => t.Date);
-
-		var rows = await query.ToListAsync(cancellationToken);
+		List<TransactionEntity> rows;
+		if (uid is null)
+			rows = [];
+		else
+			rows = await db.Transactions.AsNoTracking()
+				.Include(t => t.Category)
+				.Where(t => t.UserId == uid && t.Date >= start && t.Date < end && t.Type == kind)
+				.OrderBy(t => t.Date)
+				.ToListAsync(cancellationToken);
 
 		decimal total = rows.Sum(t => t.Amount);
 		var summaryLabel = kind == TransactionKind.Expense ? "Total Expenditure" : "Total Income";
@@ -97,15 +136,18 @@ public sealed class SpendyDataService(
 
 	public async Task<StatisticsData> GetStatisticsAsync(int year, int month, TransactionKind kind, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
 		var start = new DateTime(year, month, 1);
 		var end = start.AddMonths(1);
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 
-		var monthTx = await db.Transactions.AsNoTracking()
-			.Include(t => t.Category)
-			.Where(t => t.Date >= start && t.Date < end && t.Type == kind)
-			.ToListAsync(cancellationToken);
+		var monthTx = uid is null
+			? []
+			: await db.Transactions.AsNoTracking()
+				.Include(t => t.Category)
+				.Where(t => t.UserId == uid && t.Date >= start && t.Date < end && t.Type == kind)
+				.ToListAsync(cancellationToken);
 
 		var byDay = monthTx
 			.GroupBy(t => t.Date.Day)
@@ -155,9 +197,13 @@ public sealed class SpendyDataService(
 
 	public async Task<IReadOnlyList<SavingPlan>> GetSavingPlansAsync(bool endedOnly, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return [];
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		var goals = await db.SavingGoals.AsNoTracking()
-			.Where(g => g.IsEnded == endedOnly)
+			.Where(g => g.UserId == uid && g.IsEnded == endedOnly)
 			.OrderBy(g => g.TargetDate)
 			.ToListAsync(cancellationToken);
 
@@ -166,14 +212,28 @@ public sealed class SpendyDataService(
 
 	public async Task<SavingPlan?> GetSavingPlanAsync(int id, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return null;
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		var g = await db.SavingGoals.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+		var g = await db.SavingGoals.AsNoTracking()
+			.FirstOrDefaultAsync(x => x.Id == id && x.UserId == uid, cancellationToken);
 		return g is null ? null : MapPlan(g);
 	}
 
 	public async Task<IReadOnlyList<SavingHistoryLine>> GetSavingHistoryAsync(int goalId, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return [];
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+		var goalOk = await db.SavingGoals.AsNoTracking()
+			.AnyAsync(g => g.Id == goalId && g.UserId == uid, cancellationToken);
+		if (!goalOk)
+			return [];
+
 		var rows = await db.SavingTransactions.AsNoTracking()
 			.Where(s => s.SavingGoalId == goalId)
 			.OrderByDescending(s => s.Date)
@@ -224,12 +284,16 @@ public sealed class SpendyDataService(
 
 	public async Task AddTransactionAsync(decimal amount, TransactionKind kind, int categoryId, DateTime date, string? notes, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
 		if (amount <= 0)
 			throw new ArgumentOutOfRangeException(nameof(amount));
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		db.Transactions.Add(new TransactionEntity
 		{
+			UserId = uid,
 			Amount = decimal.Round(amount, 2),
 			Type = kind,
 			CategoryId = categoryId,
@@ -250,6 +314,9 @@ public sealed class SpendyDataService(
 		decimal mandatorySavingsAmount,
 		CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
 		if (incomeAmount <= 0)
 			throw new ArgumentOutOfRangeException(nameof(incomeAmount));
 		if (mandatorySavingsAmount <= 0)
@@ -266,6 +333,7 @@ public sealed class SpendyDataService(
 
 		db.Transactions.Add(new TransactionEntity
 		{
+			UserId = uid,
 			Amount = incomeRounded,
 			Type = TransactionKind.Income,
 			CategoryId = categoryId,
@@ -274,15 +342,16 @@ public sealed class SpendyDataService(
 			CreatedAt = DateTime.UtcNow
 		});
 
-		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == savingGoalId, cancellationToken)
+		var g = await db.SavingGoals.FirstOrDefaultAsync(
+			         x => x.Id == savingGoalId && x.UserId == uid, cancellationToken)
 			?? throw new InvalidOperationException("Saving goal not found.");
 		if (g.IsEnded)
 			throw new InvalidOperationException("Cannot allocate to an ended goal.");
 
-		// Mirror manual "save to goal": expense reduces available balance while the goal balance increases.
 		var expenseCat = await GetOrCreateCategoryAsync(db, "Savings goal", "🎯", CategoryScope.Expense, cancellationToken);
 		db.Transactions.Add(new TransactionEntity
 		{
+			UserId = uid,
 			Amount = dep,
 			Type = TransactionKind.Expense,
 			CategoryId = expenseCat.Id,
@@ -308,9 +377,13 @@ public sealed class SpendyDataService(
 
 	public async Task<int> CreateSavingGoalAsync(string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		var g = new SavingGoalEntity
 		{
+			UserId = uid,
 			Name = name.Trim(),
 			TargetAmount = decimal.Round(targetAmount, 2),
 			CurrentAmount = 0,
@@ -325,8 +398,11 @@ public sealed class SpendyDataService(
 
 	public async Task UpdateSavingGoalAsync(int id, string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
+		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == id && x.UserId == uid, cancellationToken)
 			?? throw new InvalidOperationException("Goal not found.");
 		g.Name = name.Trim();
 		g.TargetAmount = decimal.Round(targetAmount, 2);
@@ -337,8 +413,11 @@ public sealed class SpendyDataService(
 
 	public async Task SetSavingGoalEndedAsync(int id, bool isEnded, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
+		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == id && x.UserId == uid, cancellationToken)
 			?? throw new InvalidOperationException("Goal not found.");
 		g.IsEnded = isEnded;
 		await db.SaveChangesAsync(cancellationToken);
@@ -347,11 +426,14 @@ public sealed class SpendyDataService(
 
 	public async Task AddSavingMovementAsync(int goalId, decimal amount, SavingMovement movement, DateTime date, string? notes, CancellationToken cancellationToken = default)
 	{
+		var uid = CurrentUserIdOrNull()
+			?? throw new InvalidOperationException("Not signed in.");
+
 		if (amount <= 0)
 			throw new ArgumentOutOfRangeException(nameof(amount));
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == goalId, cancellationToken)
+		var g = await db.SavingGoals.FirstOrDefaultAsync(x => x.Id == goalId && x.UserId == uid, cancellationToken)
 			?? throw new InvalidOperationException("Goal not found.");
 
 		var delta = movement == SavingMovement.Save ? amount : -amount;
@@ -368,7 +450,6 @@ public sealed class SpendyDataService(
 			Notes = string.IsNullOrWhiteSpace(notes) ? null : notes.Trim()
 		});
 
-		// Cash-flow mirror: money moved to/from goals updates available balance (income − expenses).
 		var expenseCat = await GetOrCreateCategoryAsync(db, "Savings goal", "🎯", CategoryScope.Expense, cancellationToken);
 		var incomeSavingsCat = await db.Categories.FirstAsync(
 			c => c.Scope == CategoryScope.Income && c.Name == "Savings", cancellationToken);
@@ -377,6 +458,7 @@ public sealed class SpendyDataService(
 		{
 			db.Transactions.Add(new TransactionEntity
 			{
+				UserId = uid,
 				Amount = decimal.Round(amount, 2),
 				Type = TransactionKind.Expense,
 				CategoryId = expenseCat.Id,
@@ -389,6 +471,7 @@ public sealed class SpendyDataService(
 		{
 			db.Transactions.Add(new TransactionEntity
 			{
+				UserId = uid,
 				Amount = decimal.Round(amount, 2),
 				Type = TransactionKind.Income,
 				CategoryId = incomeSavingsCat.Id,

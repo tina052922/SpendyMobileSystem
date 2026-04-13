@@ -12,4 +12,7 @@ public sealed class TransactionEntity
 	public DateTime Date { get; set; }
 	public string? Notes { get; set; }
 	public DateTime CreatedAt { get; set; }
+
+	public int UserId { get; set; }
+	public UserEntity? User { get; set; }
 }

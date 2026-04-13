@@ -19,11 +19,16 @@
                             </Border.StrokeShape>
                             <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
                         </Border>
-                        <Label Text="Dashboard"
-                               TextColor="{StaticResource SpendyNavy}"
-                               FontFamily="OpenSansSemibold"
-                               FontSize="20"
-                               VerticalOptions="Center" />
+                        <VerticalStackLayout Spacing="0" VerticalOptions="Center">
+                            <Label Text="Dashboard"
+                                   TextColor="{StaticResource SpendyNavy}"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="20" />
+                            <Label Text="{Binding UserGreeting}"
+                                   IsVisible="{Binding HasUserGreeting}"
+                                   TextColor="#667085"
+                                   FontSize="12" />
+                        </VerticalStackLayout>
                     </HorizontalStackLayout>
                     <Border Grid.Column="2"
                             WidthRequest="44"

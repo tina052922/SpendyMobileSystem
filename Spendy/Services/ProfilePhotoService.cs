@@ -1,5 +1,4 @@
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage;
 
 namespace Spendy.Services;
 
@@ -9,13 +8,12 @@ public interface IProfilePhotoService
 	string? PhotoPath { get; }
 	event EventHandler? Changed;
 	void SetPhotoPath(string filePath);
-	void RefreshFromStorage();
+	Task SyncFromCurrentUserAsync(ISpendyDataService data, CancellationToken cancellationToken = default);
+	void ClearForLogout();
 }
 
 public sealed class ProfilePhotoService : IProfilePhotoService
 {
-	const string PrefKey = "SpendyProfilePhotoPath";
-
 	ImageSource _photo = ImageSource.FromFile("blankprofile.png");
 	string? _photoPath;
 
@@ -24,14 +22,20 @@ public sealed class ProfilePhotoService : IProfilePhotoService
 	public ImageSource Photo => _photo;
 	public string? PhotoPath => _photoPath;
 
-	public ProfilePhotoService()
+	public void SetPhotoPath(string filePath)
 	{
-		RefreshFromStorage();
+		if (string.IsNullOrWhiteSpace(filePath))
+			return;
+
+		_photoPath = filePath.Trim();
+		_photo = ImageSource.FromFile(_photoPath);
+		Changed?.Invoke(this, EventArgs.Empty);
 	}
 
-	public void RefreshFromStorage()
+	public async Task SyncFromCurrentUserAsync(ISpendyDataService data, CancellationToken cancellationToken = default)
 	{
-		var path = Preferences.Get(PrefKey, string.Empty);
+		var u = await data.GetCurrentUserAsync(cancellationToken);
+		var path = u?.ProfilePhotoPath?.Trim();
 		if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
 		{
 			_photoPath = path;
@@ -44,17 +48,13 @@ public sealed class ProfilePhotoService : IProfilePhotoService
 		}
 
 		Changed?.Invoke(this, EventArgs.Empty);
+		await Task.CompletedTask;
 	}
 
-	public void SetPhotoPath(string filePath)
+	public void ClearForLogout()
 	{
-		if (string.IsNullOrWhiteSpace(filePath))
-			return;
-
-		Preferences.Set(PrefKey, filePath);
-		_photoPath = filePath;
-		_photo = ImageSource.FromFile(filePath);
+		_photoPath = null;
+		_photo = ImageSource.FromFile("blankprofile.png");
 		Changed?.Invoke(this, EventArgs.Empty);
 	}
 }
-

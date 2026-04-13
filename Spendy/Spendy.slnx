@@ -5,6 +5,25 @@
   <Folder Name="/Spendy/">
     <Project Path="Spendy.csproj" DisplayName="Spendy" />
   </Folder>
+  <Folder Name="/Spendy/Auth and security/">
+    <File Path="Services/IUserSession.cs" />
+    <File Path="Services/UserSession.cs" />
+    <File Path="Services/IPasswordHasher.cs" />
+    <File Path="Services/PasswordHasher.cs" />
+    <File Path="Services/PasswordPolicy.cs" />
+    <File Path="Services/IAuthService.cs" />
+    <File Path="Services/AuthService.cs" />
+    <File Path="ViewModels/SignInViewModel.cs" />
+    <File Path="ViewModels/SignUpViewModel.cs" />
+    <File Path="Views/SignInPage.xaml" />
+    <File Path="Views/SignInPage.xaml.cs" />
+    <File Path="Views/SignUpPage.xaml" />
+    <File Path="Views/SignUpPage.xaml.cs" />
+    <File Path="Views/SplashPage.xaml" />
+    <File Path="Views/SplashPage.xaml.cs" />
+    <File Path="Views/GetStartedPage.xaml" />
+    <File Path="Views/GetStartedPage.xaml.cs" />
+  </Folder>
   <Folder Name="/Spendy/Views (main tabs)/">
     <File Path="Views/DashboardView.xaml" />
     <File Path="Views/DashboardView.xaml.cs" />
@@ -15,7 +34,22 @@
     <File Path="Views/SettingsView.xaml" />
     <File Path="Views/SettingsView.xaml.cs" />
   </Folder>
+  <Folder Name="/Spendy/Savings plans (pages + viewmodels)/">
+    <File Path="Views/AddSavingPlanPage.xaml" />
+    <File Path="Views/AddSavingPlanPage.xaml.cs" />
+    <File Path="Views/EditSavingPlanPage.xaml" />
+    <File Path="Views/EditSavingPlanPage.xaml.cs" />
+    <File Path="Views/SavePlanDetailPage.xaml" />
+    <File Path="Views/SavePlanDetailPage.xaml.cs" />
+    <File Path="Views/EndedSavingsPage.xaml" />
+    <File Path="Views/EndedSavingsPage.xaml.cs" />
+    <File Path="ViewModels/SavingsViewModel.cs" />
+    <File Path="ViewModels/AddSavingPlanViewModel.cs" />
+    <File Path="ViewModels/EditSavingPlanViewModel.cs" />
+    <File Path="ViewModels/EndedSavingsViewModel.cs" />
+  </Folder>
   <Folder Name="/Spendy/Core (data, navigation, tab bar)/">
+    <File Path="Resources/Styles/SpendyTheme.xaml" />
     <File Path="Services/ISpendyDataService.cs" />
     <File Path="Services/SpendyDataService.cs" />
     <File Path="Services/AppNavigation.cs" />

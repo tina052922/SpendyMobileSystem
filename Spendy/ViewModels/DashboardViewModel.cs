@@ -36,9 +36,17 @@ public partial class DashboardViewModel : ObservableObject
 	[ObservableProperty]
 	private bool _hasTransactions;
 
+	[ObservableProperty]
+	private string _userGreeting = "";
+
 	public ObservableCollection<TransactionItem> Transactions { get; } = new();
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
+
+	public bool HasUserGreeting => !string.IsNullOrWhiteSpace(UserGreeting);
+
+	partial void OnUserGreetingChanged(string value) =>
+		OnPropertyChanged(nameof(HasUserGreeting));
 
 	public DashboardViewModel(ISpendyDataService data)
 	{
@@ -71,6 +79,8 @@ public partial class DashboardViewModel : ObservableObject
 
 	async Task LoadAsync()
 	{
+		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+
 		var bal = await _data.GetBalanceAsync();
 		AvailableBalance = $"{_currency.Symbol}{bal.ToString("N2", _currency.Culture)}";
 

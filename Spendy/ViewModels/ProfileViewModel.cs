@@ -49,7 +49,8 @@ public partial class ProfileViewModel : ObservableObject
 
 	public async Task LoadAsync()
 	{
-		_photoService.RefreshFromStorage();
+		await _photoService.SyncFromCurrentUserAsync(_data);
+
 		ProfilePhoto = _photoService.Photo;
 
 		var u = await _data.GetCurrentUserAsync();
@@ -61,9 +62,9 @@ public partial class ProfileViewModel : ObservableObject
 			return;
 		}
 
-		Name = u.Name;
-		Email = u.Email;
-		Phone = u.Phone;
+		Name = u.Name ?? string.Empty;
+		Email = u.Email ?? string.Empty;
+		Phone = u.Phone ?? string.Empty;
 		if (DateTime.TryParse(
 			    u.Birthday,
 			    System.Globalization.CultureInfo.InvariantCulture,
@@ -73,7 +74,7 @@ public partial class ProfileViewModel : ObservableObject
 		else if (DateTime.TryParse(u.Birthday, out var bd2))
 			BirthdayDate = bd2.Date;
 		Gender = NormalizeGender(u.Gender);
-		Address = u.Address;
+		Address = u.Address ?? string.Empty;
 		Handle = u.Handle ?? string.Empty;
 	}
 
@@ -101,19 +102,34 @@ public partial class ProfileViewModel : ObservableObject
 	[RelayCommand]
 	async Task Save()
 	{
-		await _data.UpsertUserAsync(new UserEntity
+		try
 		{
-			Name = Name.Trim(),
-			Email = Email.Trim(),
-			Phone = Phone.Trim(),
-			Birthday = BirthdayDate.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
-			Gender = Gender.Trim(),
-			Address = Address.Trim(),
-			Handle = string.IsNullOrWhiteSpace(Handle) ? null : Handle.Trim()
-		});
+			var photoPath = string.IsNullOrWhiteSpace(_photoService.PhotoPath)
+				? null
+				: _photoService.PhotoPath.Trim();
 
-		if (Shell.Current is not null)
-			await Shell.Current.DisplayAlert("Spendy", "Profile saved successfully", "OK");
+			await _data.UpsertUserAsync(new UserEntity
+			{
+				Name = Name.Trim(),
+				Email = Email.Trim(),
+				Phone = Phone.Trim(),
+				Birthday = BirthdayDate.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+				Gender = Gender.Trim(),
+				Address = Address.Trim(),
+				Handle = string.IsNullOrWhiteSpace(Handle) ? null : Handle.Trim(),
+				ProfilePhotoPath = photoPath
+			});
+
+			await LoadAsync();
+
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", "Profile saved successfully", "OK");
+		}
+		catch (Exception ex)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", $"Could not save profile: {ex.Message}", "OK");
+		}
 	}
 
 	public void ApplyLocalPhoto(string filePath)

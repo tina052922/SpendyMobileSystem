@@ -25,11 +25,16 @@
                                 <Image Source="{Binding ProfilePhoto}"
                                        Aspect="AspectFill" />
                             </Border>
-                            <Label Text="Savings"
-                                   TextColor="White"
-                                   FontFamily="OpenSansSemibold"
-                                   FontSize="20"
-                                   VerticalOptions="Center" />
+                            <VerticalStackLayout Spacing="0" VerticalOptions="Center">
+                                <Label Text="Savings"
+                                       TextColor="White"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="20" />
+                                <Label Text="{Binding UserGreeting}"
+                                       IsVisible="{Binding HasUserGreeting}"
+                                       TextColor="#B3FFFFFF"
+                                       FontSize="12" />
+                            </VerticalStackLayout>
                         </HorizontalStackLayout>
                         <Border Grid.Column="2"
                                 WidthRequest="44"

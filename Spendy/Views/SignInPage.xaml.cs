@@ -1,4 +1,5 @@
 using Spendy.Services;
+using Spendy.ViewModels;
 
 namespace Spendy.Views;
 
@@ -7,6 +8,8 @@ public partial class SignInPage : ContentPage
 	public SignInPage()
 	{
 		InitializeComponent();
+		BindingContext = Ioc.Services.GetRequiredService<SignInViewModel>();
+		PasswordEyeImage.Source = "unhide.png";
 	}
 
 	void OnTogglePasswordEye(object? sender, TappedEventArgs e)
@@ -17,8 +20,6 @@ public partial class SignInPage : ContentPage
 
 	async void OnForgot(object? sender, TappedEventArgs e) =>
 		await DisplayAlert("Spendy", "Forgot password flow would open here.", "OK");
-
-	void OnSignIn(object? sender, EventArgs e) => AppNavigation.GoToMainShell();
 
 	async void OnGoogle(object? sender, EventArgs e) =>
 		await DisplayAlert("Spendy", "Google sign-in would continue here.", "OK");

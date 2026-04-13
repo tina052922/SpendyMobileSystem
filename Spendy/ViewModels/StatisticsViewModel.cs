@@ -55,6 +55,9 @@ public partial class StatisticsViewModel : ObservableObject
 	[ObservableProperty]
 	private string _yAxisZeroLabel = "";
 
+	[ObservableProperty]
+	private string _userGreeting = "";
+
 	public ObservableCollection<CategoryStat> Categories { get; } = new();
 
 	public ObservableCollection<ChartBarDisplay> Bars { get; } = new();
@@ -77,6 +80,11 @@ public partial class StatisticsViewModel : ObservableObject
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 	public string CurrencySymbol => _currency.Symbol;
 
+	public bool HasUserGreeting => !string.IsNullOrWhiteSpace(UserGreeting);
+
+	partial void OnUserGreetingChanged(string value) =>
+		OnPropertyChanged(nameof(HasUserGreeting));
+
 	partial void OnIsExpenseModeChanged(bool value)
 	{
 		_ = LoadAsync();
@@ -95,6 +103,8 @@ public partial class StatisticsViewModel : ObservableObject
 
 	async Task LoadAsync()
 	{
+		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+
 		var bal = await _data.GetBalanceAsync();
 		AvailableBalance = $"{_currency.Symbol}{bal.ToString("N2", _currency.Culture)}";
 

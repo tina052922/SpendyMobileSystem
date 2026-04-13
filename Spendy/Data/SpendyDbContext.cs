@@ -28,6 +28,9 @@ public sealed class SpendyDbContext : DbContext
 			e.Property(x => x.Gender).HasMaxLength(64);
 			e.Property(x => x.Address).HasMaxLength(500);
 			e.Property(x => x.Handle).HasMaxLength(100);
+			e.Property(x => x.ProfilePhotoPath).HasMaxLength(2048);
+			e.Property(x => x.PasswordHash).HasMaxLength(256);
+			e.HasIndex(x => x.Email).IsUnique();
 		});
 
 		modelBuilder.Entity<CategoryEntity>(e =>
@@ -51,6 +54,11 @@ public sealed class SpendyDbContext : DbContext
 				.HasForeignKey(x => x.CategoryId)
 				.OnDelete(DeleteBehavior.Restrict);
 			e.HasIndex(x => x.Date);
+			e.HasIndex(x => x.UserId);
+			e.HasOne(x => x.User)
+				.WithMany()
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
 		});
 
 		modelBuilder.Entity<SavingGoalEntity>(e =>
@@ -59,6 +67,11 @@ public sealed class SpendyDbContext : DbContext
 			e.Property(x => x.Name).HasMaxLength(200);
 			e.Property(x => x.TargetAmount).HasPrecision(18, 2);
 			e.Property(x => x.CurrentAmount).HasPrecision(18, 2);
+			e.HasIndex(x => x.UserId);
+			e.HasOne(x => x.User)
+				.WithMany()
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
 			e.HasMany(x => x.Transactions)
 				.WithOne(x => x.SavingGoal)
 				.HasForeignKey(x => x.SavingGoalId)
