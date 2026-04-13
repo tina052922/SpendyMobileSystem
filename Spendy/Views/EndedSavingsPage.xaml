@@ -7,21 +7,67 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="{StaticResource SpendyPageBg}">
     <Grid RowDefinitions="Auto,*">
-        <Grid Padding="16,12" BackgroundColor="{StaticResource SpendyNavy}">
-            <Grid ColumnDefinitions="Auto,*">
-                <Button Text="&#x2039;"
-                        FontSize="28"
-                        TextColor="White"
-                        BackgroundColor="Transparent"
-                        WidthRequest="44"
-                        Clicked="OnBack" />
-                <Label Grid.Column="1"
-                       Text="Ended"
-                       TextColor="White"
-                       FontFamily="OpenSansSemibold"
-                       FontSize="20"
-                       VerticalOptions="Center" />
-            </Grid>
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#01143D" Offset="0" />
+                    <GradientStop Color="#0335A3" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <VerticalStackLayout Padding="16,12,16,18" Spacing="10">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="#1AFFFFFF"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
+                    </Border>
+                    <Border Grid.Column="2"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="White"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                        </Border.GestureRecognizers>
+                        <Image Source="darkbluenotificon.png"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               InputTransparent="True" />
+                    </Border>
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Button Text="&#x2039;"
+                            FontSize="26"
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            WidthRequest="44"
+                            Clicked="OnBack" />
+                    <Label Grid.Column="1"
+                           Text="Ended"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="20"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center" />
+                    <BoxView Grid.Column="2"
+                             WidthRequest="44"
+                             HeightRequest="44"
+                             Color="Transparent" />
+                </Grid>
+            </VerticalStackLayout>
         </Grid>
 
         <ScrollView Grid.Row="1" Padding="24,16">

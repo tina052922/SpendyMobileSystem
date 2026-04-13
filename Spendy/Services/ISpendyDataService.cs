@@ -29,7 +29,7 @@ public interface ISpendyDataService
 
 	Task AddTransactionAsync(decimal amount, TransactionKind kind, int categoryId, DateTime date, string? notes, CancellationToken cancellationToken = default);
 
-	/// <summary>Records full income plus a mandatory savings deposit in one transaction (single save).</summary>
+	/// <summary>Records full income, a mandatory savings deposit to the goal, and a matching expense so available balance reflects the allocation (single save).</summary>
 	Task AddIncomeWithMandatorySavingsAsync(
 		decimal incomeAmount,
 		int categoryId,

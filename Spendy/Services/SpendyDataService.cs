@@ -123,9 +123,16 @@ public sealed class SpendyDataService(
 		if (max <= 0)
 			max = 1;
 
-		var byCategory = monthTx
+		var grouped = monthTx
 			.GroupBy(t => new { t.CategoryId, Name = t.Category!.Name, Icon = t.Category.Icon })
-			.Select(g => new CategoryStat
+			.OrderByDescending(g => g.Sum(x => x.Amount))
+			.ToList();
+
+		var byCategory = new List<CategoryStat>();
+		for (var i = 0; i < grouped.Count; i++)
+		{
+			var g = grouped[i];
+			byCategory.Add(new CategoryStat
 			{
 				Name = g.Key.Name,
 				Icon = g.Key.Icon,
@@ -133,10 +140,10 @@ public sealed class SpendyDataService(
 				CurrencySymbol = currency.Symbol,
 				AmountColor = kind == TransactionKind.Expense
 					? Color.FromArgb("#01143D")
-					: Color.FromArgb("#00D4A5")
-			})
-			.OrderByDescending(c => c.Amount)
-			.ToList();
+					: Color.FromArgb("#00D4A5"),
+				IsTopCategory = i == 0 && g.Sum(x => x.Amount) > 0
+			});
+		}
 
 		var barColor = kind == TransactionKind.Expense
 			? Color.FromArgb("#022268")
@@ -250,9 +257,16 @@ public sealed class SpendyDataService(
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 
+		var incomeRounded = decimal.Round(incomeAmount, 2);
+		var dep = decimal.Round(mandatorySavingsAmount, 2);
+		if (dep > incomeRounded)
+			throw new ArgumentOutOfRangeException(
+				nameof(mandatorySavingsAmount),
+				"Mandatory savings cannot exceed the income amount.");
+
 		db.Transactions.Add(new TransactionEntity
 		{
-			Amount = decimal.Round(incomeAmount, 2),
+			Amount = incomeRounded,
 			Type = TransactionKind.Income,
 			CategoryId = categoryId,
 			Date = date,
@@ -265,7 +279,18 @@ public sealed class SpendyDataService(
 		if (g.IsEnded)
 			throw new InvalidOperationException("Cannot allocate to an ended goal.");
 
-		var dep = decimal.Round(mandatorySavingsAmount, 2);
+		// Mirror manual "save to goal": expense reduces available balance while the goal balance increases.
+		var expenseCat = await GetOrCreateCategoryAsync(db, "Savings goal", "🎯", CategoryScope.Expense, cancellationToken);
+		db.Transactions.Add(new TransactionEntity
+		{
+			Amount = dep,
+			Type = TransactionKind.Expense,
+			CategoryId = expenseCat.Id,
+			Date = date,
+			Notes = $"Mandatory allocation to {g.Name}",
+			CreatedAt = DateTime.UtcNow
+		});
+
 		g.CurrentAmount = decimal.Round(g.CurrentAmount + dep, 2);
 
 		db.SavingTransactions.Add(new SavingTransactionEntity
@@ -273,7 +298,7 @@ public sealed class SpendyDataService(
 			SavingGoalId = savingGoalId,
 			Amount = dep,
 			Type = SavingMovement.Save,
-			Date = DateTime.Now,
+			Date = date,
 			Notes = "Mandatory 2% income allocation"
 		});
 
@@ -343,7 +368,54 @@ public sealed class SpendyDataService(
 			Notes = string.IsNullOrWhiteSpace(notes) ? null : notes.Trim()
 		});
 
+		// Cash-flow mirror: money moved to/from goals updates available balance (income − expenses).
+		var expenseCat = await GetOrCreateCategoryAsync(db, "Savings goal", "🎯", CategoryScope.Expense, cancellationToken);
+		var incomeSavingsCat = await db.Categories.FirstAsync(
+			c => c.Scope == CategoryScope.Income && c.Name == "Savings", cancellationToken);
+
+		if (movement == SavingMovement.Save)
+		{
+			db.Transactions.Add(new TransactionEntity
+			{
+				Amount = decimal.Round(amount, 2),
+				Type = TransactionKind.Expense,
+				CategoryId = expenseCat.Id,
+				Date = date,
+				Notes = $"Saved to {g.Name}",
+				CreatedAt = DateTime.UtcNow
+			});
+		}
+		else
+		{
+			db.Transactions.Add(new TransactionEntity
+			{
+				Amount = decimal.Round(amount, 2),
+				Type = TransactionKind.Income,
+				CategoryId = incomeSavingsCat.Id,
+				Date = date,
+				Notes = $"Withdrawn from {g.Name}",
+				CreatedAt = DateTime.UtcNow
+			});
+		}
+
 		await db.SaveChangesAsync(cancellationToken);
 		DataChanged?.Invoke(this, EventArgs.Empty);
+	}
+
+	static async Task<CategoryEntity> GetOrCreateCategoryAsync(
+		SpendyDbContext db,
+		string name,
+		string icon,
+		CategoryScope scope,
+		CancellationToken ct)
+	{
+		var existing = await db.Categories.FirstOrDefaultAsync(c => c.Name == name && c.Scope == scope, ct);
+		if (existing is not null)
+			return existing;
+
+		var created = new CategoryEntity { Name = name, Icon = icon, Scope = scope };
+		db.Categories.Add(created);
+		await db.SaveChangesAsync(ct);
+		return created;
 	}
 }

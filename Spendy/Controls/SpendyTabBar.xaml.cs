@@ -1,3 +1,5 @@
+using Spendy.Views;
+
 namespace Spendy.Controls;
 
 public partial class SpendyTabBar : ContentView
@@ -62,10 +64,16 @@ public partial class SpendyTabBar : ContentView
 
 	void SetTab(int index)
 	{
-		if (SelectedIndex == index)
+		if (Shell.Current?.CurrentPage is MainShellPage)
+		{
+			if (SelectedIndex == index)
+				return;
+			SelectedIndex = index;
+			TabChanged?.Invoke(this, index);
 			return;
-		SelectedIndex = index;
-		TabChanged?.Invoke(this, index);
+		}
+
+		_ = MainShellPage.SwitchToTabFromOverlayAsync(index);
 	}
 
 	void UpdateStripImage()

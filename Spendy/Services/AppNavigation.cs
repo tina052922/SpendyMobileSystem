@@ -35,11 +35,11 @@ public static class AppNavigation
 		});
 	}
 
-	public static Task PushAsync(Page page)
+	public static Task PushAsync(Page page, bool animated = true)
 	{
 		if (Shell.Current is null)
 			throw new InvalidOperationException("Shell not active.");
-		return Shell.Current.Navigation.PushAsync(page);
+		return Shell.Current.Navigation.PushAsync(page, animated);
 	}
 
 	public static Task PopAsync()

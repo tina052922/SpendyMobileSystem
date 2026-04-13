@@ -5,27 +5,33 @@
     <Grid BackgroundColor="{StaticResource SpendyPageBg}">
         <ScrollView>
             <VerticalStackLayout Spacing="0" Padding="0,0,0,120">
-                <!-- Top bar ONLY (no big gradient container behind) -->
-                <Grid Padding="24,16,24,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Border WidthRequest="44"
-                            HeightRequest="44"
-                            StrokeThickness="0"
-                            BackgroundColor="#1AFFFFFF">
-                        <Border.StrokeShape>
-                            <Ellipse />
-                        </Border.StrokeShape>
-                        <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
-                    </Border>
+                <!-- Top bar: profile + title + notifications (matches Savings / Settings) -->
+                <Grid Padding="16,12,16,18"
+                      ColumnDefinitions="Auto,*,Auto">
+                    <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                        <Border WidthRequest="44"
+                                HeightRequest="44"
+                                StrokeThickness="0"
+                                BackgroundColor="#1AFFFFFF"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <Ellipse />
+                            </Border.StrokeShape>
+                            <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
+                        </Border>
+                        <Label Text="Dashboard"
+                               TextColor="{StaticResource SpendyNavy}"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="20"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
                     <Border Grid.Column="2"
-                            WidthRequest="46"
-                            HeightRequest="46"
+                            WidthRequest="44"
+                            HeightRequest="44"
                             BackgroundColor="White"
-                            StrokeThickness="0">
+                            StrokeThickness="0"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End">
                         <Border.StrokeShape>
                             <Ellipse />
                         </Border.StrokeShape>

@@ -91,6 +91,17 @@ public partial class SavePlanDetailViewModel : ObservableObject
 		if (!ok)
 			return;
 
+		var available = await _data.GetBalanceAsync();
+		if (amt > available)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert(
+					"Spendy",
+					"You cannot save more than your available balance.",
+					"OK");
+			return;
+		}
+
 		await _data.AddSavingMovementAsync(_planId, amt, SavingMovement.Save, DateTime.Now, null);
 		await LoadAsync();
 		AmountInput = string.Empty;

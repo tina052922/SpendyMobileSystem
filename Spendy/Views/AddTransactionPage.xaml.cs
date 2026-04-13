@@ -7,10 +7,12 @@ namespace Spendy.Views;
 
 public partial class AddTransactionPage : ContentPage
 {
-    public AddTransactionPage()
+    public AddTransactionPage(bool openWithIncomeMode = false)
     {
         InitializeComponent();
-        BindingContext = Ioc.Services.GetRequiredService<AddTransactionViewModel>();
+        var vm = Ioc.Services.GetRequiredService<AddTransactionViewModel>();
+        BindingContext = vm;
+        vm.ApplyInitialMode(openWithIncomeMode);
     }
 
     protected override async void OnAppearing()

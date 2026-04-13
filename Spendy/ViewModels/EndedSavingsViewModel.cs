@@ -1,14 +1,19 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls;
 using Spendy.Models;
 using Spendy.Services;
+using Spendy.Views;
 
 namespace Spendy.ViewModels;
 
 public partial class EndedSavingsViewModel : ObservableObject
 {
 	readonly ISpendyDataService _data;
+	readonly IProfilePhotoService _profilePhoto;
+
+	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 
 	public ObservableCollection<SavingPlan> Unfinished { get; } = new();
 	public ObservableCollection<SavingPlan> Finished { get; } = new();
@@ -25,10 +30,16 @@ public partial class EndedSavingsViewModel : ObservableObject
 	public EndedSavingsViewModel(ISpendyDataService data)
 	{
 		_data = data;
+		_profilePhoto = Ioc.Services.GetRequiredService<IProfilePhotoService>();
+		_profilePhoto.Changed += (_, _) =>
+			MainThread.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(ProfilePhoto)));
 		_data.DataChanged += (_, _) =>
 			MainThread.BeginInvokeOnMainThread(() => _ = LoadAsync());
 		_ = LoadAsync();
 	}
+
+	[RelayCommand]
+	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());
 
 	public async Task LoadAsync()
 	{

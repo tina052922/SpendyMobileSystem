@@ -105,5 +105,6 @@ public partial class DashboardViewModel : ObservableObject
 	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());
 
 	[RelayCommand]
-	Task AddTransactionAsync() => AppNavigation.PushAsync(new AddTransactionPage());
+	Task AddTransactionAsync() =>
+		AppNavigation.PushAsync(new AddTransactionPage(!IsExpenseMode));
 }

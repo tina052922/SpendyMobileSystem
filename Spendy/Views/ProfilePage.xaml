@@ -9,152 +9,286 @@
     <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
             <VerticalStackLayout Spacing="0" Padding="0,0,0,32">
-            <Grid Padding="24,18,24,26">
-                <Grid.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#01143D" Offset="0" />
-                        <GradientStop Color="#0335A3" Offset="1" />
-                    </LinearGradientBrush>
-                </Grid.Background>
-                <Label Text="Profile"
-                       TextColor="White"
-                       FontFamily="OpenSansSemibold"
-                       FontSize="22"
-                       VerticalOptions="Center" />
-            </Grid>
+                <!-- Dark header row -->
+                <Grid Padding="16,12,16,18">
+                    <Grid.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#01143D" Offset="0" />
+                            <GradientStop Color="#0335A3" Offset="1" />
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Button Text="&#x2039;"
+                                TextColor="White"
+                                BackgroundColor="Transparent"
+                                FontSize="26"
+                                WidthRequest="44"
+                                Clicked="OnBack" />
+                        <Label Grid.Column="1"
+                               Text="Profile"
+                               TextColor="White"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="20"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="Center" />
+                        <Border Grid.Column="2"
+                                WidthRequest="44"
+                                HeightRequest="44"
+                                StrokeThickness="0"
+                                BackgroundColor="White"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <Ellipse />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                            </Border.GestureRecognizers>
+                            <Image Source="darkbluenotificon.png"
+                                   WidthRequest="24"
+                                   HeightRequest="24"
+                                   Aspect="AspectFit"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   InputTransparent="True" />
+                        </Border>
+                    </Grid>
+                </Grid>
 
-            <Border Margin="24,-22,24,0"
-                    BackgroundColor="White"
-                    StrokeThickness="0"
-                    Padding="18,18,18,22">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="26" />
-                </Border.StrokeShape>
-                <VerticalStackLayout Spacing="14">
-                    <!-- Photo (left) + name/handle (right) like reference -->
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Grid WidthRequest="108" HeightRequest="86">
-                            <Border WidthRequest="82"
-                                    HeightRequest="82"
-                                    HorizontalOptions="Start"
-                                    VerticalOptions="Center"
-                                    StrokeThickness="0"
-                                    BackgroundColor="#1A01143D">
-                                <Border.StrokeShape>
-                                    <Ellipse />
-                                </Border.StrokeShape>
-                                <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
-                            </Border>
-                            <!-- Instagram-style camera overlay -->
-                            <Border WidthRequest="34"
-                                    HeightRequest="34"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="End"
-                                    BackgroundColor="White"
-                                    StrokeThickness="0"
-                                    Padding="6">
-                                <Border.StrokeShape>
-                                    <Ellipse />
-                                </Border.StrokeShape>
-                                <Image Source="uploadphotoicon.png" Aspect="AspectFit">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnChangePhoto" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </Border>
-                        </Grid>
+                <!-- White card: photo centered, name/handle below, then fields -->
+                <Border Margin="20,-18,20,0"
+                        BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="20,24,20,24">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="26" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="16">
+                        <VerticalStackLayout Spacing="10"
+                                             HorizontalOptions="Center">
+                            <Grid WidthRequest="120"
+                                  HeightRequest="120"
+                                  HorizontalOptions="Center">
+                                <Border WidthRequest="120"
+                                        HeightRequest="120"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Start"
+                                        StrokeThickness="0"
+                                        BackgroundColor="#1A01143D">
+                                    <Border.StrokeShape>
+                                        <Ellipse />
+                                    </Border.StrokeShape>
+                                    <Image Source="{Binding ProfilePhoto}"
+                                           Aspect="AspectFill" />
+                                </Border>
+                                <Border WidthRequest="36"
+                                        HeightRequest="36"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="End"
+                                        Margin="0,0,-4,-4"
+                                        BackgroundColor="White"
+                                        StrokeThickness="0"
+                                        Padding="7">
+                                    <Border.StrokeShape>
+                                        <Ellipse />
+                                    </Border.StrokeShape>
+                                    <Image Source="uploadphotoicon.png"
+                                           Aspect="AspectFit">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnChangePhoto" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Border>
+                            </Grid>
 
-                        <VerticalStackLayout VerticalOptions="Center" Spacing="2">
                             <Label Text="{Binding Name}"
                                    FontFamily="OpenSansSemibold"
-                                   FontSize="20"
-                                   TextColor="{StaticResource SpendyNavy}" />
+                                   FontSize="22"
+                                   TextColor="{StaticResource SpendyNavy}"
+                                   HorizontalTextAlignment="Center" />
                             <Label Text="{Binding Handle}"
                                    FontFamily="OpenSansSemibold"
                                    FontSize="14"
-                                   TextColor="#667085" />
-                        </VerticalStackLayout>
-                    </Grid>
-
-                    <BoxView HeightRequest="1" Color="#E6E8EC" />
-
-                    <!-- Rounded editable pills with pencil icons -->
-                    <VerticalStackLayout Spacing="12">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Name" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource SpendyNavy}" />
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                                    <Entry Text="{Binding Name, Mode=TwoWay}" Unfocused="OnFieldUnfocused" BackgroundColor="Transparent" TextColor="#0B1B3A" />
-                                    <Image Grid.Column="1" Source="editicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                </Grid>
-                            </Border>
+                                   TextColor="#667085"
+                                   HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Email" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource SpendyNavy}" />
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                                    <Entry Text="{Binding Email, Mode=TwoWay}" Unfocused="OnFieldUnfocused" Keyboard="Email" BackgroundColor="Transparent" TextColor="#0B1B3A" />
-                                    <Image Grid.Column="1" Source="editicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                </Grid>
-                            </Border>
+                        <BoxView HeightRequest="1" Color="#E6E8EC" />
+
+                        <VerticalStackLayout Spacing="12">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Name"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SpendyNavy}" />
+                                <Border BackgroundColor="#F1F3F5"
+                                        StrokeThickness="0"
+                                        Padding="14,0"
+                                        HeightRequest="44">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10"
+                                          VerticalOptions="Center">
+                                        <Entry Text="{Binding Name, Mode=TwoWay}"
+                                               BackgroundColor="Transparent"
+                                               TextColor="#0B1B3A" />
+                                        <Image Grid.Column="1"
+                                               Source="editicon.png"
+                                               WidthRequest="18"
+                                               HeightRequest="18"
+                                               Aspect="AspectFit" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Email"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SpendyNavy}" />
+                                <Border BackgroundColor="#F1F3F5"
+                                        StrokeThickness="0"
+                                        Padding="14,0"
+                                        HeightRequest="44">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10"
+                                          VerticalOptions="Center">
+                                        <Entry Text="{Binding Email, Mode=TwoWay}"
+                                               Keyboard="Email"
+                                               BackgroundColor="Transparent"
+                                               TextColor="#0B1B3A" />
+                                        <Image Grid.Column="1"
+                                               Source="editicon.png"
+                                               WidthRequest="18"
+                                               HeightRequest="18"
+                                               Aspect="AspectFit" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Phone"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SpendyNavy}" />
+                                <Border BackgroundColor="#F1F3F5"
+                                        StrokeThickness="0"
+                                        Padding="14,0"
+                                        HeightRequest="44">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10"
+                                          VerticalOptions="Center">
+                                        <Entry Text="{Binding Phone, Mode=TwoWay}"
+                                               Keyboard="Telephone"
+                                               BackgroundColor="Transparent"
+                                               TextColor="#0B1B3A" />
+                                        <Image Grid.Column="1"
+                                               Source="editicon.png"
+                                               WidthRequest="18"
+                                               HeightRequest="18"
+                                               Aspect="AspectFit" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Birthday"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SpendyNavy}" />
+                                <Border BackgroundColor="#F1F3F5"
+                                        StrokeThickness="0"
+                                        Padding="14,0"
+                                        HeightRequest="44">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <DatePicker Date="{Binding BirthdayDate, Mode=TwoWay}"
+                                                Format="MMMM dd, yyyy"
+                                                TextColor="#0B1B3A"
+                                                VerticalOptions="Center"
+                                                MaximumDate="2099-12-31"
+                                                MinimumDate="1920-01-01" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Gender"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SpendyNavy}" />
+                                <Border BackgroundColor="#F1F3F5"
+                                        StrokeThickness="0"
+                                        Padding="12,0"
+                                        HeightRequest="44">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <Picker Title="Select gender"
+                                            ItemsSource="{Binding GenderOptions}"
+                                            SelectedItem="{Binding Gender}"
+                                            TextColor="#0B1B3A"
+                                            TitleColor="#667085"
+                                            VerticalOptions="Center" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Address"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SpendyNavy}" />
+                                <Border BackgroundColor="#F1F3F5"
+                                        StrokeThickness="0"
+                                        Padding="12,0"
+                                        HeightRequest="44">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          ColumnSpacing="10"
+                                          VerticalOptions="Center">
+                                        <Image Source="locpinicon.png"
+                                               WidthRequest="18"
+                                               HeightRequest="18"
+                                               Aspect="AspectFit" />
+                                        <Entry Grid.Column="1"
+                                               Text="{Binding Address, Mode=TwoWay}"
+                                               BackgroundColor="Transparent"
+                                               TextColor="#0B1B3A" />
+                                        <Image Grid.Column="2"
+                                               Source="editicon.png"
+                                               WidthRequest="18"
+                                               HeightRequest="18"
+                                               Aspect="AspectFit" />
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Phone" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource SpendyNavy}" />
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                                    <Entry Text="{Binding Phone, Mode=TwoWay}" Unfocused="OnFieldUnfocused" Keyboard="Telephone" BackgroundColor="Transparent" TextColor="#0B1B3A" />
-                                    <Image Grid.Column="1" Source="editicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                </Grid>
-                            </Border>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Birthday" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource SpendyNavy}" />
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                                    <Entry Text="{Binding Birthday, Mode=TwoWay}" Unfocused="OnFieldUnfocused" BackgroundColor="Transparent" TextColor="#0B1B3A" />
-                                    <Image Grid.Column="1" Source="editicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                </Grid>
-                            </Border>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Gender" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource SpendyNavy}" />
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="14,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                                    <Entry Text="{Binding Gender, Mode=TwoWay}" Unfocused="OnFieldUnfocused" BackgroundColor="Transparent" TextColor="#0B1B3A" />
-                                    <Image Grid.Column="1" Source="editicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                </Grid>
-                            </Border>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Address" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource SpendyNavy}" />
-                            <Border BackgroundColor="#F1F3F5" StrokeThickness="0" Padding="12,0" HeightRequest="44">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
-                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" VerticalOptions="Center">
-                                    <Image Source="locpinicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                    <Entry Grid.Column="1" Text="{Binding Address, Mode=TwoWay}" Unfocused="OnFieldUnfocused" BackgroundColor="Transparent" TextColor="#0B1B3A" />
-                                    <Image Grid.Column="2" Source="editicon.png" WidthRequest="18" HeightRequest="18" Aspect="AspectFit" />
-                                </Grid>
-                            </Border>
-                        </VerticalStackLayout>
+                        <Button Text="Save"
+                                Command="{Binding SaveCommand}"
+                                BackgroundColor="#0335A3"
+                                TextColor="White"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="16"
+                                CornerRadius="22"
+                                HeightRequest="50"
+                                Margin="0,8,0,0" />
                     </VerticalStackLayout>
-                </VerticalStackLayout>
-            </Border>
-        </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Navbar with no active highlight (navbar_none.png) -->
         <controls:SpendyTabBar Grid.Row="1"
-                               SelectedIndex="-1"
+                               SelectedIndex="3"
                                ShowTabBar="True" />
     </Grid>
 </ContentPage>

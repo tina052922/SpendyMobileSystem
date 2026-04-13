@@ -5,7 +5,7 @@
     <Grid BackgroundColor="{StaticResource SpendyPageBg}">
         <ScrollView>
             <VerticalStackLayout Spacing="0" Padding="0,0,0,120">
-                <Grid Padding="24,16,24,22">
+                <Grid Padding="16,12,16,18">
                     <Grid.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop Color="#01143D" Offset="0" />
@@ -17,7 +17,8 @@
                             <Border WidthRequest="44"
                                     HeightRequest="44"
                                     StrokeThickness="0"
-                                    BackgroundColor="#1AFFFFFF">
+                                    BackgroundColor="#1AFFFFFF"
+                                    VerticalOptions="Center">
                                 <Border.StrokeShape>
                                     <Ellipse />
                                 </Border.StrokeShape>
@@ -27,22 +28,28 @@
                             <Label Text="Savings"
                                    TextColor="White"
                                    FontFamily="OpenSansSemibold"
-                                   FontSize="22"
+                                   FontSize="20"
                                    VerticalOptions="Center" />
                         </HorizontalStackLayout>
                         <Border Grid.Column="2"
-                                WidthRequest="46"
-                                HeightRequest="46"
+                                WidthRequest="44"
+                                HeightRequest="44"
                                 BackgroundColor="White"
                                 StrokeThickness="0"
-                                Padding="9">
+                                VerticalOptions="Center">
                             <Border.StrokeShape>
                                 <Ellipse />
                             </Border.StrokeShape>
-                            <ImageButton Source="darkbluenotificon.png"
-                                         BackgroundColor="Transparent"
-                                         Aspect="AspectFit"
-                                         Command="{Binding OpenNotificationsCommand}" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                            </Border.GestureRecognizers>
+                            <Image Source="darkbluenotificon.png"
+                                   WidthRequest="24"
+                                   HeightRequest="24"
+                                   Aspect="AspectFit"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   InputTransparent="True" />
                         </Border>
                         <Label Grid.Column="3"
                                Text="Ended"

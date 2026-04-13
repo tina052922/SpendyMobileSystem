@@ -12,21 +12,56 @@
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" Padding="20,20,20,16">
+        <Grid Grid.Row="0" Padding="16,12,16,18">
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#01143D" Offset="0" />
                     <GradientStop Color="#0335A3" Offset="1" />
                 </LinearGradientBrush>
             </Grid.Background>
-            <VerticalStackLayout Spacing="6">
-                <Label Text="Allocate Mandatory Savings"
-                       TextColor="White"
-                       FontFamily="OpenSansSemibold"
-                       FontSize="22" />
-                <Label Text="Required for income ₱20,000 or more"
-                       TextColor="#B3FFFFFF"
-                       FontSize="13" />
+            <VerticalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="#1AFFFFFF"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
+                    </Border>
+                    <Border Grid.Column="2"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="White"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                        </Border.GestureRecognizers>
+                        <Image Source="darkbluenotificon.png"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               InputTransparent="True" />
+                    </Border>
+                </Grid>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Allocate Mandatory Savings"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="20" />
+                    <Label Text="Required for income ₱20,000 or more"
+                           TextColor="#B3FFFFFF"
+                           FontSize="13" />
+                </VerticalStackLayout>
             </VerticalStackLayout>
         </Grid>
 

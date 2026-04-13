@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Spendy.Data;
@@ -11,8 +10,10 @@ namespace Spendy.ViewModels;
 
 public sealed class ChartBarDisplay
 {
-	public int Day { get; init; }
+	public string Icon { get; init; } = "";
+	public string Caption { get; init; } = "";
 	public double BarHeight { get; init; }
+	public Color BarColor { get; init; } = Color.FromArgb("#01143D");
 }
 
 public partial class StatisticsViewModel : ObservableObject
@@ -31,16 +32,32 @@ public partial class StatisticsViewModel : ObservableObject
 	private string _monthLabel = "";
 
 	[ObservableProperty]
+	private string _topCategoryHint = "";
+
+	[ObservableProperty]
 	private string _availableBalance = "₱0.00";
 
 	[ObservableProperty]
 	private bool _hasCategoryBreakdown;
 
+	[ObservableProperty]
+	private string _yAxisMaxLabel = "";
+
+	[ObservableProperty]
+	private string _yAxisHighLabel = "";
+
+	[ObservableProperty]
+	private string _yAxisMidLabel = "";
+
+	[ObservableProperty]
+	private string _yAxisLowLabel = "";
+
+	[ObservableProperty]
+	private string _yAxisZeroLabel = "";
+
 	public ObservableCollection<CategoryStat> Categories { get; } = new();
 
 	public ObservableCollection<ChartBarDisplay> Bars { get; } = new();
-
-	public Color BarColor { get; private set; } = Color.FromArgb("#022268");
 
 	public StatisticsViewModel(ISpendyDataService data)
 	{
@@ -60,12 +77,6 @@ public partial class StatisticsViewModel : ObservableObject
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 	public string CurrencySymbol => _currency.Symbol;
 
-	public string YAxis200 => $"{CurrencySymbol}200";
-	public string YAxis150 => $"{CurrencySymbol}150";
-	public string YAxis100 => $"{CurrencySymbol}100";
-	public string YAxis50 => $"{CurrencySymbol}50";
-	public string YAxis0 => $"{CurrencySymbol}0";
-
 	partial void OnIsExpenseModeChanged(bool value)
 	{
 		_ = LoadAsync();
@@ -79,6 +90,9 @@ public partial class StatisticsViewModel : ObservableObject
 	public Color IncomeButtonBackground =>
 		!IsExpenseMode ? Color.FromArgb("#43B3EF") : Color.FromArgb("#3E4E65");
 
+	string FormatAxis(decimal amount) =>
+		$"{_currency.Symbol}{decimal.Round(amount, 0).ToString("N0", _currency.Culture)}";
+
 	async Task LoadAsync()
 	{
 		var bal = await _data.GetBalanceAsync();
@@ -88,39 +102,59 @@ public partial class StatisticsViewModel : ObservableObject
 		var now = DateTime.Now;
 		var data = await _data.GetStatisticsAsync(now.Year, now.Month, kind);
 
-		ChartTitle = data.ChartTitle;
-		MonthLabel = now.ToString("MMMM", _currency.Culture).ToUpperInvariant();
+		ChartTitle = kind == TransactionKind.Expense
+			? "Spending by category"
+			: "Income by category";
+		MonthLabel = now.ToString("MMMM yyyy", _currency.Culture).ToUpperInvariant();
 		OnPropertyChanged(nameof(CurrencySymbol));
-		OnPropertyChanged(nameof(YAxis200));
-		OnPropertyChanged(nameof(YAxis150));
-		OnPropertyChanged(nameof(YAxis100));
-		OnPropertyChanged(nameof(YAxis50));
-		OnPropertyChanged(nameof(YAxis0));
-		BarColor = data.BarColor;
-		OnPropertyChanged(nameof(BarColor));
 
 		Categories.Clear();
 		foreach (var c in data.Categories)
 			Categories.Add(c);
 
 		HasCategoryBreakdown = Categories.Count > 0;
+		TopCategoryHint = Categories.Count > 0 && Categories[0].Amount > 0
+			? $"Highest: {Categories[0].Name} · {Categories[0].FormattedAmount}"
+			: "";
 
 		Bars.Clear();
-		var max = data.Points.Count == 0 ? 1 : data.Points.Max(p => p.Amount);
-		if (max <= 0)
-			max = 1;
+		var catList = data.Categories.Take(8).ToList();
+		var maxAmt = catList.Count == 0 ? 1m : catList.Max(c => c.Amount);
+		if (maxAmt <= 0)
+			maxAmt = 1;
 		const double chartHeight = 140;
-		foreach (var p in data.Points)
+		var expenseBar = Color.FromArgb("#01143D");
+		var incomeBar = Color.FromArgb("#00D4A5");
+		var topExpense = Color.FromArgb("#43B3EF");
+		var topIncome = Color.FromArgb("#43B3EF");
+		foreach (var c in catList)
 		{
-			double h = 0;
-			if (p.Amount > 0)
+			var h = 0d;
+			if (c.Amount > 0)
 			{
-				h = (double)(p.Amount / max) * chartHeight;
+				h = (double)(c.Amount / maxAmt) * chartHeight;
 				h = Math.Max(h, 4);
 			}
 
-			Bars.Add(new ChartBarDisplay { Day = p.Day, BarHeight = h });
+			var caption = c.Name.Length > 10 ? c.Name[..7] + "…" : c.Name;
+			var isTop = c.IsTopCategory && c.Amount > 0;
+			var barColor = kind == TransactionKind.Expense
+				? (isTop ? topExpense : expenseBar)
+				: (isTop ? topIncome : incomeBar);
+			Bars.Add(new ChartBarDisplay
+			{
+				Icon = c.Icon,
+				Caption = caption,
+				BarHeight = h,
+				BarColor = barColor
+			});
 		}
+
+		YAxisZeroLabel = FormatAxis(0);
+		YAxisLowLabel = FormatAxis(maxAmt * 0.25m);
+		YAxisMidLabel = FormatAxis(maxAmt * 0.5m);
+		YAxisHighLabel = FormatAxis(maxAmt * 0.75m);
+		YAxisMaxLabel = FormatAxis(maxAmt);
 	}
 
 	[RelayCommand]

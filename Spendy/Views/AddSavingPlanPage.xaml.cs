@@ -20,6 +20,6 @@ public partial class AddSavingPlanPage : ContentPage
 
 	async void OnBack(object? sender, EventArgs e) => await AppNavigation.PopAsync();
 
-	async void OnNotifications(object? sender, EventArgs e) =>
+	async void OnNotificationsTapped(object? sender, TappedEventArgs e) =>
 		await AppNavigation.PushAsync(new NotificationPage());
 }

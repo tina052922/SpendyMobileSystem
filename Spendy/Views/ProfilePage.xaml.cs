@@ -11,17 +11,13 @@ public partial class ProfilePage : ContentPage
 		BindingContext = Ioc.Services.GetRequiredService<ProfileViewModel>();
 	}
 
+	async void OnBack(object? sender, EventArgs e) => await AppNavigation.PopAsync();
+
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
 		if (BindingContext is ProfileViewModel vm)
 			await vm.LoadAsync();
-	}
-
-	void OnFieldUnfocused(object? sender, FocusEventArgs e)
-	{
-		if (BindingContext is ProfileViewModel vm && vm.SaveCommand.CanExecute(null))
-			vm.SaveCommand.Execute(null);
 	}
 
 	async void OnChangePhoto(object? sender, TappedEventArgs e)

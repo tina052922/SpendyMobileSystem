@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Spendy.ViewModels"
              x:Class="Spendy.Views.NotificationPage"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
@@ -14,32 +15,27 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- ═══════ HEADER ═══════ -->
-        <Grid Grid.Row="0" Padding="16,14,16,20">
+        <Grid Grid.Row="0" Padding="16,12,16,18">
             <Grid ColumnDefinitions="Auto,*,Auto">
 
-                <!-- Back button -->
-                <Border WidthRequest="40" HeightRequest="40"
-                StrokeThickness="0"
-                BackgroundColor="#1AFFFFFF">
+                <Border WidthRequest="44"
+                        HeightRequest="44"
+                        StrokeThickness="0"
+                        BackgroundColor="#1AFFFFFF">
                     <Border.StrokeShape>
                         <Ellipse />
                     </Border.StrokeShape>
                     <Label Text="&#x2039;"
-                TextColor="White"
-                FontSize="30"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                Padding="0,0,1,3">
+                           TextColor="White"
+                           FontSize="28"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnBack" />
                         </Label.GestureRecognizers>
                     </Label>
                 </Border>
 
-                <!-- Title -->
                 <Label Grid.Column="1"
                        Text="Notifications"
                        TextColor="White"
@@ -48,15 +44,16 @@
                        HorizontalTextAlignment="Center"
                        VerticalOptions="Center" />
 
-                <!-- Unread count badge -->
                 <Border Grid.Column="2"
-                        WidthRequest="40" HeightRequest="40"
+                        WidthRequest="44"
+                        HeightRequest="44"
                         StrokeThickness="0"
-                        BackgroundColor="#1AFFFFFF">
+                        BackgroundColor="#1AFFFFFF"
+                        IsVisible="{Binding HasAlerts}">
                     <Border.StrokeShape>
                         <Ellipse />
                     </Border.StrokeShape>
-                    <Label Text="2"
+                    <Label Text="{Binding BadgeCount}"
                            TextColor="White"
                            FontFamily="OpenSansSemibold"
                            FontSize="14"
@@ -66,194 +63,82 @@
             </Grid>
         </Grid>
 
-        <!-- ═══════ CONTENT CARD ═══════ -->
         <Border Grid.Row="1"
                 BackgroundColor="#1B2B42"
                 StrokeThickness="0"
                 Margin="0,-20,0,0"
-                Padding="16,24,16,24">
+                Padding="16,20,16,24">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="28,28,0,0" />
             </Border.StrokeShape>
 
-            <ScrollView>
-                <VerticalStackLayout Spacing="0">
-
-                    <!-- Section: Today -->
-                    <Label Text="TODAY"
-                           TextColor="#8FA1B5"
-                           FontFamily="OpenSansSemibold"
-                           FontSize="11"
-                           Margin="4,0,0,14" />
-
-                    <!-- ── Notification 1: Payment Reminder (Orange / Unread) ── -->
-                    <Border BackgroundColor="#1E3050"
-                            StrokeThickness="0"
-                            Padding="0"
-                            Margin="0,0,0,12">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="18" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="5,Auto,*,Auto" ColumnSpacing="0">
-
-                            <!-- Accent bar -->
-                            <BoxView Grid.Column="0" BackgroundColor="#FF9F43" />
-
-                            <!-- Icon -->
-                            <Border Grid.Column="1"
-                                    WidthRequest="46" HeightRequest="46"
-                                    BackgroundColor="#2E1A00"
-                                    StrokeThickness="0"
-                                    Margin="14,14,0,14">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="14" />
-                                </Border.StrokeShape>
-                                <Label Text="⏰" FontSize="22"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                            </Border>
-
-                            <!-- Text -->
-                            <VerticalStackLayout Grid.Column="2"
-                                                 Spacing="3"
-                                                 VerticalOptions="Center"
-                                                 Margin="12,14,8,14">
-                                <Label Text="Payment Reminder"
-                                       TextColor="White"
-                                       FontFamily="OpenSansSemibold"
-                                       FontSize="13" />
-                                <Label Text="Your Gaming PC goal is due soon."
-                                       TextColor="#BFD0E3"
-                                       FontSize="12"
-                                       MaxLines="2"
-                                       LineBreakMode="TailTruncation" />
-                                <Label Text="2 hours ago"
-                                       TextColor="#62738A"
-                                       FontSize="11"
-                                       Margin="0,2,0,0" />
-                            </VerticalStackLayout>
-
-                            <!-- Unread dot -->
-                            <BoxView Grid.Column="3"
-                                     WidthRequest="9" HeightRequest="9"
-                                     CornerRadius="4.5"
-                                     BackgroundColor="#FF9F43"
-                                     VerticalOptions="Start"
-                                     HorizontalOptions="Center"
-                                     Margin="0,16,14,0" />
-                        </Grid>
-                    </Border>
-
-                    <!-- ── Notification 2: Expense Logged (Blue / Unread) ── -->
-                    <Border BackgroundColor="#1E3050"
-                            StrokeThickness="0"
-                            Padding="0"
-                            Margin="0,0,0,12">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="18" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="5,Auto,*,Auto" ColumnSpacing="0">
-
-                            <BoxView Grid.Column="0" BackgroundColor="#00B2FF" />
-
-                            <Border Grid.Column="1"
-                                    WidthRequest="46" HeightRequest="46"
-                                    BackgroundColor="#001E33"
-                                    StrokeThickness="0"
-                                    Margin="14,14,0,14">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="14" />
-                                </Border.StrokeShape>
-                                <Label Text="🍔" FontSize="22"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                            </Border>
-
-                            <VerticalStackLayout Grid.Column="2"
-                                                 Spacing="3"
-                                                 VerticalOptions="Center"
-                                                 Margin="12,14,8,14">
-                                <Label Text="Expense Logged"
-                                       TextColor="White"
-                                       FontFamily="OpenSansSemibold"
-                                       FontSize="13" />
-                                <Label Text="Food · ₱80.00 added to your log."
-                                       TextColor="#BFD0E3"
-                                       FontSize="12"
-                                       MaxLines="2"
-                                       LineBreakMode="TailTruncation" />
-                                <Label Text="5 hours ago"
-                                       TextColor="#62738A"
-                                       FontSize="11"
-                                       Margin="0,2,0,0" />
-                            </VerticalStackLayout>
-
-                            <BoxView Grid.Column="3"
-                                     WidthRequest="9" HeightRequest="9"
-                                     CornerRadius="4.5"
-                                     BackgroundColor="#00B2FF"
-                                     VerticalOptions="Start"
-                                     HorizontalOptions="Center"
-                                     Margin="0,16,14,0" />
-                        </Grid>
-                    </Border>
-
-                    <!-- Section: Earlier -->
-                    <Label Text="EARLIER"
-                           TextColor="#8FA1B5"
-                           FontFamily="OpenSansSemibold"
-                           FontSize="11"
-                           Margin="4,8,0,14" />
-
-                    <!-- ── Notification 3: Budget Tip (Green / Read) ── -->
-                    <Border BackgroundColor="#16283D"
-                            StrokeThickness="0"
-                            Padding="0"
-                            Margin="0,0,0,12">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="18" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="5,Auto,*" ColumnSpacing="0">
-
-                            <BoxView Grid.Column="0" BackgroundColor="#2ECC71" />
-
-                            <Border Grid.Column="1"
-                                    WidthRequest="46" HeightRequest="46"
-                                    BackgroundColor="#002010"
-                                    StrokeThickness="0"
-                                    Margin="14,14,0,14">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="14" />
-                                </Border.StrokeShape>
-                                <Label Text="💡" FontSize="22"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                            </Border>
-
-                            <VerticalStackLayout Grid.Column="2"
-                                                 Spacing="3"
-                                                 VerticalOptions="Center"
-                                                 Margin="12,14,14,14">
-                                <Label Text="Budget Tip"
-                                       TextColor="#8FA1B5"
-                                       FontFamily="OpenSansSemibold"
-                                       FontSize="13" />
-                                <Label Text="You are on track for September. Keep it up!"
-                                       TextColor="#62738A"
-                                       FontSize="12"
-                                       MaxLines="2"
-                                       LineBreakMode="TailTruncation" />
-                                <Label Text="Yesterday"
-                                       TextColor="#3D5268"
-                                       FontSize="11"
-                                       Margin="0,2,0,0" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-
-                </VerticalStackLayout>
-            </ScrollView>
+            <CollectionView ItemsSource="{Binding Items}">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="24"
+                                         Spacing="8"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center">
+                        <Label Text="No alerts right now"
+                               TextColor="#BFD0E3"
+                               FontFamily="OpenSansSemibold"
+                               FontSize="16"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Savings reminders and budget tips will appear here."
+                               TextColor="#62738A"
+                               FontSize="13"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:NotificationItemVm">
+                        <Border BackgroundColor="#1E3050"
+                                StrokeThickness="0"
+                                Padding="0"
+                                Margin="0,0,0,12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="18" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="5,Auto,*"
+                                  ColumnSpacing="0">
+                                <BoxView Grid.Column="0"
+                                         BackgroundColor="{Binding AccentColor}" />
+                                <Border Grid.Column="1"
+                                        WidthRequest="46"
+                                        HeightRequest="46"
+                                        BackgroundColor="#243652"
+                                        StrokeThickness="0"
+                                        Margin="14,14,0,14"
+                                        VerticalOptions="Start">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="14" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding IconGlyph}"
+                                           FontSize="22"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="2"
+                                                     Spacing="3"
+                                                     VerticalOptions="Center"
+                                                     Margin="12,14,14,14">
+                                    <Label Text="{Binding Title}"
+                                           TextColor="White"
+                                           FontFamily="OpenSansSemibold"
+                                           FontSize="13" />
+                                    <Label Text="{Binding Message}"
+                                           TextColor="#BFD0E3"
+                                           FontSize="12"
+                                           LineBreakMode="WordWrap" />
+                                    <Label Text="{Binding TimeText}"
+                                           TextColor="#62738A"
+                                           FontSize="11"
+                                           Margin="0,4,0,0" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Border>
-
     </Grid>
 </ContentPage>

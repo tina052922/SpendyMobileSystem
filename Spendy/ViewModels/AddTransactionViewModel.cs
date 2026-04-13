@@ -60,6 +60,10 @@ public partial class AddTransactionViewModel : ObservableObject
 		SelectedDay = DateTime.Today.Day;
 	}
 
+	/// <summary>Call from <see cref="AddTransactionPage"/> before first appear when opening from Dashboard (+).</summary>
+	public void ApplyInitialMode(bool openWithIncomeMode) =>
+		IsExpenseMode = !openWithIncomeMode;
+
 	partial void OnIsExpenseModeChanged(bool value)
 	{
 		OnPropertyChanged(nameof(IsIncomeMode));
@@ -82,6 +86,10 @@ public partial class AddTransactionViewModel : ObservableObject
 
 		SelectedExpenseCategory = ExpensePicker.FirstOrDefault();
 		SelectedIncomeCategory = IncomePicker.FirstOrDefault();
+
+		// No income yet — show Income tab (expense is blocked until first income exists).
+		if (!await _data.HasAnyIncomeAsync() && IsExpenseMode)
+			IsExpenseMode = false;
 	}
 
 	partial void OnSelectedExpenseCategoryChanged(CategoryPickItem? value)
@@ -97,7 +105,20 @@ public partial class AddTransactionViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	void SelectExpense() => IsExpenseMode = true;
+	async Task SelectExpense()
+	{
+		if (!await _data.HasAnyIncomeAsync())
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert(
+					"Spendy",
+					"Please add income first for accurate budget tracking.",
+					"OK");
+			return;
+		}
+
+		IsExpenseMode = true;
+	}
 
 	[RelayCommand]
 	void SelectIncome() => IsExpenseMode = false;
@@ -126,6 +147,16 @@ public partial class AddTransactionViewModel : ObservableObject
 		}
 
 		var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
+		if (kind == TransactionKind.Expense && !await _data.HasAnyIncomeAsync())
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert(
+					"Spendy",
+					"Please add income first for accurate budget tracking.",
+					"OK");
+			return;
+		}
+
 		var cat = IsExpenseMode ? SelectedExpenseCategory : SelectedIncomeCategory;
 		if (cat is null)
 		{
@@ -148,7 +179,7 @@ public partial class AddTransactionViewModel : ObservableObject
 
 			var notes = string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim();
 			var allocVm = new MandatorySavingsAllocationViewModel(
-				_data, _currency, amt, mandatory, cat.Id, date, notes);
+				_data, _currency, _profilePhoto, amt, mandatory, cat.Id, date, notes);
 			await AppNavigation.PushModalAsync(new MandatorySavingsAllocationPage(allocVm));
 			return;
 		}

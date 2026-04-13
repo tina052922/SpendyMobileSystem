@@ -15,9 +15,6 @@ public partial class SettingsView : ContentView
 		BindingContext = Ioc.Services.GetRequiredService<SettingsViewModel>();
 	}
 
-	async void OnNotifications(object? sender, EventArgs e) =>
-		await AppNavigation.PushAsync(new NotificationPage());
-
 	async void OnProfileTapped(object? sender, TappedEventArgs e) =>
 		await AppNavigation.PushAsync(new ProfilePage());
 

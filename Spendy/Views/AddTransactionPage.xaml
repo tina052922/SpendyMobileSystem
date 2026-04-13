@@ -15,9 +15,8 @@
         </LinearGradientBrush>
     </ContentPage.Background>
     <Grid RowDefinitions="Auto,*">
-
         <!-- Header -->
-        <Grid Grid.Row="0" Padding="16,8,16,12" RowDefinitions="Auto,Auto" RowSpacing="6">
+        <Grid Grid.Row="0" Padding="16,12,16,18" RowDefinitions="Auto,Auto" RowSpacing="10">
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
                 <Border WidthRequest="44"
                         HeightRequest="44"
@@ -28,13 +27,26 @@
                     </Border.StrokeShape>
                     <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
                 </Border>
-                <ImageButton Grid.Column="2"
-                             Source="whitenotificon.png"
-                             BackgroundColor="Transparent"
-                             WidthRequest="34"
-                             HeightRequest="34"
-                             Aspect="AspectFit"
-                             Command="{Binding OpenNotificationsCommand}" />
+                <Border Grid.Column="2"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        StrokeThickness="0"
+                        BackgroundColor="White"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <Ellipse />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                    </Border.GestureRecognizers>
+                    <Image Source="darkbluenotificon.png"
+                           WidthRequest="24"
+                           HeightRequest="24"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           InputTransparent="True" />
+                </Border>
             </Grid>
 
             <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
@@ -63,15 +75,14 @@
                 BackgroundColor="#1B2B42"
                 StrokeThickness="0"
                 Margin="0,-16,0,0"
-                Padding="16,18,6,20">
+                Padding="16,18,16,20">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="28,28,0,0" />
             </Border.StrokeShape>
 
+            <!-- Margin clears vertical scrollbar overlap on narrow layouts -->
             <ScrollView Margin="0,0,2,0">
                 <VerticalStackLayout Spacing="16" Padding="0,0,0,18">
-
-                    <!-- Type selector -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Button Text="Expenses"
                                 Command="{Binding SelectExpenseCommand}"
@@ -92,12 +103,11 @@
                                 BackgroundColor="{Binding IncomeAccentBackground}" />
                     </Grid>
 
-                    <!-- Amount field -->
                     <Grid>
                         <Border BackgroundColor="#2A3B55"
                                 StrokeThickness="0"
                                 Padding="16,0"
-                                HeightRequest="50">
+                                HeightRequest="54">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="22" />
                             </Border.StrokeShape>
@@ -127,11 +137,10 @@
                         </Border>
                     </Grid>
 
-                    <!-- Notes field -->
                     <Border BackgroundColor="#2A3B55"
                             StrokeThickness="0"
                             Padding="16,0"
-                            HeightRequest="50">
+                            HeightRequest="54">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="22" />
                         </Border.StrokeShape>
@@ -148,21 +157,20 @@
                            FontSize="14"
                            FontFamily="OpenSansSemibold" />
 
-                    <!-- Expense categories -->
                     <CollectionView ItemsSource="{Binding ExpensePicker}"
-                                    SelectedItem="{Binding SelectedExpenseCategory, Mode=TwoWay}"
-                                    SelectionMode="Single"
-                                    IsVisible="{Binding IsExpenseMode}">
+                                      SelectedItem="{Binding SelectedExpenseCategory, Mode=TwoWay}"
+                                      SelectionMode="Single"
+                                      IsVisible="{Binding IsExpenseMode}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical"
-                                             Span="4"
-                                             HorizontalItemSpacing="8"
-                                             VerticalItemSpacing="14" />
+                                             Span="5"
+                                             HorizontalItemSpacing="10"
+                                             VerticalItemSpacing="16" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <VerticalStackLayout Padding="2,2"
-                                                     Spacing="6"
+                                                     Spacing="8"
                                                      HorizontalOptions="Fill">
                                     <Border HorizontalOptions="Center"
                                             WidthRequest="72"
@@ -174,7 +182,7 @@
                                             <RoundRectangle CornerRadius="22" />
                                         </Border.StrokeShape>
                                         <Label Text="{Binding Icon}"
-                                               FontSize="28"
+                                               FontSize="32"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center" />
                                     </Border>
@@ -189,21 +197,20 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
-                    <!-- Income categories -->
                     <CollectionView ItemsSource="{Binding IncomePicker}"
                                     SelectedItem="{Binding SelectedIncomeCategory, Mode=TwoWay}"
                                     SelectionMode="Single"
                                     IsVisible="{Binding IsIncomeMode}">
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Orientation="Vertical"
-                                             Span="4"
-                                             HorizontalItemSpacing="8"
-                                             VerticalItemSpacing="14" />
+                                             Span="5"
+                                             HorizontalItemSpacing="10"
+                                             VerticalItemSpacing="16" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <VerticalStackLayout Padding="2,2"
-                                                     Spacing="6"
+                                                     Spacing="8"
                                                      HorizontalOptions="Fill">
                                     <Border HorizontalOptions="Center"
                                             WidthRequest="72"
@@ -215,7 +222,7 @@
                                             <RoundRectangle CornerRadius="22" />
                                         </Border.StrokeShape>
                                         <Label Text="{Binding Icon}"
-                                               FontSize="28"
+                                               FontSize="32"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center" />
                                     </Border>
@@ -235,24 +242,23 @@
                            FontSize="14"
                            FontFamily="OpenSansSemibold" />
 
-                    <!-- Calendar -->
                     <Border BackgroundColor="#2A3B55"
                             StrokeThickness="0"
-                            Padding="4,10">
+                            Padding="12">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
                         <VerticalStackLayout Spacing="10">
-                            <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="10" HorizontalOptions="Center">
-                                <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                            <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="12" HorizontalOptions="Center">
+                                <HorizontalStackLayout Grid.Column="0" Spacing="6">
                                     <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" BackgroundColor="#0335A3" VerticalOptions="Center" />
                                     <Label Text="Added" TextColor="#BFD0E3" FontSize="12" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
-                                <HorizontalStackLayout Grid.Column="1" Spacing="5">
+                                <HorizontalStackLayout Grid.Column="1" Spacing="6">
                                     <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" BackgroundColor="#00B2FF" VerticalOptions="Center" />
                                     <Label Text="Recurring" TextColor="#BFD0E3" FontSize="12" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
-                                <HorizontalStackLayout Grid.Column="2" Spacing="5">
+                                <HorizontalStackLayout Grid.Column="2" Spacing="6">
                                     <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" BackgroundColor="#62738A" VerticalOptions="Center" />
                                     <Label Text="Not Available" TextColor="#BFD0E3" FontSize="12" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
@@ -268,11 +274,10 @@
                             BackgroundColor="#0335A3"
                             TextColor="White"
                             FontFamily="OpenSansSemibold"
-                            FontSize="15"
-                            CornerRadius="22"
-                            HeightRequest="50"
-                            Margin="0,4,0,0" />
-
+                            FontSize="16"
+                            CornerRadius="26"
+                            HeightRequest="54"
+                            Margin="0,8,0,0" />
                 </VerticalStackLayout>
             </ScrollView>
         </Border>

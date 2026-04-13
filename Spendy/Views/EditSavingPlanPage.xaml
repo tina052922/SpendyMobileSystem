@@ -14,7 +14,7 @@
         </LinearGradientBrush>
     </ContentPage.Background>
     <Grid RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" Padding="16,12,16,8">
+        <Grid Grid.Row="0" Padding="16,12,16,18">
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#01143D" Offset="0" />
@@ -33,17 +33,30 @@
                         <Image Source="{Binding ProfilePhoto}"
                                Aspect="AspectFill" />
                     </Border>
-                    <ImageButton Grid.Column="2"
-                                 Source="whitenotificon.png"
-                                 BackgroundColor="Transparent"
-                                 WidthRequest="34"
-                                 HeightRequest="34"
-                                 Aspect="AspectFit"
-                                 Clicked="OnNotifications" />
+                    <Border Grid.Column="2"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="White"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNotificationsTapped" />
+                        </Border.GestureRecognizers>
+                        <Image Source="darkbluenotificon.png"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               InputTransparent="True" />
+                    </Border>
                 </Grid>
                 <Grid ColumnDefinitions="Auto,*,Auto">
                     <Button Text="&#x2039;"
-                            FontSize="28"
+                            FontSize="26"
                             TextColor="White"
                             BackgroundColor="Transparent"
                             WidthRequest="44"
@@ -55,10 +68,9 @@
                            FontSize="20"
                            HorizontalTextAlignment="Center"
                            VerticalOptions="Center" />
-                    <BoxView Grid.Column="2"
-                             WidthRequest="44"
-                             HeightRequest="44"
-                             Color="Transparent" />
+                    <Grid Grid.Column="2"
+                          WidthRequest="44"
+                          HeightRequest="44" />
                 </Grid>
             </VerticalStackLayout>
         </Grid>

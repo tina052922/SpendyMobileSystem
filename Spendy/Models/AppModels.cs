@@ -35,8 +35,14 @@ public sealed class CategoryStat
 	public decimal Amount { get; init; }
 	public Color AmountColor { get; init; } = Color.FromArgb("#01143D");
 	public string CurrencySymbol { get; init; } = "₱";
+	public bool IsTopCategory { get; init; }
 
 	public string FormattedAmount => $"{CurrencySymbol}{Amount:N0}";
+
+	public Color HighlightStroke =>
+		IsTopCategory ? Color.FromArgb("#43B3EF") : Colors.Transparent;
+
+	public double HighlightStrokeThickness => IsTopCategory ? 2 : 0;
 }
 
 public sealed class ChartPoint

@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls;
 using Spendy.Models;
 using Spendy.Services;
+using Spendy.Views;
 
 namespace Spendy.ViewModels;
 
@@ -23,6 +25,7 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 {
 	readonly ISpendyDataService _data;
 	readonly ICurrencyService _currency;
+	readonly IProfilePhotoService _profilePhoto;
 	readonly decimal _incomeAmount;
 	readonly decimal _mandatoryAmount;
 	readonly int _categoryId;
@@ -49,9 +52,12 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 
 	public ObservableCollection<MandatoryGoalPickRow> GoalRows { get; } = new();
 
+	public ImageSource ProfilePhoto => _profilePhoto.Photo;
+
 	public MandatorySavingsAllocationViewModel(
 		ISpendyDataService data,
 		ICurrencyService currency,
+		IProfilePhotoService profilePhoto,
 		decimal incomeAmount,
 		decimal mandatoryAmount,
 		int categoryId,
@@ -60,6 +66,9 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 	{
 		_data = data;
 		_currency = currency;
+		_profilePhoto = profilePhoto;
+		_profilePhoto.Changed += (_, _) =>
+			MainThread.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(ProfilePhoto)));
 		_incomeAmount = incomeAmount;
 		_mandatoryAmount = mandatoryAmount;
 		_categoryId = categoryId;
@@ -105,6 +114,9 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 		CancelWithoutSavingCommand.NotifyCanExecuteChanged();
 		UpdateCanConfirm();
 	}
+
+	[RelayCommand]
+	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());
 
 	[RelayCommand]
 	void SelectGoal(MandatoryGoalPickRow? row)

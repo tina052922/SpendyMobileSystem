@@ -4,27 +4,52 @@
              x:Class="Spendy.Views.SettingsView">
     <ScrollView BackgroundColor="{StaticResource SpendyPageBg}">
         <VerticalStackLayout Padding="0,0,0,120" Spacing="0">
-            <Grid Padding="24,16,24,20">
+            <Grid Padding="16,12,16,18">
                 <Grid.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                         <GradientStop Color="#01143D" Offset="0" />
                         <GradientStop Color="#0335A3" Offset="1" />
                     </LinearGradientBrush>
                 </Grid.Background>
-                <Grid ColumnDefinitions="*,Auto">
-                    <Label Text="Settings"
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="#1AFFFFFF"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
+                    </Border>
+                    <Label Grid.Column="1"
+                           Text="Settings"
                            TextColor="White"
                            FontFamily="OpenSansSemibold"
-                           FontSize="24"
-                           VerticalOptions="Center" />
-                    <ImageButton Grid.Column="1"
-                                 Source="whitenotificon.png"
-                                 BackgroundColor="Transparent"
-                                 WidthRequest="34"
-                                 HeightRequest="34"
-                                 Margin="0,2,0,0"
-                                 Aspect="AspectFit"
-                                 Clicked="OnNotifications" />
+                           FontSize="20"
+                           VerticalOptions="Center"
+                           Margin="12,0,0,0" />
+                    <Border Grid.Column="2"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            StrokeThickness="0"
+                            BackgroundColor="White"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
+                        </Border.GestureRecognizers>
+                        <Image Source="darkbluenotificon.png"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               InputTransparent="True" />
+                    </Border>
                 </Grid>
             </Grid>
 

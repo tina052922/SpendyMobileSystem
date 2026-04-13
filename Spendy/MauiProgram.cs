@@ -34,6 +34,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<SavingsViewModel>();
 		builder.Services.AddSingleton<SettingsViewModel>();
 		builder.Services.AddTransient<AddTransactionViewModel>();
+		builder.Services.AddTransient<NotificationViewModel>();
 		builder.Services.AddTransient<ProfileViewModel>();
 		builder.Services.AddTransient<AddSavingPlanViewModel>();
 
