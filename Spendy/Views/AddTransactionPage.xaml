@@ -28,7 +28,7 @@
                         WidthRequest="44"
                         HeightRequest="44"
                         StrokeThickness="0"
-                        BackgroundColor="White"
+                        BackgroundColor="Transparent"
                         VerticalOptions="Center">
                     <Border.StrokeShape>
                         <Ellipse />
@@ -36,7 +36,7 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
                     </Border.GestureRecognizers>
-                    <Image Source="darkbluenotificon.png"
+                    <Image Source="whitenotificon.png"
                            WidthRequest="24"
                            HeightRequest="24"
                            Aspect="AspectFit"
@@ -60,10 +60,7 @@
                        FontSize="20"
                        HorizontalTextAlignment="Center"
                        VerticalOptions="Center" />
-                <BoxView Grid.Column="2"
-                         WidthRequest="44"
-                         HeightRequest="44"
-                         Color="Transparent" />
+                
             </Grid>
         </Grid>
 
@@ -169,11 +166,25 @@
                                 <VerticalStackLayout Padding="2,2"
                                                      Spacing="8"
                                                      HorizontalOptions="Fill">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
                                     <Border HorizontalOptions="Center"
                                             WidthRequest="72"
                                             HeightRequest="72"
                                             BackgroundColor="#2A3B55"
-                                            Stroke="#0335A3"
+                                            Stroke="{StaticResource SpendyAccent}"
                                             StrokeThickness="{Binding IsSelected, Converter={StaticResource CatSelStroke}}">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="22" />
@@ -209,11 +220,25 @@
                                 <VerticalStackLayout Padding="2,2"
                                                      Spacing="8"
                                                      HorizontalOptions="Fill">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
                                     <Border HorizontalOptions="Center"
                                             WidthRequest="72"
                                             HeightRequest="72"
                                             BackgroundColor="#2A3B55"
-                                            Stroke="#0335A3"
+                                            Stroke="{StaticResource SpendyAccent}"
                                             StrokeThickness="{Binding IsSelected, Converter={StaticResource CatSelStroke}}">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="22" />

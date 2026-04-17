@@ -88,7 +88,7 @@
             <!-- Month label + calendar button -->
             <Grid Padding="24,0,24,8"
                   ColumnDefinitions="*,Auto,*">
-                <BoxView Color="Transparent" />
+              
                 <VerticalStackLayout Grid.Column="1"
                                      Spacing="4"
                                      VerticalOptions="Center"

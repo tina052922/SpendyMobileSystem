@@ -59,10 +59,9 @@
                            FontSize="20"
                            HorizontalTextAlignment="Center"
                            VerticalOptions="Center" />
-                    <BoxView Grid.Column="2"
-                             WidthRequest="44"
-                             HeightRequest="44"
-                             Color="Transparent" />
+                    <Grid Grid.Column="2"
+                      WidthRequest="44"
+                      HeightRequest="44" />
                 </Grid>
             </VerticalStackLayout>
         </Grid>
