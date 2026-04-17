@@ -72,10 +72,10 @@ public partial class DashboardViewModel : ObservableObject
 	}
 
 	public Color ExpenseButtonBackground =>
-		IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#9AA5B1");
+		IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#3E4E65");
 
 	public Color IncomeButtonBackground =>
-		!IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#9AA5B1");
+		!IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#3E4E65");
 
 	async Task LoadAsync()
 	{

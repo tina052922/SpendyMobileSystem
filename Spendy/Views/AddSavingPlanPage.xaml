@@ -6,7 +6,7 @@
              x:Name="PageRoot"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
-             Background="{StaticResource SpendyHeaderGradient}">
+             BackgroundColor="#01143D">
     <Grid RowDefinitions="Auto,*">
         <!-- Header (same structure as Add Transaction — no extra gradient layer) -->
         <Grid Grid.Row="0" Padding="16,12,16,18" RowDefinitions="Auto,Auto" RowSpacing="10">
@@ -25,7 +25,7 @@
                         WidthRequest="44"
                         HeightRequest="44"
                         StrokeThickness="0"
-                        BackgroundColor="White"
+                        BackgroundColor="Transparent"
                         VerticalOptions="Center">
                     <Border.StrokeShape>
                         <Ellipse />

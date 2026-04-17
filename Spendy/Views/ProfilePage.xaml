@@ -12,10 +12,7 @@
                 <!-- Dark header row -->
                 <Grid Padding="16,12,16,18">
                     <Grid.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#01143D" Offset="0" />
-                            <GradientStop Color="#0335A3" Offset="1" />
-                        </LinearGradientBrush>
+                        <SolidColorBrush Color="#01143D" />
                     </Grid.Background>
                     <Grid ColumnDefinitions="Auto,*,Auto">
                         <Button Text="&#x2039;"
@@ -35,7 +32,7 @@
                                 WidthRequest="44"
                                 HeightRequest="44"
                                 StrokeThickness="0"
-                                BackgroundColor="White"
+                                BackgroundColor="Transparent"
                                 VerticalOptions="Center">
                             <Border.StrokeShape>
                                 <Ellipse />
@@ -43,7 +40,7 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
                             </Border.GestureRecognizers>
-                            <Image Source="darkbluenotificon.png"
+                            <Image Source="whitenotificon.png"
                                    WidthRequest="24"
                                    HeightRequest="24"
                                    Aspect="AspectFit"

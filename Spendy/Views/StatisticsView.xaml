@@ -20,21 +20,12 @@
                         </Border.StrokeShape>
                         <Image Source="{Binding ProfilePhoto}" Aspect="AspectFill" />
                     </Border>
-                    <VerticalStackLayout Spacing="0" VerticalOptions="Center">
-                        <Label Text="Statistics"
-                               TextColor="{StaticResource SpendyNavy}"
-                               FontFamily="OpenSansSemibold"
-                               FontSize="20" />
-                        <Label Text="{Binding UserGreeting}"
-                               IsVisible="{Binding HasUserGreeting}"
-                               TextColor="#667085"
-                               FontSize="12" />
-                    </VerticalStackLayout>
+                    
                 </HorizontalStackLayout>
                 <Border Grid.Column="2"
                         WidthRequest="44"
                         HeightRequest="44"
-                        BackgroundColor="White"
+                        BackgroundColor="Transparent"
                         StrokeThickness="0"
                         VerticalOptions="Center"
                         HorizontalOptions="End">
@@ -55,57 +46,26 @@
             </Grid>
 
             <!-- Balance card -->
-            <Border Margin="24,0,24,14"
-                    StrokeThickness="0"
-                    Padding="16"
-                    HeightRequest="90">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="22" />
-                </Border.StrokeShape>
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#0B1B3A" Offset="0" />
-                        <GradientStop Color="#01143D" Offset="0.55" />
-                        <GradientStop Color="#0335A3" Offset="1" />
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid>
-                    <!-- glossy highlight (matches reference card streak) -->
-                    <Border HorizontalOptions="End"
-                            VerticalOptions="Center"
-                            WidthRequest="150"
-                            HeightRequest="120"
-                            Margin="0,-28,-36,0"
-                            StrokeThickness="0"
-                            Opacity="0.45"
-                            Rotation="-18">
-                        <Border.StrokeShape>
-                            <Ellipse />
-                        </Border.StrokeShape>
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#66FFFFFF" Offset="0" />
-                                <GradientStop Color="#00FFFFFF" Offset="0.65" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Available balance"
-                               TextColor="#B3FFFFFF"
-                               FontSize="14" />
-                        <Label Text="{Binding AvailableBalance}"
-                               TextColor="White"
-                               FontFamily="OpenSansSemibold"
-                               FontSize="34" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
+            <Grid Margin="24,0,24,14"
+                  HeightRequest="95">
+                <Image Source="balancecard.png"
+                       Aspect="Fill" />
+                <VerticalStackLayout Padding="16"
+                                     Spacing="4">
+                    <Label Text="Available balance"
+                           TextColor="#B3FFFFFF"
+                           FontSize="14" />
+                    <Label Text="{Binding AvailableBalance}"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="34" />
+                </VerticalStackLayout>
+            </Grid>
 
             <!-- Toggle pills -->
             <Grid Padding="24,0,24,14"
                   ColumnDefinitions="*,*"
-                  ColumnSpacing="14">
+                  ColumnSpacing="12">
                 <Button Text="Expenses"
                         Command="{Binding SelectExpenseCommand}"
                         TextColor="White"

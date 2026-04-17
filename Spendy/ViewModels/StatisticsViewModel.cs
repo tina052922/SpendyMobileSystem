@@ -93,10 +93,10 @@ public partial class StatisticsViewModel : ObservableObject
 	}
 
 	public Color ExpenseButtonBackground =>
-		IsExpenseMode ? Color.FromArgb("#43B3EF") : Color.FromArgb("#3E4E65");
+		IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#3E4E65");
 
 	public Color IncomeButtonBackground =>
-		!IsExpenseMode ? Color.FromArgb("#43B3EF") : Color.FromArgb("#3E4E65");
+		!IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#3E4E65");
 
 	string FormatAxis(decimal amount) =>
 		$"{_currency.Symbol}{decimal.Round(amount, 0).ToString("N0", _currency.Culture)}";

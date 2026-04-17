@@ -7,12 +7,9 @@
             <VerticalStackLayout Spacing="0" Padding="0,0,0,120">
                 <Grid Padding="16,12,16,18">
                     <Grid.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#01143D" Offset="0" />
-                            <GradientStop Color="#0335A3" Offset="1" />
-                        </LinearGradientBrush>
+                        <SolidColorBrush Color="#01143D" />
                     </Grid.Background>
-                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
                         <HorizontalStackLayout Spacing="12">
                             <Border WidthRequest="44"
                                     HeightRequest="44"
@@ -30,16 +27,13 @@
                                        TextColor="White"
                                        FontFamily="OpenSansSemibold"
                                        FontSize="20" />
-                                <Label Text="{Binding UserGreeting}"
-                                       IsVisible="{Binding HasUserGreeting}"
-                                       TextColor="#B3FFFFFF"
-                                       FontSize="12" />
+
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
                         <Border Grid.Column="2"
                                 WidthRequest="44"
                                 HeightRequest="44"
-                                BackgroundColor="White"
+                                BackgroundColor="Transparent"
                                 StrokeThickness="0"
                                 VerticalOptions="Center">
                             <Border.StrokeShape>
@@ -48,7 +42,7 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
                             </Border.GestureRecognizers>
-                            <Image Source="darkbluenotificon.png"
+                            <Image Source="whitenotificon.png"
                                    WidthRequest="24"
                                    HeightRequest="24"
                                    Aspect="AspectFit"
@@ -56,17 +50,18 @@
                                    VerticalOptions="Center"
                                    InputTransparent="True" />
                         </Border>
-                        <Label Grid.Column="3"
-                               Text="Ended"
-                               TextColor="{StaticResource SpendyRed}"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               VerticalOptions="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnEndedTapped" />
-                            </Label.GestureRecognizers>
-                        </Label>
                     </Grid>
+                </Grid>
+                <Grid Padding="16,8,16,10">
+                    <Label Text="Ended"
+                           TextColor="{StaticResource SpendyRed}"
+                           FontAttributes="Bold"
+                           FontSize="13"
+                           HorizontalOptions="End">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnEndedTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Grid>
 
                 <Grid Margin="24,-10,24,0">
@@ -86,70 +81,70 @@
                     <CollectionView ItemsSource="{Binding Plans}"
                                     IsVisible="{Binding HasPlans}"
                                     SelectionMode="None">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Border BackgroundColor="White"
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="White"
                                     StrokeThickness="0"
                                     Padding="18">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="26" />
-                                </Border.StrokeShape>
-                                <Border.Shadow>
-                                    <Shadow Brush="#1A000000" Offset="0,2" Radius="12" Opacity="0.35" />
-                                </Border.Shadow>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnPlanTapped" />
-                                </Border.GestureRecognizers>
-                                <VerticalStackLayout Spacing="10">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <Label Text="{Binding Name}"
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="26" />
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="#1A000000" Offset="0,2" Radius="12" Opacity="0.35" />
+                                    </Border.Shadow>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnPlanTapped" />
+                                    </Border.GestureRecognizers>
+                                    <VerticalStackLayout Spacing="10">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="{Binding Name}"
                                                TextColor="{StaticResource SpendyNavy}"
                                                FontAttributes="Bold"
                                                FontSize="16"
                                                VerticalOptions="Center" />
-                                        <Label Grid.Column="1"
+                                            <Label Grid.Column="1"
                                                Text="Edit"
                                                TextColor="{StaticResource SpendyAccent}"
                                                FontFamily="OpenSansSemibold"
                                                FontSize="13"
                                                VerticalOptions="Center">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="OnEditClicked" />
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </Grid>
-                                    <Label Text="{Binding AmountLine}"
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnEditClicked" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </Grid>
+                                        <Label Text="{Binding AmountLine}"
                                            TextColor="{StaticResource SpendyNavy}"
                                            FontSize="15"
                                            FontAttributes="Bold" />
-                                    <ProgressBar Progress="{Binding Progress}"
+                                        <ProgressBar Progress="{Binding Progress}"
                                                  ProgressColor="{StaticResource SpendyAccentSoft}"
                                                  BackgroundColor="#D0D5DD"
                                                  HeightRequest="6" />
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <Label Text="{Binding TargetDate, StringFormat='Target Date: {0}'}"
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Text="{Binding TargetDate, StringFormat='Target Date: {0}'}"
                                                FontSize="12"
                                                TextColor="#667085" />
-                                        <Label Grid.Column="1"
+                                            <Label Grid.Column="1"
                                                FontSize="12"
                                                TextColor="#667085"
                                                HorizontalTextAlignment="End">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding ProgressPercent, StringFormat='{0:F0}'}" />
-                                                    <Span Text="% Complete" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                    </Grid>
-                                </VerticalStackLayout>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding ProgressPercent, StringFormat='{0:F0}'}" />
+                                                        <Span Text="% Complete" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </Grid>
             </VerticalStackLayout>
         </ScrollView>

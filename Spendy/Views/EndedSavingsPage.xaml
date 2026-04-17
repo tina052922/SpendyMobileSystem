@@ -9,10 +9,7 @@
     <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="0">
             <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#01143D" Offset="0" />
-                    <GradientStop Color="#0335A3" Offset="1" />
-                </LinearGradientBrush>
+                <SolidColorBrush Color="#01143D" />
             </Grid.Background>
             <VerticalStackLayout Padding="16,12,16,18" Spacing="10">
                 <Grid ColumnDefinitions="Auto,*,Auto">
@@ -30,7 +27,7 @@
                             WidthRequest="44"
                             HeightRequest="44"
                             StrokeThickness="0"
-                            BackgroundColor="White"
+                            BackgroundColor="Transparent"
                             VerticalOptions="Center"
                             HorizontalOptions="End">
                         <Border.StrokeShape>
@@ -39,7 +36,7 @@
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OpenNotificationsCommand}" />
                         </Border.GestureRecognizers>
-                        <Image Source="darkbluenotificon.png"
+                        <Image Source="whitenotificon.png"
                                WidthRequest="24"
                                HeightRequest="24"
                                Aspect="AspectFit"

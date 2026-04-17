@@ -28,10 +28,7 @@
     <Color x:Key="SpendyBalanceSubtle">#E1F1FE99</Color>
     <Color x:Key="SpendyGrayIcon">#9CA3AF</Color>
 
-    <LinearGradientBrush x:Key="SpendyHeaderGradient" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#01143D" Offset="0" />
-        <GradientStop Color="#0335A3" Offset="1" />
-    </LinearGradientBrush>
+    <SolidColorBrush x:Key="SpendyHeaderGradient" Color="#01143D" />
 
     <Style x:Key="SpendyPrimaryButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="{StaticResource SpendyNavy}" />

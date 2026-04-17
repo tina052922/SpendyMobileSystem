@@ -6,10 +6,7 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#01143D">
     <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#01143D" Offset="0" />
-            <GradientStop Color="#0335A3" Offset="1" />
-        </LinearGradientBrush>
+        <SolidColorBrush Color="#01143D" />
     </ContentPage.Background>
     <Grid RowDefinitions="Auto,*">
         <!-- Header (same gradient stops as theme / add-plan pages) -->
@@ -17,10 +14,7 @@
               Padding="0,0,0,0"
               RowDefinitions="Auto,Auto">
             <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#01143D" Offset="0" />
-                    <GradientStop Color="#0335A3" Offset="1" />
-                </LinearGradientBrush>
+                <SolidColorBrush Color="#01143D" />
             </Grid.Background>
             <VerticalStackLayout Padding="16,12,16,18" Spacing="10">
                 <Grid ColumnDefinitions="Auto,*,Auto">

@@ -8,7 +8,7 @@ This document describes how to build Spendy, verify core behavior, and run struc
 
 | Requirement | Notes |
 |-------------|--------|
-| **.NET SDK** | Matches the project (e.g. .NET 10 per `Spendy.csproj` `TargetFrameworks`). Run `dotnet --version`. |
+| **.NET SDK** | Matches the project (e.g. .NET 9 per `Spendy.csproj` `TargetFrameworks`). Run `dotnet --version`. |
 | **Workload** | MAUI: `dotnet workload install maui` (or install via Visual Studio Installer). |
 | **IDE** (optional) | Visual Studio 2022+ with MAUI, or VS Code + CLI. |
 | **Device / emulator** | Android emulator or device, Windows (WinUI target), iOS/Mac only on macOS with Xcode. |
@@ -16,13 +16,13 @@ This document describes how to build Spendy, verify core behavior, and run struc
 **Build (example — Windows):**
 
 ```bash
-dotnet build Spendy/Spendy.csproj -f net10.0-windows10.0.19041.0
+dotnet build Spendy/Spendy.csproj -f net9.0-windows10.0.19041.0
 ```
 
 **Build Android (example):**
 
 ```bash
-dotnet build Spendy/Spendy.csproj -f net10.0-android
+dotnet build Spendy/Spendy.csproj -f net9.0-android
 ```
 
 Adjust target framework names if your `Spendy.csproj` differs.

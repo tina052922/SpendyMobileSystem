@@ -7,10 +7,7 @@
              NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#01143D" Offset="0" />
-            <GradientStop Color="#0335A3" Offset="1" />
-        </LinearGradientBrush>
+        <SolidColorBrush Color="#01143D" />
     </ContentPage.Background>
 
     <Grid RowDefinitions="Auto,*">
