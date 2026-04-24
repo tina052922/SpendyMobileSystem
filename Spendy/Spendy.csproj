@@ -57,8 +57,7 @@
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<!-- Project `images` folder: nav strips, icons, phone mockup, logos (bundled as Maui drawables) -->
-		<MauiImage Include="images\*.png"
-		           Exclude="images\Windows 10 Settings - iconSvg.co.png;images\profile.png" />
+		<MauiImage Include="images\*.png" Exclude="images\Windows 10 Settings - iconSvg.co.png;images\profile.png" />
 		
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -73,6 +72,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
 
 </Project>

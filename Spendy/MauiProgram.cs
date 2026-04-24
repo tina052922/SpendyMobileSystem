@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Storage;
+using SQLitePCL;
 using Spendy.Data;
 using Spendy.Services;
 using Spendy.ViewModels;
@@ -11,6 +12,9 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
+		// Required for SQLitePCLRaw.bundle_green and sqlite-net-pcl (professor requirement).
+		Batteries_V2.Init();
+
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()

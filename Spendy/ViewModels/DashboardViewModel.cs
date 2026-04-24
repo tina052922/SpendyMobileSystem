@@ -9,18 +9,30 @@ using Spendy.Views;
 
 namespace Spendy.ViewModels;
 
-public sealed class MonthlyDayLine
+public sealed class DashboardCalendarDayCell
 {
-	public int Day { get; init; }
-	public required string DayLabel { get; init; }
+	public int? DayNumber { get; init; }
+	public bool IsInMonth => DayNumber is not null;
+
+	public string DayLabel => DayNumber?.ToString(CultureInfo.InvariantCulture) ?? "";
+
+	public decimal ExpenseAmount { get; init; }
+	public decimal IncomeAmount { get; init; }
+
 	public required string ExpenseText { get; init; }
 	public required string IncomeText { get; init; }
-	public double ExpenseProgress { get; init; }
-	public double IncomeProgress { get; init; }
+
+	public bool HasExpense => ExpenseAmount > 0;
+	public bool HasIncome => IncomeAmount > 0;
+
 	public bool IsTopExpense { get; init; }
 	public bool IsTopIncome { get; init; }
-	public Color ExpenseBarColor { get; init; } = Color.FromArgb("#01143D");
-	public Color IncomeBarColor { get; init; } = Color.FromArgb("#00D4A5");
+
+	public Color BorderColor { get; init; } = Colors.Transparent;
+	public double BorderThickness { get; init; }
+
+	public Color ExpenseDotColor { get; init; } = Color.FromArgb("#01143D");
+	public Color IncomeDotColor { get; init; } = Color.FromArgb("#00D4A5");
 }
 
 public partial class DashboardViewModel : ObservableObject
@@ -70,7 +82,9 @@ public partial class DashboardViewModel : ObservableObject
 	[ObservableProperty]
 	private string _topIncomeDayHint = "";
 
-	public ObservableCollection<MonthlyDayLine> MonthlyDays { get; } = new();
+	public ObservableCollection<DashboardCalendarDayCell> MonthlyDays { get; } = new();
+
+	public IReadOnlyList<string> WeekdayHeaders => ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 
@@ -91,7 +105,12 @@ public partial class DashboardViewModel : ObservableObject
 			MainThread.BeginInvokeOnMainThread(() => _ = LoadAsync());
 
 		_data.DataChanged += (_, _) =>
-			MainThread.BeginInvokeOnMainThread(() => _ = LoadAsync());
+			MainThread.BeginInvokeOnMainThread(() =>
+			{
+				_ = LoadAsync();
+				if (IsMonthlyViewOpen)
+					_ = LoadMonthlyAsync(MonthlySelectedDate);
+			});
 		_ = LoadAsync();
 	}
 
@@ -167,28 +186,62 @@ public partial class DashboardViewModel : ObservableObject
 			: "Pinaka gaining: —";
 
 		MonthlyDays.Clear();
+
+		// Calendar grid: Sunday-first. Offset based on the first day-of-week.
 		var daysInMonth = DateTime.DaysInMonth(first.Year, first.Month);
-		for (var d = 1; d <= daysInMonth; d++)
+		var leading = (int)first.DayOfWeek; // Sunday=0 ... Saturday=6
+		var totalCells = leading + daysInMonth;
+		var rows = (int)Math.Ceiling(totalCells / 7d);
+		var cells = rows * 7;
+
+		var topExpenseColor = Color.FromArgb("#43B3EF");
+		var topIncomeColor = Color.FromArgb("#43B3EF");
+		var expenseDot = Color.FromArgb("#01143D");
+		var incomeDot = Color.FromArgb("#00D4A5");
+
+		for (var idx = 0; idx < cells; idx++)
 		{
+			var d = idx - leading + 1;
+			if (d < 1 || d > daysInMonth)
+			{
+				MonthlyDays.Add(new DashboardCalendarDayCell
+				{
+					DayNumber = null,
+					ExpenseAmount = 0,
+					IncomeAmount = 0,
+					ExpenseText = "",
+					IncomeText = "",
+					IsTopExpense = false,
+					IsTopIncome = false,
+					BorderColor = Colors.Transparent,
+					BorderThickness = 0,
+					ExpenseDotColor = expenseDot,
+					IncomeDotColor = incomeDot
+				});
+				continue;
+			}
+
 			var exp = expenseByDay.TryGetValue(d, out var e) ? e : 0m;
 			var inc = incomeByDay.TryGetValue(d, out var i) ? i : 0m;
-			var expProgress = maxExpense <= 0 ? 0 : (double)(exp / maxExpense);
-			var incProgress = maxIncome <= 0 ? 0 : (double)(inc / maxIncome);
-			expProgress = double.IsFinite(expProgress) ? Math.Clamp(expProgress, 0, 1) : 0;
-			incProgress = double.IsFinite(incProgress) ? Math.Clamp(incProgress, 0, 1) : 0;
+			var isTopExpense = d == topExpenseDay && maxExpense > 0;
+			var isTopIncome = d == topIncomeDay && maxIncome > 0;
 
-			MonthlyDays.Add(new MonthlyDayLine
+			var borderColor = isTopExpense || isTopIncome ? topExpenseColor : Colors.Transparent;
+			var borderThickness = isTopExpense || isTopIncome ? 2d : 0d;
+
+			MonthlyDays.Add(new DashboardCalendarDayCell
 			{
-				Day = d,
-				DayLabel = d.ToString(CultureInfo.InvariantCulture),
-				ExpenseText = $"{_currency.Symbol}{exp.ToString("N0", _currency.Culture)}",
-				IncomeText = $"{_currency.Symbol}{inc.ToString("N0", _currency.Culture)}",
-				ExpenseProgress = expProgress,
-				IncomeProgress = incProgress,
-				IsTopExpense = d == topExpenseDay && maxExpense > 0,
-				IsTopIncome = d == topIncomeDay && maxIncome > 0,
-				ExpenseBarColor = d == topExpenseDay && maxExpense > 0 ? Color.FromArgb("#43B3EF") : Color.FromArgb("#01143D"),
-				IncomeBarColor = d == topIncomeDay && maxIncome > 0 ? Color.FromArgb("#43B3EF") : Color.FromArgb("#00D4A5"),
+				DayNumber = d,
+				ExpenseAmount = exp,
+				IncomeAmount = inc,
+				ExpenseText = exp <= 0 ? "" : $"{_currency.Symbol}{exp.ToString("N0", _currency.Culture)}",
+				IncomeText = inc <= 0 ? "" : $"{_currency.Symbol}{inc.ToString("N0", _currency.Culture)}",
+				IsTopExpense = isTopExpense,
+				IsTopIncome = isTopIncome,
+				BorderColor = borderColor,
+				BorderThickness = borderThickness,
+				ExpenseDotColor = isTopExpense ? topExpenseColor : expenseDot,
+				IncomeDotColor = isTopIncome ? topIncomeColor : incomeDot,
 			});
 		}
 	}
