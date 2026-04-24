@@ -300,6 +300,86 @@
                            FontFamily="OpenSansSemibold"
                            FontSize="13" />
 
+                    <!-- Spending & Income Overview (monthly) -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Overview"
+                               TextColor="#D0D5DD"
+                               FontSize="12" />
+
+                        <Border BackgroundColor="#0B2A66"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="Spending by day"
+                                       TextColor="White"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="12" />
+                                <CollectionView ItemsSource="{Binding MonthlyExpenseBars}"
+                                                SelectionMode="None"
+                                                HeightRequest="95">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="6" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid WidthRequest="20"
+                                                  RowDefinitions="*,Auto"
+                                                  Padding="0,0,0,2">
+                                                <BoxView Grid.Row="0"
+                                                         WidthRequest="12"
+                                                         HeightRequest="{Binding BarHeight}"
+                                                         HorizontalOptions="Center"
+                                                         VerticalOptions="End"
+                                                         Color="{Binding BarColor}"
+                                                         CornerRadius="6" />
+                                                <Label Grid.Row="1"
+                                                       Text="{Binding DayLabel}"
+                                                       FontSize="9"
+                                                       TextColor="#D0D5DD"
+                                                       HorizontalTextAlignment="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                                <Label Text="Income by day"
+                                       TextColor="White"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="12" />
+                                <CollectionView ItemsSource="{Binding MonthlyIncomeBars}"
+                                                SelectionMode="None"
+                                                HeightRequest="95">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="6" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid WidthRequest="20"
+                                                  RowDefinitions="*,Auto"
+                                                  Padding="0,0,0,2">
+                                                <BoxView Grid.Row="0"
+                                                         WidthRequest="12"
+                                                         HeightRequest="{Binding BarHeight}"
+                                                         HorizontalOptions="Center"
+                                                         VerticalOptions="End"
+                                                         Color="{Binding BarColor}"
+                                                         CornerRadius="6" />
+                                                <Label Grid.Row="1"
+                                                       Text="{Binding DayLabel}"
+                                                       FontSize="9"
+                                                       TextColor="#D0D5DD"
+                                                       HorizontalTextAlignment="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+
                     <!-- Calendar grid (Sun → Sat) -->
                     <Grid RowDefinitions="Auto,Auto"
                           RowSpacing="10">

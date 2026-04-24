@@ -35,11 +35,20 @@ public sealed class DashboardCalendarDayCell
 	public Color IncomeDotColor { get; init; } = Color.FromArgb("#00D4A5");
 }
 
+public sealed class MonthBar
+{
+	public required string DayLabel { get; init; }
+	public double BarHeight { get; init; }
+	public Color BarColor { get; init; } = Color.FromArgb("#01143D");
+	public bool IsTop { get; init; }
+}
+
 public partial class DashboardViewModel : ObservableObject
 {
 	readonly ISpendyDataService _data;
 	readonly IProfilePhotoService _profilePhoto;
 	readonly ICurrencyService _currency;
+	int _monthlyLoadToken;
 
 	[ObservableProperty]
 	private bool _isExpenseMode = true;
@@ -83,8 +92,8 @@ public partial class DashboardViewModel : ObservableObject
 	private string _topIncomeDayHint = "";
 
 	public ObservableCollection<DashboardCalendarDayCell> MonthlyDays { get; } = new();
-
-	public IReadOnlyList<string> WeekdayHeaders => ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+	public ObservableCollection<MonthBar> MonthlyExpenseBars { get; } = new();
+	public ObservableCollection<MonthBar> MonthlyIncomeBars { get; } = new();
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 
@@ -159,12 +168,19 @@ public partial class DashboardViewModel : ObservableObject
 
 	async Task LoadMonthlyAsync(DateTime anyDayInMonth)
 	{
+		var loadToken = Interlocked.Increment(ref _monthlyLoadToken);
 		var first = new DateTime(anyDayInMonth.Year, anyDayInMonth.Month, 1);
 		MonthlySelectedDate = first;
 		MonthlyMonthLabel = first.ToString("MMMM yyyy", _currency.Culture).ToUpperInvariant();
 
-		var expense = await _data.GetStatisticsAsync(first.Year, first.Month, TransactionKind.Expense);
-		var income = await _data.GetStatisticsAsync(first.Year, first.Month, TransactionKind.Income);
+		var expenseTask = _data.GetStatisticsAsync(first.Year, first.Month, TransactionKind.Expense);
+		var incomeTask = _data.GetStatisticsAsync(first.Year, first.Month, TransactionKind.Income);
+		await Task.WhenAll(expenseTask, incomeTask);
+		var expense = expenseTask.Result;
+		var income = incomeTask.Result;
+
+		if (loadToken != _monthlyLoadToken || !IsMonthlyViewOpen)
+			return;
 
 		var expenseByDay = expense.Points.ToDictionary(p => p.Day, p => p.Amount);
 		var incomeByDay = income.Points.ToDictionary(p => p.Day, p => p.Amount);
@@ -185,10 +201,45 @@ public partial class DashboardViewModel : ObservableObject
 			? $"Pinaka gaining: Day {topIncomeDay} · {_currency.Symbol}{maxIncome.ToString("N0", _currency.Culture)}"
 			: "Pinaka gaining: —";
 
+		// Overview bar charts (easy at-a-glance comparison)
+		MonthlyExpenseBars.Clear();
+		MonthlyIncomeBars.Clear();
+		const double chartHeight = 70;
+		var expenseBar = Color.FromArgb("#01143D");
+		var incomeBar = Color.FromArgb("#00D4A5");
+		var topColor = Color.FromArgb("#43B3EF");
+
+		var daysInMonth = DateTime.DaysInMonth(first.Year, first.Month);
+		for (var d = 1; d <= daysInMonth; d++)
+		{
+			var exp = expenseByDay.TryGetValue(d, out var e) ? e : 0m;
+			var inc = incomeByDay.TryGetValue(d, out var i) ? i : 0m;
+
+			var expHeight = maxExpense <= 0 || exp <= 0 ? 0 : (double)(exp / maxExpense) * chartHeight;
+			var incHeight = maxIncome <= 0 || inc <= 0 ? 0 : (double)(inc / maxIncome) * chartHeight;
+			expHeight = double.IsFinite(expHeight) ? Math.Clamp(expHeight, 0, chartHeight) : 0;
+			incHeight = double.IsFinite(incHeight) ? Math.Clamp(incHeight, 0, chartHeight) : 0;
+
+			MonthlyExpenseBars.Add(new MonthBar
+			{
+				DayLabel = d.ToString(CultureInfo.InvariantCulture),
+				BarHeight = expHeight < 4 && exp > 0 ? 4 : expHeight,
+				IsTop = d == topExpenseDay && maxExpense > 0,
+				BarColor = d == topExpenseDay && maxExpense > 0 ? topColor : expenseBar
+			});
+
+			MonthlyIncomeBars.Add(new MonthBar
+			{
+				DayLabel = d.ToString(CultureInfo.InvariantCulture),
+				BarHeight = incHeight < 4 && inc > 0 ? 4 : incHeight,
+				IsTop = d == topIncomeDay && maxIncome > 0,
+				BarColor = d == topIncomeDay && maxIncome > 0 ? topColor : incomeBar
+			});
+		}
+
 		MonthlyDays.Clear();
 
 		// Calendar grid: Sunday-first. Offset based on the first day-of-week.
-		var daysInMonth = DateTime.DaysInMonth(first.Year, first.Month);
 		var leading = (int)first.DayOfWeek; // Sunday=0 ... Saturday=6
 		var totalCells = leading + daysInMonth;
 		var rows = (int)Math.Ceiling(totalCells / 7d);
