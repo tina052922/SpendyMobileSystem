@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Spendy.Data;
 using Spendy.Data.Entities;
+using System.Globalization;
 
 namespace Spendy.Services;
 
@@ -150,6 +151,37 @@ public sealed class AuthService(
 		await profilePhoto.SyncFromCurrentUserAsync(data, cancellationToken);
 		data.NotifyDataChanged();
 		return true;
+	}
+
+	public async Task<string?> ResetPasswordAsync(
+		string email,
+		DateTime birthday,
+		string newPassword,
+		string confirmNewPassword,
+		CancellationToken cancellationToken = default)
+	{
+		var normalized = NormalizeEmail(email);
+		if (normalized is null)
+			return "Enter a valid email address.";
+
+		if (!string.Equals(newPassword, confirmNewPassword, StringComparison.Ordinal))
+			return "New password and confirmation must match.";
+
+		if (!PasswordPolicy.TryValidate(newPassword, out var policyErr))
+			return policyErr;
+
+		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+		var user = await db.Users.FirstOrDefaultAsync(u => u.Email == normalized, cancellationToken);
+		if (user is null)
+			return "Account not found.";
+
+		var expectedBirthday = birthday.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+		if (!string.Equals((user.Birthday ?? string.Empty).Trim(), expectedBirthday, StringComparison.Ordinal))
+			return "Birthday does not match this account.";
+
+		user.PasswordHash = hasher.Hash(newPassword);
+		await db.SaveChangesAsync(cancellationToken);
+		return null;
 	}
 
 	static string? NormalizeEmail(string? email)

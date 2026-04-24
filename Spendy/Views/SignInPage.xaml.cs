@@ -18,8 +18,11 @@ public partial class SignInPage : ContentPage
 		PasswordEyeImage.Source = PasswordEntry.IsPassword ? "unhide.png" : "hideicon.png";
 	}
 
-	async void OnForgot(object? sender, TappedEventArgs e) =>
-		await DisplayAlert("Spendy", "Forgot password flow would open here.", "OK");
+	async void OnForgot(object? sender, TappedEventArgs e)
+	{
+		if (AppNavigation.TryGetRootNavigationPage() is { } nav)
+			await nav.PushAsync(new ForgotPasswordPage());
+	}
 
 	async void OnGoogle(object? sender, EventArgs e) =>
 		await DisplayAlert("Spendy", "Google sign-in would continue here.", "OK");

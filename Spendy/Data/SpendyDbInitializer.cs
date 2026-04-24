@@ -19,8 +19,6 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 		await EnsureTransactionsUserIdColumnAsync(db, cancellationToken);
 		await EnsureSavingGoalsUserIdColumnAsync(db, cancellationToken);
 
-		await PurgeLegacyFinancialDataOnceAsync(db, cancellationToken);
-
 		if (await db.Categories.AnyAsync(cancellationToken))
 			return;
 

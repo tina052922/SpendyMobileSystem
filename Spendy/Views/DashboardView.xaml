@@ -135,6 +135,9 @@
                                     <Border.StrokeShape>
                                         <Ellipse />
                                     </Border.StrokeShape>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenMonthlyViewCommand}" />
+                                    </Border.GestureRecognizers>
                                     <Image Source="calendar.png"
                                            WidthRequest="18"
                                            HeightRequest="18"
@@ -228,5 +231,153 @@
                 VerticalOptions="End"
                 Margin="0,0,24,96"
                 Command="{Binding AddTransactionCommand}" />
+
+        <!-- Monthly daily breakdown overlay (opened by calendar icon) -->
+        <Grid IsVisible="{Binding IsMonthlyViewOpen}"
+              BackgroundColor="#80000000"
+              Padding="18"
+              ZIndex="99">
+            <Border BackgroundColor="{StaticResource SpendyNavy}"
+                    StrokeThickness="0"
+                    Padding="18"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    WidthRequest="360">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                        <Button Text="‹"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"
+                                BackgroundColor="#1AFFFFFF"
+                                TextColor="White"
+                                FontSize="18"
+                                Command="{Binding PrevMonthCommand}" />
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
+                            <Label Text="{Binding MonthlyMonthLabel}"
+                                   TextColor="White"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="14"
+                                   HorizontalTextAlignment="Center" />
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                                <Label Text="{Binding TopSpendingDayHint}" TextColor="#D0D5DD" FontSize="11" />
+                                <Label Text="{Binding TopIncomeDayHint}" TextColor="#D0D5DD" FontSize="11" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="2"
+                                Text="›"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"
+                                BackgroundColor="#1AFFFFFF"
+                                TextColor="White"
+                                FontSize="18"
+                                Command="{Binding NextMonthCommand}" />
+                    </Grid>
+
+                    <!-- Month/year picker (uses DatePicker; day ignored) -->
+                    <Border BackgroundColor="#1AFFFFFF"
+                            StrokeThickness="0"
+                            Padding="12,8">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <DatePicker Date="{Binding MonthlySelectedDate}"
+                                    TextColor="White"
+                                    BackgroundColor="Transparent"
+                                    Format="MMMM yyyy"
+                                    HorizontalOptions="Center" />
+                    </Border>
+
+                    <Label Text="Daily activity"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="13" />
+
+                    <CollectionView ItemsSource="{Binding MonthlyDays}"
+                                    SelectionMode="None"
+                                    HeightRequest="360">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#0B2A66"
+                                        StrokeThickness="0"
+                                        Padding="12">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="16" />
+                                    </Border.StrokeShape>
+                                    <Grid RowDefinitions="Auto,Auto,Auto"
+                                          ColumnDefinitions="42,*,*"
+                                          ColumnSpacing="10"
+                                          RowSpacing="6">
+                                        <Border Grid.RowSpan="3"
+                                                WidthRequest="42"
+                                                HeightRequest="42"
+                                                BackgroundColor="#1AFFFFFF"
+                                                StrokeThickness="0"
+                                                VerticalOptions="Start">
+                                            <Border.StrokeShape>
+                                                <Ellipse />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding DayLabel}"
+                                                   TextColor="White"
+                                                   FontFamily="OpenSansSemibold"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center" />
+                                        </Border>
+
+                                        <Label Grid.Column="1"
+                                               Text="Expenses"
+                                               TextColor="#D0D5DD"
+                                               FontSize="11" />
+                                        <Label Grid.Column="2"
+                                               Text="Income"
+                                               TextColor="#D0D5DD"
+                                               FontSize="11" />
+
+                                        <Label Grid.Row="1" Grid.Column="1"
+                                               Text="{Binding ExpenseText}"
+                                               TextColor="White"
+                                               FontFamily="OpenSansSemibold"
+                                               FontSize="12" />
+                                        <Label Grid.Row="1" Grid.Column="2"
+                                               Text="{Binding IncomeText}"
+                                               TextColor="White"
+                                               FontFamily="OpenSansSemibold"
+                                               FontSize="12" />
+
+                                        <ProgressBar Grid.Row="2" Grid.Column="1"
+                                                     Progress="{Binding ExpenseProgress}"
+                                                     ProgressColor="{Binding ExpenseBarColor}"
+                                                     BackgroundColor="#1AFFFFFF"
+                                                     HeightRequest="6" />
+                                        <ProgressBar Grid.Row="2" Grid.Column="2"
+                                                     Progress="{Binding IncomeProgress}"
+                                                     ProgressColor="{Binding IncomeBarColor}"
+                                                     BackgroundColor="#1AFFFFFF"
+                                                     HeightRequest="6" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Close"
+                            BackgroundColor="#1AFFFFFF"
+                            TextColor="White"
+                            CornerRadius="14"
+                            HeightRequest="44"
+                            Command="{Binding CloseMonthlyViewCommand}" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentView>
