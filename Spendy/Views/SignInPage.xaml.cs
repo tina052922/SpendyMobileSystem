@@ -10,6 +10,10 @@ public partial class SignInPage : ContentPage
 		InitializeComponent();
 		BindingContext = Ioc.Services.GetRequiredService<SignInViewModel>();
 		PasswordEyeImage.Source = "unhide.png";
+
+		// Hide Google button when not configured (keeps app usable offline).
+		var google = Ioc.Services.GetRequiredService<IGoogleAuthService>();
+		GoogleButton.IsVisible = google.IsConfigured;
 	}
 
 	void OnTogglePasswordEye(object? sender, TappedEventArgs e)
@@ -25,7 +29,17 @@ public partial class SignInPage : ContentPage
 	}
 
 	async void OnGoogle(object? sender, EventArgs e) =>
-		await DisplayAlert("Spendy", "Google sign-in would continue here.", "OK");
+		await TryGoogleAsync();
+
+	async Task TryGoogleAsync()
+	{
+		var svc = Ioc.Services.GetRequiredService<IGoogleAuthService>();
+		var err = await svc.SignInAsync();
+		if (err is not null)
+			await DisplayAlert("Spendy", err, "OK");
+		// When a real Google auth service is added, it should complete login + session, then navigate.
+		// Keep this page functional even without Google configured.
+	}
 
 	async void OnSignUp(object? sender, TappedEventArgs e)
 	{

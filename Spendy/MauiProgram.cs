@@ -35,6 +35,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ISpendyDataService, SpendyDataService>();
 		builder.Services.AddSingleton<IProfilePhotoService, ProfilePhotoService>();
 		builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
+		builder.Services.AddSingleton<IGoogleAuthService, NoopGoogleAuthService>();
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 
 		builder.Services.AddTransient<SignInViewModel>();

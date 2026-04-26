@@ -216,7 +216,8 @@
                         <BoxView Grid.Column="2" HeightRequest="1" Color="#E5E7EB" VerticalOptions="Center" />
                     </Grid>
 
-                    <Button Text="Sign up with Google"
+                    <Button x:Name="GoogleButton"
+                            Text="Sign up with Google"
                             ImageSource="google.png"
                             ContentLayout="Left,12"
                             BackgroundColor="White"

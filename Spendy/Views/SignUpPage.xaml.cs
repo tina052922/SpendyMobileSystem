@@ -10,6 +10,9 @@ public partial class SignUpPage : ContentPage
 		InitializeComponent();
 		BindingContext = Ioc.Services.GetRequiredService<SignUpViewModel>();
 		PasswordEyeImage.Source = "unhide.png";
+
+		var google = Ioc.Services.GetRequiredService<IGoogleAuthService>();
+		GoogleButton.IsVisible = google.IsConfigured;
 	}
 
 	void OnTogglePasswordEye(object? sender, TappedEventArgs e)
@@ -22,7 +25,15 @@ public partial class SignUpPage : ContentPage
 		await DisplayAlert("Spendy", "Terms & Conditions placeholder.", "OK");
 
 	async void OnGoogle(object? sender, EventArgs e) =>
-		await DisplayAlert("Spendy", "Google sign-up would continue here.", "OK");
+		await TryGoogleAsync();
+
+	async Task TryGoogleAsync()
+	{
+		var svc = Ioc.Services.GetRequiredService<IGoogleAuthService>();
+		var err = await svc.SignInAsync();
+		if (err is not null)
+			await DisplayAlert("Spendy", err, "OK");
+	}
 
 	async void OnSignIn(object? sender, TappedEventArgs e)
 	{
