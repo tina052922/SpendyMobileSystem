@@ -18,11 +18,34 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 		await EnsureUserPasswordHashColumnAsync(db, cancellationToken);
 		await EnsureTransactionsUserIdColumnAsync(db, cancellationToken);
 		await EnsureSavingGoalsUserIdColumnAsync(db, cancellationToken);
+		await EnsurePasswordResetTokensTableAsync(db, cancellationToken);
 
 		if (await db.Categories.AnyAsync(cancellationToken))
 			return;
 
 		await SeedCategoriesOnlyAsync(db, cancellationToken);
+	}
+
+	static async Task EnsurePasswordResetTokensTableAsync(SpendyDbContext db, CancellationToken ct)
+	{
+		// EnsureCreated doesn't add new tables on existing DBs; create this one explicitly.
+		await db.Database.ExecuteSqlRawAsync(
+			"""
+			CREATE TABLE IF NOT EXISTS PasswordResetTokens (
+				Id INTEGER PRIMARY KEY AUTOINCREMENT,
+				UserId INTEGER NOT NULL,
+				TokenHash TEXT NOT NULL,
+				CreatedAtUtc TEXT NOT NULL,
+				ExpiresAtUtc TEXT NOT NULL,
+				UsedAtUtc TEXT NULL,
+				FOREIGN KEY(UserId) REFERENCES Users(Id) ON DELETE CASCADE
+			);
+			""", ct);
+
+		await db.Database.ExecuteSqlRawAsync(
+			"CREATE INDEX IF NOT EXISTS IX_PasswordResetTokens_UserId ON PasswordResetTokens(UserId);", ct);
+		await db.Database.ExecuteSqlRawAsync(
+			"CREATE INDEX IF NOT EXISTS IX_PasswordResetTokens_ExpiresAtUtc ON PasswordResetTokens(ExpiresAtUtc);", ct);
 	}
 
 	static async Task EnsureUserProfilePhotoPathColumnAsync(SpendyDbContext db, CancellationToken ct)

@@ -28,12 +28,17 @@ public interface IAuthService
 	Task<bool> TryRestoreSessionAsync(CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Local reset-password flow: validates the user by email + birthday and sets a new password hash.
+	/// Requests a password reset for an email. Always returns a generic success message if the request is accepted,
+	/// to avoid user enumeration.
 	/// </summary>
+	/// <returns>Error message if request was rejected (e.g., rate limited), otherwise null.</returns>
+	Task<string?> RequestPasswordResetAsync(string email, CancellationToken cancellationToken = default);
+
+	/// <summary>Completes a password reset using the emailed token.</summary>
 	/// <returns>Error message if failed, null if success.</returns>
-	Task<string?> ResetPasswordAsync(
+	Task<string?> ConfirmPasswordResetAsync(
 		string email,
-		DateTime birthday,
+		string token,
 		string newPassword,
 		string confirmNewPassword,
 		CancellationToken cancellationToken = default);

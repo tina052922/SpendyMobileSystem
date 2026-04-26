@@ -16,10 +16,17 @@ public static class AppNavigation
 	{
 		if (Application.Current is null)
 			return;
-		MainThread.BeginInvokeOnMainThread(() =>
+		MainThread.BeginInvokeOnMainThread(async () =>
 		{
 			if (Application.Current.Windows.Count > 0)
-				Application.Current.Windows[0].Page = new Spendy.AppShell();
+			{
+				var win = Application.Current.Windows[0];
+				if (win.Page is { } oldPage)
+					await oldPage.FadeTo(0, 160, Easing.CubicOut);
+				var shell = new Spendy.AppShell { Opacity = 0 };
+				win.Page = shell;
+				await shell.FadeTo(1, 200, Easing.CubicIn);
+			}
 		});
 	}
 
@@ -28,10 +35,17 @@ public static class AppNavigation
 	{
 		if (Application.Current is null)
 			return;
-		MainThread.BeginInvokeOnMainThread(() =>
+		MainThread.BeginInvokeOnMainThread(async () =>
 		{
 			if (Application.Current.Windows.Count > 0)
-				Application.Current.Windows[0].Page = new NavigationPage(new SignInPage());
+			{
+				var win = Application.Current.Windows[0];
+				if (win.Page is { } oldPage)
+					await oldPage.FadeTo(0, 160, Easing.CubicOut);
+				var root = new NavigationPage(new SignInPage()) { Opacity = 0 };
+				win.Page = root;
+				await root.FadeTo(1, 200, Easing.CubicIn);
+			}
 		});
 	}
 

@@ -20,6 +20,14 @@ public abstract partial class SavingPlanCalendarViewModelBase : ObservableObject
 	[ObservableProperty]
 	private bool _isSelectingStartDate = true;
 
+	[ObservableProperty]
+	private int _durationValue = 1;
+
+	[ObservableProperty]
+	private string _durationUnit = "Months";
+
+	public IReadOnlyList<string> DurationUnits => ["Months", "Years"];
+
 	public ObservableCollection<CalendarDayCell> CalendarDays { get; } = new();
 
 	public string CalendarTitle => CalendarMonth.ToString("MMMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
@@ -47,6 +55,24 @@ public abstract partial class SavingPlanCalendarViewModelBase : ObservableObject
 	{
 		RebuildCalendar();
 		OnPropertyChanged(nameof(DurationText));
+	}
+
+	partial void OnDurationValueChanged(int value)
+	{
+		if (value < 1)
+			DurationValue = 1;
+	}
+
+	[RelayCommand]
+	void ApplyDuration()
+	{
+		var v = DurationValue;
+		if (v < 1)
+			v = 1;
+
+		EndDate = DurationUnit == "Years"
+			? StartDate.Date.AddYears(v)
+			: StartDate.Date.AddMonths(v);
 	}
 
 	partial void OnCalendarMonthChanged(DateTime value) => RebuildCalendar();

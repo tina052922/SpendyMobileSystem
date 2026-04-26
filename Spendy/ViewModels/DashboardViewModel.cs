@@ -194,12 +194,12 @@ public partial class DashboardViewModel : ObservableObject
 		var topIncomeDay = income.Points.Where(p => p.Amount == maxIncome && p.Amount > 0).Select(p => p.Day).FirstOrDefault();
 
 		TopSpendingDayHint = maxExpense > 0 && topExpenseDay > 0
-			? $"Pinaka gasto: Day {topExpenseDay} · {_currency.Symbol}{maxExpense.ToString("N0", _currency.Culture)}"
-			: "Pinaka gasto: —";
+			? $"Biggest Spending Day: {topExpenseDay} · {_currency.Symbol}{maxExpense.ToString("N0", _currency.Culture)}"
+			: "Biggest Spending Day: —";
 
 		TopIncomeDayHint = maxIncome > 0 && topIncomeDay > 0
-			? $"Pinaka gaining: Day {topIncomeDay} · {_currency.Symbol}{maxIncome.ToString("N0", _currency.Culture)}"
-			: "Pinaka gaining: —";
+			? $"Highest Income Day: {topIncomeDay} · {_currency.Symbol}{maxIncome.ToString("N0", _currency.Culture)}"
+			: "Highest Income Day: —";
 
 		// Overview bar charts (easy at-a-glance comparison)
 		MonthlyExpenseBars.Clear();

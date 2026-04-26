@@ -313,7 +313,7 @@
                                 <RoundRectangle CornerRadius="16" />
                             </Border.StrokeShape>
                             <VerticalStackLayout Spacing="10">
-                                <Label Text="Spending by day"
+                                <Label Text="Biggest Spending Days"
                                        TextColor="White"
                                        FontFamily="OpenSansSemibold"
                                        FontSize="12" />
@@ -345,7 +345,7 @@
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
 
-                                <Label Text="Income by day"
+                                <Label Text="Highest Income Days"
                                        TextColor="White"
                                        FontFamily="OpenSansSemibold"
                                        FontSize="12" />

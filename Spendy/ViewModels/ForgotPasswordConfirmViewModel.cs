@@ -4,7 +4,7 @@ using Spendy.Services;
 
 namespace Spendy.ViewModels;
 
-public partial class ForgotPasswordViewModel : ObservableObject
+public partial class ForgotPasswordConfirmViewModel : ObservableObject
 {
 	readonly IAuthService _auth;
 
@@ -12,9 +12,7 @@ public partial class ForgotPasswordViewModel : ObservableObject
 	private string _email = string.Empty;
 
 	[ObservableProperty]
-	private DateTime _birthday = new(2000, 1, 15);
-
-	public DateTime MaximumBirthdayDate => DateTime.Today;
+	private string _token = string.Empty;
 
 	[ObservableProperty]
 	private string _newPassword = string.Empty;
@@ -22,28 +20,29 @@ public partial class ForgotPasswordViewModel : ObservableObject
 	[ObservableProperty]
 	private string _confirmNewPassword = string.Empty;
 
-	public ForgotPasswordViewModel(IAuthService auth)
+	public ForgotPasswordConfirmViewModel(IAuthService auth, string email)
 	{
 		_auth = auth;
+		Email = email ?? string.Empty;
 	}
 
 	[RelayCommand]
-	async Task ResetAsync()
+	async Task ConfirmAsync()
 	{
 		var page = Application.Current?.Windows.FirstOrDefault()?.Page;
 		if (page is null)
 			return;
 
-		var err = await _auth.ResetPasswordAsync(Email, Birthday.Date, NewPassword, ConfirmNewPassword);
+		var err = await _auth.ConfirmPasswordResetAsync(Email, Token, NewPassword, ConfirmNewPassword);
 		if (err is not null)
 		{
 			await page.DisplayAlert("Spendy", err, "OK");
 			return;
 		}
 
-		await page.DisplayAlert("Spendy", "Password reset successfully. Please sign in.", "OK");
+		await page.DisplayAlert("Spendy", "Password updated. Please sign in.", "OK");
 		if (AppNavigation.TryGetRootNavigationPage() is { } nav)
-			await nav.PopAsync();
+			await nav.PopToRootAsync();
 	}
 }
 

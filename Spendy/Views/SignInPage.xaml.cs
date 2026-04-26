@@ -21,7 +21,7 @@ public partial class SignInPage : ContentPage
 	async void OnForgot(object? sender, TappedEventArgs e)
 	{
 		if (AppNavigation.TryGetRootNavigationPage() is { } nav)
-			await nav.PushAsync(new ForgotPasswordPage());
+			await nav.PushAsync(new ForgotPasswordRequestPage());
 	}
 
 	async void OnGoogle(object? sender, EventArgs e) =>

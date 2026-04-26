@@ -216,16 +216,48 @@
                                TextColor="{StaticResource SpendyDarkLabel}"
                                FontSize="14"
                                FontFamily="OpenSansSemibold" />
-                        <Border StrokeThickness="0"
-                                BackgroundColor="{StaticResource SpendyDarkInput}"
-                                Padding="16,14">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="22" />
-                            </Border.StrokeShape>
-                            <Label Text="{Binding DurationText}"
-                                   TextColor="{StaticResource SpendyDarkSubtext}"
-                                   FontSize="16" />
-                        </Border>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <Border Grid.Column="0"
+                                    StrokeThickness="0"
+                                    BackgroundColor="{StaticResource SpendyDarkInput}"
+                                    Padding="16,0"
+                                    HeightRequest="54">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="22" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="e.g. 6"
+                                       Keyboard="Numeric"
+                                       Text="{Binding DurationValue, Mode=TwoWay}"
+                                       PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+                                       TextColor="{StaticResource SpendyDarkLabel}"
+                                       BackgroundColor="Transparent"
+                                       VerticalOptions="Center" />
+                            </Border>
+                            <Border Grid.Column="1"
+                                    StrokeThickness="0"
+                                    BackgroundColor="{StaticResource SpendyDarkInput}"
+                                    Padding="14,0"
+                                    HeightRequest="54"
+                                    WidthRequest="120">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="22" />
+                                </Border.StrokeShape>
+                                <Picker ItemsSource="{Binding DurationUnits}"
+                                        SelectedItem="{Binding DurationUnit, Mode=TwoWay}"
+                                        TextColor="{StaticResource SpendyDarkLabel}"
+                                        BackgroundColor="Transparent"
+                                        VerticalOptions="Center" />
+                            </Border>
+                        </Grid>
+                        <Button Text="Apply duration"
+                                Command="{Binding ApplyDurationCommand}"
+                                BackgroundColor="#0E1F3A"
+                                TextColor="White"
+                                CornerRadius="18"
+                                HeightRequest="46" />
+                        <Label Text="{Binding DurationText}"
+                               TextColor="{StaticResource SpendyDarkSubtext}"
+                               FontSize="13" />
                     </VerticalStackLayout>
 
                     <Button Text="Save Plan"

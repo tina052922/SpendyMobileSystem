@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Solution>
+  <!-- Alias for spendy.slnx (professor requirement). -->
+  <Folder Name="/Spendy/">
+    <Project Path="Spendy/Spendy.csproj" DisplayName="Spendy" />
+  </Folder>
+</Solution>
+
+<?xml version="1.0" encoding="utf-8"?>
+<Solution>
   <!-- Spendy Budget Tracker — .NET MAUI app (SQLite/EF Core, MVVM, mandatory 2% savings). -->
   <!-- Repo also includes a Vite + React shell at the root (npm/pnpm). MAUI build: dotnet build spendy.slnx -->
   <!-- Open this file from the SpendyMobile folder. Web UI sources appear under /Web (Vite)/. -->

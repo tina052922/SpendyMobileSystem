@@ -34,11 +34,12 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ICurrencyService, CurrencyService>();
 		builder.Services.AddSingleton<ISpendyDataService, SpendyDataService>();
 		builder.Services.AddSingleton<IProfilePhotoService, ProfilePhotoService>();
+		builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 
 		builder.Services.AddTransient<SignInViewModel>();
 		builder.Services.AddTransient<SignUpViewModel>();
-		builder.Services.AddTransient<ForgotPasswordViewModel>();
+		builder.Services.AddTransient<ForgotPasswordRequestViewModel>();
 
 		builder.Services.AddSingleton<DashboardViewModel>();
 		builder.Services.AddSingleton<StatisticsViewModel>();

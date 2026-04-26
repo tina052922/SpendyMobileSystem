@@ -15,6 +15,7 @@ public sealed class SpendyDbContext : DbContext
 	public DbSet<TransactionEntity> Transactions => Set<TransactionEntity>();
 	public DbSet<SavingGoalEntity> SavingGoals => Set<SavingGoalEntity>();
 	public DbSet<SavingTransactionEntity> SavingTransactions => Set<SavingTransactionEntity>();
+	public DbSet<PasswordResetTokenEntity> PasswordResetTokens => Set<PasswordResetTokenEntity>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -85,6 +86,18 @@ public sealed class SpendyDbContext : DbContext
 			e.Property(x => x.Amount).HasPrecision(18, 2);
 			e.Property(x => x.Notes).HasMaxLength(2000);
 			e.HasIndex(x => x.Date);
+		});
+
+		modelBuilder.Entity<PasswordResetTokenEntity>(e =>
+		{
+			e.HasKey(x => x.Id);
+			e.Property(x => x.TokenHash).HasMaxLength(128);
+			e.HasIndex(x => x.UserId);
+			e.HasIndex(x => x.ExpiresAtUtc);
+			e.HasOne(x => x.User)
+				.WithMany()
+				.HasForeignKey(x => x.UserId)
+				.OnDelete(DeleteBehavior.Cascade);
 		});
 	}
 }
