@@ -200,7 +200,8 @@
                         </Label>
                     </HorizontalStackLayout>
 
-                    <Button Text="Sign up"
+                    <Button x:Name="SignUpButton"
+                            Text="Sign up"
                             BackgroundColor="#001F54"
                             TextColor="White"
                             FontFamily="OpenSansSemibold"
@@ -208,26 +209,37 @@
                             CornerRadius="14"
                             HeightRequest="52"
                             Margin="0,8,0,0"
-                            Command="{Binding SignUpCommand}" />
-
-                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10" Margin="0,4">
-                        <BoxView Grid.Column="0" HeightRequest="1" Color="#E5E7EB" VerticalOptions="Center" />
-                        <Label Grid.Column="1" Text="Or" TextColor="#9CA3AF" FontSize="13" />
-                        <BoxView Grid.Column="2" HeightRequest="1" Color="#E5E7EB" VerticalOptions="Center" />
-                    </Grid>
-
-                    <Button x:Name="GoogleButton"
-                            Text="Sign up with Google"
-                            ImageSource="google.png"
-                            ContentLayout="Left,12"
-                            BackgroundColor="White"
-                            TextColor="#0F172A"
-                            BorderColor="#D1D5DB"
-                            BorderWidth="1"
-                            CornerRadius="12"
-                            FontSize="15"
-                            HeightRequest="52"
-                            Clicked="OnGoogle" />
+                            Command="{Binding SignUpCommand}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsBusy}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Opacity" Value="0.75" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="Scale" Value="1" />
+                                            <Setter Property="Opacity" Value="1" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="Scale" Value="0.98" />
+                                            <Setter Property="Opacity" Value="0.9" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Property="Opacity" Value="0.7" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                    </Button>
 
                     <VerticalStackLayout Spacing="6" Margin="0,8,0,0">
                         <Label HorizontalTextAlignment="Center"

@@ -117,6 +117,9 @@
                         <Border BackgroundColor="{StaticResource SpendyNavy}"
                                 StrokeThickness="0"
                                 Padding="16,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
+                            </Border.GestureRecognizers>
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="22" />
                             </Border.StrokeShape>
@@ -247,8 +250,10 @@
                     <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
-                <VerticalStackLayout Spacing="12">
-                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Grid>
+                    <!-- Base calendar content -->
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                         <Button Text="‹"
                                 WidthRequest="40"
                                 HeightRequest="40"
@@ -264,10 +269,10 @@
                                    FontFamily="OpenSansSemibold"
                                    FontSize="14"
                                    HorizontalTextAlignment="Center" />
-                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                                <Label Text="{Binding TopSpendingDayHint}" TextColor="#D0D5DD" FontSize="11" />
-                                <Label Text="{Binding TopIncomeDayHint}" TextColor="#D0D5DD" FontSize="11" />
-                            </HorizontalStackLayout>
+                            <Label Text="{Binding MonthlyKindLabel}"
+                                   TextColor="#D0D5DD"
+                                   FontSize="11"
+                                   HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
 
                         <Button Grid.Column="2"
@@ -279,143 +284,67 @@
                                 TextColor="White"
                                 FontSize="18"
                                 Command="{Binding NextMonthCommand}" />
-                    </Grid>
+                        </Grid>
 
-                    <!-- Month/year picker (uses DatePicker; day ignored) -->
-                    <Border BackgroundColor="#1AFFFFFF"
-                            StrokeThickness="0"
-                            Padding="12,8">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="14" />
-                        </Border.StrokeShape>
-                        <DatePicker Date="{Binding MonthlySelectedDate}"
-                                    TextColor="White"
-                                    BackgroundColor="Transparent"
-                                    Format="MMMM yyyy"
-                                    HorizontalOptions="Center" />
-                    </Border>
+                        <!-- Month/year picker (uses DatePicker; day ignored) -->
+                        <Border BackgroundColor="#1AFFFFFF"
+                                StrokeThickness="0"
+                                Padding="12,8">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14" />
+                            </Border.StrokeShape>
+                            <DatePicker Date="{Binding MonthlySelectedDate}"
+                                        TextColor="White"
+                                        BackgroundColor="Transparent"
+                                        Format="MMMM yyyy"
+                                        HorizontalOptions="Center" />
+                        </Border>
 
-                    <Label Text="Daily activity"
-                           TextColor="White"
-                           FontFamily="OpenSansSemibold"
-                           FontSize="13" />
-
-                    <!-- Spending & Income Overview (monthly) -->
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Overview"
+                        <Label Text="Tap a day to view transactions"
                                TextColor="#D0D5DD"
                                FontSize="12" />
 
-                        <Border BackgroundColor="#0B2A66"
-                                StrokeThickness="0"
-                                Padding="12">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="16" />
-                            </Border.StrokeShape>
-                            <VerticalStackLayout Spacing="10">
-                                <Label Text="Biggest Spending Days"
-                                       TextColor="White"
-                                       FontFamily="OpenSansSemibold"
-                                       FontSize="12" />
-                                <CollectionView ItemsSource="{Binding MonthlyExpenseBars}"
-                                                SelectionMode="None"
-                                                HeightRequest="95">
-                                    <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="6" />
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid WidthRequest="20"
-                                                  RowDefinitions="*,Auto"
-                                                  Padding="0,0,0,2">
-                                                <BoxView Grid.Row="0"
-                                                         WidthRequest="12"
-                                                         HeightRequest="{Binding BarHeight}"
-                                                         HorizontalOptions="Center"
-                                                         VerticalOptions="End"
-                                                         Color="{Binding BarColor}"
-                                                         CornerRadius="6" />
-                                                <Label Grid.Row="1"
-                                                       Text="{Binding DayLabel}"
-                                                       FontSize="9"
-                                                       TextColor="#D0D5DD"
-                                                       HorizontalTextAlignment="Center" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
+                        <!-- Calendar grid (Sun → Sat) -->
+                        <Grid RowDefinitions="Auto,Auto"
+                              RowSpacing="10">
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="*,*,*,*,*,*,*"
+                                  ColumnSpacing="6">
+                                <Label Grid.Column="0" Text="SUN" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="1" Text="MON" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="2" Text="TUE" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="3" Text="WED" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="4" Text="THU" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="5" Text="FRI" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                                <Label Grid.Column="6" Text="SAT" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
+                            </Grid>
 
-                                <Label Text="Highest Income Days"
-                                       TextColor="White"
-                                       FontFamily="OpenSansSemibold"
-                                       FontSize="12" />
-                                <CollectionView ItemsSource="{Binding MonthlyIncomeBars}"
-                                                SelectionMode="None"
-                                                HeightRequest="95">
-                                    <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="6" />
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid WidthRequest="20"
-                                                  RowDefinitions="*,Auto"
-                                                  Padding="0,0,0,2">
-                                                <BoxView Grid.Row="0"
-                                                         WidthRequest="12"
-                                                         HeightRequest="{Binding BarHeight}"
-                                                         HorizontalOptions="Center"
-                                                         VerticalOptions="End"
-                                                         Color="{Binding BarColor}"
-                                                         CornerRadius="6" />
-                                                <Label Grid.Row="1"
-                                                       Text="{Binding DayLabel}"
-                                                       FontSize="9"
-                                                       TextColor="#D0D5DD"
-                                                       HorizontalTextAlignment="Center" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </VerticalStackLayout>
-                        </Border>
-                    </VerticalStackLayout>
+                            <CollectionView Grid.Row="1"
+                                            ItemsSource="{Binding MonthlyDays}"
+                                            SelectionMode="None"
+                                            HeightRequest="360">
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout Orientation="Vertical"
+                                                     Span="7"
+                                                     HorizontalItemSpacing="8"
+                                                     VerticalItemSpacing="8" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BackgroundColor="#0B2A66"
+                                                Stroke="{Binding BorderColor}"
+                                                StrokeThickness="{Binding BorderThickness}"
+                                                Padding="10">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentView}}, Path=BindingContext.SelectCalendarDayCommand}"
+                                                    CommandParameter="{Binding DayNumber}" />
+                                            </Border.GestureRecognizers>
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
 
-                    <!-- Calendar grid (Sun → Sat) -->
-                    <Grid RowDefinitions="Auto,Auto"
-                          RowSpacing="10">
-                        <Grid Grid.Row="0"
-                              ColumnDefinitions="*,*,*,*,*,*,*"
-                              ColumnSpacing="6">
-                            <Label Grid.Column="0" Text="SUN" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                            <Label Grid.Column="1" Text="MON" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                            <Label Grid.Column="2" Text="TUE" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                            <Label Grid.Column="3" Text="WED" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                            <Label Grid.Column="4" Text="THU" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                            <Label Grid.Column="5" Text="FRI" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                            <Label Grid.Column="6" Text="SAT" TextColor="#D0D5DD" FontSize="10" HorizontalTextAlignment="Center" />
-                        </Grid>
-
-                        <CollectionView Grid.Row="1"
-                                        ItemsSource="{Binding MonthlyDays}"
-                                        SelectionMode="None"
-                                        HeightRequest="360">
-                            <CollectionView.ItemsLayout>
-                                <GridItemsLayout Orientation="Vertical"
-                                                 Span="7"
-                                                 HorizontalItemSpacing="8"
-                                                 VerticalItemSpacing="8" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BackgroundColor="#0B2A66"
-                                            Stroke="{Binding BorderColor}"
-                                            StrokeThickness="{Binding BorderThickness}"
-                                            Padding="10">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="14" />
-                                        </Border.StrokeShape>
-
-                                        <Grid RowDefinitions="Auto,Auto,Auto"
+                                            <Grid RowDefinitions="Auto,Auto"
                                               RowSpacing="6">
                                             <Label Text="{Binding DayLabel}"
                                                    TextColor="White"
@@ -424,47 +353,97 @@
 
                                             <HorizontalStackLayout Grid.Row="1"
                                                                    Spacing="6"
-                                                                   IsVisible="{Binding HasExpense}">
+                                                                   IsVisible="{Binding HasAmount}">
                                                 <BoxView WidthRequest="7"
                                                          HeightRequest="7"
                                                          CornerRadius="3.5"
-                                                         BackgroundColor="{Binding ExpenseDotColor}"
+                                                         BackgroundColor="{Binding DotColor}"
                                                          VerticalOptions="Center" />
-                                                <Label Text="{Binding ExpenseText}"
-                                                       TextColor="#D0D5DD"
-                                                       FontSize="10"
-                                                       LineBreakMode="TailTruncation"
-                                                       MaxLines="1" />
-                                            </HorizontalStackLayout>
-
-                                            <HorizontalStackLayout Grid.Row="2"
-                                                                   Spacing="6"
-                                                                   IsVisible="{Binding HasIncome}">
-                                                <BoxView WidthRequest="7"
-                                                         HeightRequest="7"
-                                                         CornerRadius="3.5"
-                                                         BackgroundColor="{Binding IncomeDotColor}"
-                                                         VerticalOptions="Center" />
-                                                <Label Text="{Binding IncomeText}"
+                                                <Label Text="{Binding AmountText}"
                                                        TextColor="#D0D5DD"
                                                        FontSize="10"
                                                        LineBreakMode="TailTruncation"
                                                        MaxLines="1" />
                                             </HorizontalStackLayout>
                                         </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
 
-                    <Button Text="Close"
-                            BackgroundColor="#1AFFFFFF"
-                            TextColor="White"
-                            CornerRadius="14"
-                            HeightRequest="44"
-                            Command="{Binding CloseMonthlyViewCommand}" />
-                </VerticalStackLayout>
+                        <Button Text="Close"
+                                BackgroundColor="#1AFFFFFF"
+                                TextColor="White"
+                                CornerRadius="14"
+                                HeightRequest="44"
+                                Command="{Binding CloseMonthlyViewCommand}" />
+                    </VerticalStackLayout>
+
+                    <!-- Day details overlay (always visible when tapped) -->
+                    <Border IsVisible="{Binding IsDayDetailOpen}"
+                            ZIndex="10"
+                            BackgroundColor="#0B2A66"
+                            StrokeThickness="0"
+                            Padding="14"
+                            VerticalOptions="Fill"
+                            HorizontalOptions="Fill">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <ScrollView>
+                            <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Button Text="Back"
+                                        BackgroundColor="#1AFFFFFF"
+                                        TextColor="White"
+                                        CornerRadius="14"
+                                        HeightRequest="36"
+                                        Command="{Binding BackToCalendarCommand}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding SelectedDayTitle}"
+                                       TextColor="White"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="13"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <Border BackgroundColor="#01143D" StrokeThickness="0" Padding="10">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Total" TextColor="#D0D5DD" FontSize="11" />
+                                        <Label Text="{Binding SelectedDayTotal}" TextColor="White" FontFamily="OpenSansSemibold" FontSize="14" />
+                                    </VerticalStackLayout>
+                                </Border>
+                                <Border Grid.Column="1" BackgroundColor="#01143D" StrokeThickness="0" Padding="10">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Mode" TextColor="#D0D5DD" FontSize="11" />
+                                        <Label Text="{Binding MonthlyKindLabel}" TextColor="#D0D5DD" FontFamily="OpenSansSemibold" FontSize="14" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </Grid>
+
+                            <Label Text="Breakdown" TextColor="White" FontFamily="OpenSansSemibold" FontSize="12" />
+                            <CollectionView ItemsSource="{Binding SelectedDayBreakdown}" SelectionMode="None">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                            <Label Text="{Binding Icon}" FontSize="16" VerticalOptions="Center" />
+                                            <Label Grid.Column="1" Text="{Binding Name}" TextColor="#D0D5DD" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Text="{Binding FormattedAmount}" TextColor="White" HorizontalTextAlignment="End" VerticalOptions="Center" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </Border>
+                </Grid>
             </Border>
         </Grid>
     </Grid>

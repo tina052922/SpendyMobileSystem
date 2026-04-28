@@ -16,23 +16,14 @@ public sealed class DashboardCalendarDayCell
 
 	public string DayLabel => DayNumber?.ToString(CultureInfo.InvariantCulture) ?? "";
 
-	public decimal ExpenseAmount { get; init; }
-	public decimal IncomeAmount { get; init; }
-
-	public required string ExpenseText { get; init; }
-	public required string IncomeText { get; init; }
-
-	public bool HasExpense => ExpenseAmount > 0;
-	public bool HasIncome => IncomeAmount > 0;
-
-	public bool IsTopExpense { get; init; }
-	public bool IsTopIncome { get; init; }
+	public decimal Amount { get; init; }
+	public required string AmountText { get; init; }
+	public bool HasAmount => Amount > 0;
 
 	public Color BorderColor { get; init; } = Colors.Transparent;
 	public double BorderThickness { get; init; }
 
-	public Color ExpenseDotColor { get; init; } = Color.FromArgb("#01143D");
-	public Color IncomeDotColor { get; init; } = Color.FromArgb("#00D4A5");
+	public Color DotColor { get; init; } = Color.FromArgb("#01143D");
 }
 
 public sealed class MonthBar
@@ -49,6 +40,8 @@ public partial class DashboardViewModel : ObservableObject
 	readonly IProfilePhotoService _profilePhoto;
 	readonly ICurrencyService _currency;
 	int _monthlyLoadToken;
+	readonly SemaphoreSlim _loadGate = new(1, 1);
+	CancellationTokenSource? _loadCts;
 
 	[ObservableProperty]
 	private bool _isExpenseMode = true;
@@ -86,14 +79,22 @@ public partial class DashboardViewModel : ObservableObject
 	private string _monthlyMonthLabel = "";
 
 	[ObservableProperty]
-	private string _topSpendingDayHint = "";
+	private string _monthlyKindLabel = "";
 
 	[ObservableProperty]
-	private string _topIncomeDayHint = "";
+	private bool _isDayDetailOpen;
+
+	[ObservableProperty]
+	private string _selectedDayTitle = "";
+
+	[ObservableProperty]
+	private string _selectedDayTotal = "";
+
+	[ObservableProperty]
+	private int? _selectedDayNumber;
 
 	public ObservableCollection<DashboardCalendarDayCell> MonthlyDays { get; } = new();
-	public ObservableCollection<MonthBar> MonthlyExpenseBars { get; } = new();
-	public ObservableCollection<MonthBar> MonthlyIncomeBars { get; } = new();
+	public ObservableCollection<CategoryStat> SelectedDayBreakdown { get; } = new();
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 
@@ -111,21 +112,16 @@ public partial class DashboardViewModel : ObservableObject
 		_profilePhoto.Changed += (_, _) =>
 			MainThread.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(ProfilePhoto)));
 		_currency.Changed += (_, _) =>
-			MainThread.BeginInvokeOnMainThread(() => _ = LoadAsync());
+			RequestRefresh();
 
 		_data.DataChanged += (_, _) =>
-			MainThread.BeginInvokeOnMainThread(() =>
-			{
-				_ = LoadAsync();
-				if (IsMonthlyViewOpen)
-					_ = LoadMonthlyAsync(MonthlySelectedDate);
-			});
-		_ = LoadAsync();
+			RequestRefresh();
+		RequestRefresh(immediate: true);
 	}
 
 	partial void OnIsExpenseModeChanged(bool value)
 	{
-		_ = LoadAsync();
+		RequestRefresh();
 		OnPropertyChanged(nameof(ExpenseButtonBackground));
 		OnPropertyChanged(nameof(IncomeButtonBackground));
 	}
@@ -138,25 +134,76 @@ public partial class DashboardViewModel : ObservableObject
 
 	async Task LoadAsync()
 	{
-		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+		// Legacy entrypoint - kept for safety. Prefer RequestRefresh().
+		RequestRefresh(immediate: true);
+	}
 
-		var bal = await _data.GetBalanceAsync();
-		AvailableBalance = $"{_currency.Symbol}{bal.ToString("N2", _currency.Culture)}";
+	void RequestRefresh(bool immediate = false)
+	{
+		_loadCts?.Cancel();
+		_loadCts?.Dispose();
+		_loadCts = new CancellationTokenSource();
+		var ct = _loadCts.Token;
 
-		var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
-		var day = DateTime.Today;
-		var dash = await _data.GetDashboardAsync(day, kind);
+		_ = Task.Run(async () =>
+		{
+			try
+			{
+				if (!immediate)
+					await Task.Delay(180, ct).ConfigureAwait(false); // debounce frequent DB writes
+				await RefreshCoreAsync(ct).ConfigureAwait(false);
+			}
+			catch (OperationCanceledException)
+			{
+			}
+			catch
+			{
+				// Best-effort: UI should stay responsive even if refresh fails.
+			}
+		}, ct);
+	}
 
-		DateLabel = dash.DateLabel;
-		SummaryLabel = dash.SummaryLabel;
-		SummaryAmount = dash.SummaryAmount;
-		SummaryColor = dash.SummaryColor;
+	async Task RefreshCoreAsync(CancellationToken ct)
+	{
+		if (!await _loadGate.WaitAsync(0, ct).ConfigureAwait(false))
+			return;
+		try
+		{
+			var greeting = await _data.GetUserDisplayNameAsync(ct).ConfigureAwait(false) ?? string.Empty;
+			var bal = await _data.GetBalanceAsync(ct).ConfigureAwait(false);
 
-		Transactions.Clear();
-		foreach (var t in dash.Items)
-			Transactions.Add(t);
+			var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
+			var day = DateTime.Today;
+			var dash = await _data.GetDashboardAsync(day, kind, ct).ConfigureAwait(false);
 
-		HasTransactions = Transactions.Count > 0;
+			// Precompute outside UI thread
+			var available = $"{_currency.Symbol}{bal.ToString("N2", _currency.Culture)}";
+			var items = dash.Items;
+			var hasTx = items.Count > 0;
+
+			await MainThread.InvokeOnMainThreadAsync(() =>
+			{
+				if (ct.IsCancellationRequested) return;
+				UserGreeting = greeting;
+				AvailableBalance = available;
+				DateLabel = dash.DateLabel;
+				SummaryLabel = dash.SummaryLabel;
+				SummaryAmount = dash.SummaryAmount;
+				SummaryColor = dash.SummaryColor;
+
+				Transactions.Clear();
+				foreach (var t in items)
+					Transactions.Add(t);
+				HasTransactions = hasTx;
+			});
+
+			if (IsMonthlyViewOpen && !ct.IsCancellationRequested)
+				await LoadMonthlyAsync(MonthlySelectedDate).ConfigureAwait(false);
+		}
+		finally
+		{
+			_loadGate.Release();
+		}
 	}
 
 	partial void OnMonthlySelectedDateChanged(DateTime value)
@@ -173,69 +220,16 @@ public partial class DashboardViewModel : ObservableObject
 		MonthlySelectedDate = first;
 		MonthlyMonthLabel = first.ToString("MMMM yyyy", _currency.Culture).ToUpperInvariant();
 
-		var expenseTask = _data.GetStatisticsAsync(first.Year, first.Month, TransactionKind.Expense);
-		var incomeTask = _data.GetStatisticsAsync(first.Year, first.Month, TransactionKind.Income);
-		await Task.WhenAll(expenseTask, incomeTask);
-		var expense = expenseTask.Result;
-		var income = incomeTask.Result;
+		var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
+		MonthlyKindLabel = IsExpenseMode ? "EXPENSE HISTORY" : "INCOME HISTORY";
+		var stats = await _data.GetStatisticsAsync(first.Year, first.Month, kind);
 
 		if (loadToken != _monthlyLoadToken || !IsMonthlyViewOpen)
 			return;
 
-		var expenseByDay = expense.Points.ToDictionary(p => p.Day, p => p.Amount);
-		var incomeByDay = income.Points.ToDictionary(p => p.Day, p => p.Amount);
-
-		var maxExpense = expense.Points.Count == 0 ? 0m : expense.Points.Max(p => p.Amount);
-		var maxIncome = income.Points.Count == 0 ? 0m : income.Points.Max(p => p.Amount);
-		if (maxExpense < 0) maxExpense = 0;
-		if (maxIncome < 0) maxIncome = 0;
-
-		var topExpenseDay = expense.Points.Where(p => p.Amount == maxExpense && p.Amount > 0).Select(p => p.Day).FirstOrDefault();
-		var topIncomeDay = income.Points.Where(p => p.Amount == maxIncome && p.Amount > 0).Select(p => p.Day).FirstOrDefault();
-
-		TopSpendingDayHint = maxExpense > 0 && topExpenseDay > 0
-			? $"Biggest Spending Day: {topExpenseDay} · {_currency.Symbol}{maxExpense.ToString("N0", _currency.Culture)}"
-			: "Biggest Spending Day: —";
-
-		TopIncomeDayHint = maxIncome > 0 && topIncomeDay > 0
-			? $"Highest Income Day: {topIncomeDay} · {_currency.Symbol}{maxIncome.ToString("N0", _currency.Culture)}"
-			: "Highest Income Day: —";
-
-		// Overview bar charts (easy at-a-glance comparison)
-		MonthlyExpenseBars.Clear();
-		MonthlyIncomeBars.Clear();
-		const double chartHeight = 70;
-		var expenseBar = Color.FromArgb("#01143D");
-		var incomeBar = Color.FromArgb("#00D4A5");
-		var topColor = Color.FromArgb("#43B3EF");
+		var amountByDay = stats.Points.ToDictionary(p => p.Day, p => p.Amount);
 
 		var daysInMonth = DateTime.DaysInMonth(first.Year, first.Month);
-		for (var d = 1; d <= daysInMonth; d++)
-		{
-			var exp = expenseByDay.TryGetValue(d, out var e) ? e : 0m;
-			var inc = incomeByDay.TryGetValue(d, out var i) ? i : 0m;
-
-			var expHeight = maxExpense <= 0 || exp <= 0 ? 0 : (double)(exp / maxExpense) * chartHeight;
-			var incHeight = maxIncome <= 0 || inc <= 0 ? 0 : (double)(inc / maxIncome) * chartHeight;
-			expHeight = double.IsFinite(expHeight) ? Math.Clamp(expHeight, 0, chartHeight) : 0;
-			incHeight = double.IsFinite(incHeight) ? Math.Clamp(incHeight, 0, chartHeight) : 0;
-
-			MonthlyExpenseBars.Add(new MonthBar
-			{
-				DayLabel = d.ToString(CultureInfo.InvariantCulture),
-				BarHeight = expHeight < 4 && exp > 0 ? 4 : expHeight,
-				IsTop = d == topExpenseDay && maxExpense > 0,
-				BarColor = d == topExpenseDay && maxExpense > 0 ? topColor : expenseBar
-			});
-
-			MonthlyIncomeBars.Add(new MonthBar
-			{
-				DayLabel = d.ToString(CultureInfo.InvariantCulture),
-				BarHeight = incHeight < 4 && inc > 0 ? 4 : incHeight,
-				IsTop = d == topIncomeDay && maxIncome > 0,
-				BarColor = d == topIncomeDay && maxIncome > 0 ? topColor : incomeBar
-			});
-		}
 
 		MonthlyDays.Clear();
 
@@ -245,10 +239,9 @@ public partial class DashboardViewModel : ObservableObject
 		var rows = (int)Math.Ceiling(totalCells / 7d);
 		var cells = rows * 7;
 
-		var topExpenseColor = Color.FromArgb("#43B3EF");
-		var topIncomeColor = Color.FromArgb("#43B3EF");
-		var expenseDot = Color.FromArgb("#01143D");
-		var incomeDot = Color.FromArgb("#00D4A5");
+		var selectedStroke = Color.FromArgb("#43B3EF");
+		var dot = IsExpenseMode ? Color.FromArgb("#01143D") : Color.FromArgb("#00D4A5");
+		var decimals = kind == TransactionKind.Income ? 2 : 0;
 
 		for (var idx = 0; idx < cells; idx++)
 		{
@@ -258,41 +251,28 @@ public partial class DashboardViewModel : ObservableObject
 				MonthlyDays.Add(new DashboardCalendarDayCell
 				{
 					DayNumber = null,
-					ExpenseAmount = 0,
-					IncomeAmount = 0,
-					ExpenseText = "",
-					IncomeText = "",
-					IsTopExpense = false,
-					IsTopIncome = false,
+					Amount = 0,
+					AmountText = "",
 					BorderColor = Colors.Transparent,
 					BorderThickness = 0,
-					ExpenseDotColor = expenseDot,
-					IncomeDotColor = incomeDot
+					DotColor = dot
 				});
 				continue;
 			}
 
-			var exp = expenseByDay.TryGetValue(d, out var e) ? e : 0m;
-			var inc = incomeByDay.TryGetValue(d, out var i) ? i : 0m;
-			var isTopExpense = d == topExpenseDay && maxExpense > 0;
-			var isTopIncome = d == topIncomeDay && maxIncome > 0;
-
-			var borderColor = isTopExpense || isTopIncome ? topExpenseColor : Colors.Transparent;
-			var borderThickness = isTopExpense || isTopIncome ? 2d : 0d;
+			var amt = amountByDay.TryGetValue(d, out var a) ? a : 0m;
+			// Highlight the selected day when detail is open.
+			var borderColor = (IsDayDetailOpen && SelectedDayNumber == d) ? selectedStroke : Colors.Transparent;
+			var borderThickness = borderColor == Colors.Transparent ? 0d : 2d;
 
 			MonthlyDays.Add(new DashboardCalendarDayCell
 			{
 				DayNumber = d,
-				ExpenseAmount = exp,
-				IncomeAmount = inc,
-				ExpenseText = exp <= 0 ? "" : $"{_currency.Symbol}{exp.ToString("N0", _currency.Culture)}",
-				IncomeText = inc <= 0 ? "" : $"{_currency.Symbol}{inc.ToString("N0", _currency.Culture)}",
-				IsTopExpense = isTopExpense,
-				IsTopIncome = isTopIncome,
+				Amount = amt,
+				AmountText = amt <= 0 ? "" : _currency.Format(amt, decimals: decimals),
 				BorderColor = borderColor,
 				BorderThickness = borderThickness,
-				ExpenseDotColor = isTopExpense ? topExpenseColor : expenseDot,
-				IncomeDotColor = isTopIncome ? topIncomeColor : incomeDot,
+				DotColor = dot,
 			});
 		}
 	}
@@ -312,6 +292,13 @@ public partial class DashboardViewModel : ObservableObject
 	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());
 
 	[RelayCommand]
+	Task OpenHistoryAsync()
+	{
+		var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
+		return AppNavigation.PushAsync(new TransactionHistoryPage(kind));
+	}
+
+	[RelayCommand]
 	Task AddTransactionAsync() =>
 		AppNavigation.PushAsync(new AddTransactionPage(!IsExpenseMode));
 
@@ -319,11 +306,60 @@ public partial class DashboardViewModel : ObservableObject
 	async Task OpenMonthlyViewAsync()
 	{
 		IsMonthlyViewOpen = true;
+		IsDayDetailOpen = false;
+		SelectedDayNumber = null;
+		SelectedDayTitle = string.Empty;
+		SelectedDayTotal = string.Empty;
+		SelectedDayBreakdown.Clear();
 		await LoadMonthlyAsync(DateTime.Today);
 	}
 
 	[RelayCommand]
 	void CloseMonthlyView() => IsMonthlyViewOpen = false;
+
+	[RelayCommand]
+	async Task SelectCalendarDayAsync(int? dayNumber)
+	{
+		if (!IsMonthlyViewOpen)
+			return;
+		if (dayNumber is null || dayNumber.Value <= 0)
+			return;
+
+		var day = dayNumber.Value;
+		var date = new DateTime(MonthlySelectedDate.Year, MonthlySelectedDate.Month, day);
+		var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
+		var breakdown = await _data.GetDayBreakdownAsync(date, kind);
+
+		SelectedDayNumber = day;
+		SelectedDayTitle = date.ToString("MMMM d, yyyy", _currency.Culture);
+		var decimals = kind == TransactionKind.Income ? 2 : 0;
+		SelectedDayTotal = _currency.Format(breakdown.Total, decimals: decimals);
+
+		SelectedDayBreakdown.Clear();
+		foreach (var row in breakdown.ByCategory)
+			SelectedDayBreakdown.Add(row);
+
+		IsDayDetailOpen = true;
+		// Avoid reloading month stats (DB + full CollectionView refresh) on every tap.
+		// We only need to update the selected border highlight.
+		RefreshCalendarSelectionHighlight();
+	}
+
+	void RefreshCalendarSelectionHighlight()
+	{
+		// Force the CollectionView to re-evaluate bindings that depend on selection state.
+		// This is cheaper than re-querying and rebuilding the entire month.
+		OnPropertyChanged(nameof(SelectedDayNumber));
+		OnPropertyChanged(nameof(IsDayDetailOpen));
+	}
+
+	[RelayCommand]
+	void BackToCalendar()
+	{
+		IsDayDetailOpen = false;
+		SelectedDayNumber = null;
+		RefreshCalendarSelectionHighlight();
+	}
 
 	[RelayCommand]
 	async Task PrevMonthAsync() =>
@@ -332,4 +368,5 @@ public partial class DashboardViewModel : ObservableObject
 	[RelayCommand]
 	async Task NextMonthAsync() =>
 		await LoadMonthlyAsync(new DateTime(MonthlySelectedDate.Year, MonthlySelectedDate.Month, 1).AddMonths(1));
+
 }

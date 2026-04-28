@@ -34,5 +34,6 @@
 	<string>Spendy needs photo library access to choose a profile picture.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Spendy may save images you choose to your library when you allow it.</string>
+	<!-- Google OAuth uses https://127.0.0.1 redirect (Web client); WebAuthenticator handles it. -->
 </dict>
 </plist>

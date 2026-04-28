@@ -24,6 +24,17 @@ public interface ISpendyDataService
 
 	Task<StatisticsData> GetStatisticsAsync(int year, int month, TransactionKind kind, CancellationToken cancellationToken = default);
 
+	/// <summary>
+	/// Returns totals and per-category breakdown for a single day, filtered by transaction kind.
+	/// Used by the calendar daily transaction viewer (income vs expense dashboard).
+	/// </summary>
+	Task<DayBreakdownData> GetDayBreakdownAsync(DateTime day, TransactionKind kind, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Returns the full transaction history for the current user and kind (newest first).
+	/// </summary>
+	Task<IReadOnlyList<TransactionItem>> GetTransactionHistoryAsync(TransactionKind kind, CancellationToken cancellationToken = default);
+
 	Task<IReadOnlyList<SavingPlan>> GetSavingPlansAsync(bool endedOnly, CancellationToken cancellationToken = default);
 
 	Task<SavingPlan?> GetSavingPlanAsync(int id, CancellationToken cancellationToken = default);
@@ -65,3 +76,7 @@ public sealed record StatisticsData(
 	IReadOnlyList<ChartPoint> Points,
 	IReadOnlyList<CategoryStat> Categories,
 	Color BarColor);
+
+public sealed record DayBreakdownData(
+	decimal Total,
+	IReadOnlyList<CategoryStat> ByCategory);

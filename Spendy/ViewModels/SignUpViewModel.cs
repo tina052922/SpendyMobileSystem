@@ -1,5 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Spendy.Services;
 
 namespace Spendy.ViewModels;
@@ -7,6 +9,10 @@ namespace Spendy.ViewModels;
 public partial class SignUpViewModel : ObservableObject
 {
 	readonly IAuthService _auth;
+	readonly IUserSession _session;
+
+	[ObservableProperty]
+	private bool _isBusy;
 
 	[ObservableProperty]
 	private string _firstName = string.Empty;
@@ -37,9 +43,10 @@ public partial class SignUpViewModel : ObservableObject
 	[ObservableProperty]
 	private bool _termsAccepted;
 
-	public SignUpViewModel(IAuthService auth)
+	public SignUpViewModel(IAuthService auth, IUserSession session)
 	{
 		_auth = auth;
+		_session = session;
 	}
 
 	partial void OnPasswordChanged(string value) => UpdateStrength();
@@ -61,6 +68,9 @@ public partial class SignUpViewModel : ObservableObject
 	[RelayCommand]
 	async Task SignUpAsync()
 	{
+		if (IsBusy)
+			return;
+
 		var page = Application.Current?.Windows.FirstOrDefault()?.Page;
 		if (page is null)
 			return;
@@ -71,20 +81,42 @@ public partial class SignUpViewModel : ObservableObject
 			return;
 		}
 
-		var err = await _auth.RegisterAsync(
-			FirstName,
-			LastName,
-			Email,
-			Birthday.Date,
-			Password,
-			ConfirmPassword);
-
-		if (err is not null)
+		IsBusy = true;
+		try
 		{
-			await page.DisplayAlert("Spendy", err, "OK");
-			return;
-		}
+			var err = await _auth.RegisterAsync(
+				FirstName,
+				LastName,
+				Email,
+				Birthday.Date,
+				Password,
+				ConfirmPassword);
 
-		AppNavigation.GoToMainShell();
+			if (err is not null)
+			{
+				await page.DisplayAlert("Spendy", err, "OK");
+				return;
+			}
+
+			if (_session.CurrentUserId is null)
+			{
+				await page.DisplayAlert("Spendy", "Sign-up didn’t complete. Please try again.", "OK");
+				return;
+			}
+
+			try
+			{
+				await Toast.Make("Registered successfully", ToastDuration.Short).Show();
+			}
+			catch
+			{
+			}
+
+			AppNavigation.GoToMainShell();
+		}
+		finally
+		{
+			IsBusy = false;
+		}
 	}
 }

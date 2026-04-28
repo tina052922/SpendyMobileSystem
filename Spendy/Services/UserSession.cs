@@ -8,12 +8,15 @@ public sealed class UserSession : IUserSession
 
 	public int? CurrentUserId { get; private set; }
 
-	public void SetCurrentUser(int userId)
+	public void SetCurrentUser(int userId, bool persistForNextLaunch = true)
 	{
 		if (userId <= 0)
 			throw new ArgumentOutOfRangeException(nameof(userId));
 		CurrentUserId = userId;
-		Preferences.Set(UserIdKey, userId);
+		if (persistForNextLaunch)
+			Preferences.Set(UserIdKey, userId);
+		else
+			Preferences.Remove(UserIdKey);
 	}
 
 	public void Clear()

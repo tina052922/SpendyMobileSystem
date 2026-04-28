@@ -11,6 +11,8 @@ public partial class SavingsViewModel : ObservableObject
 {
 	readonly ISpendyDataService _data;
 	readonly IProfilePhotoService _profilePhoto;
+	readonly SemaphoreSlim _loadGate = new(1, 1);
+	CancellationTokenSource? _loadCts;
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 
@@ -35,19 +37,63 @@ public partial class SavingsViewModel : ObservableObject
 			MainThread.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(ProfilePhoto)));
 
 		_data.DataChanged += (_, _) =>
-			MainThread.BeginInvokeOnMainThread(() => _ = LoadAsync());
-		_ = LoadAsync();
+			RequestRefresh();
+		RequestRefresh(immediate: true);
 	}
 
 	async Task LoadAsync()
 	{
-		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+		RequestRefresh(immediate: true);
+	}
 
-		Plans.Clear();
-		foreach (var p in await _data.GetSavingPlansAsync(endedOnly: false))
-			Plans.Add(p);
+	void RequestRefresh(bool immediate = false)
+	{
+		_loadCts?.Cancel();
+		_loadCts?.Dispose();
+		_loadCts = new CancellationTokenSource();
+		var ct = _loadCts.Token;
 
-		HasPlans = Plans.Count > 0;
+		_ = Task.Run(async () =>
+		{
+			try
+			{
+				if (!immediate)
+					await Task.Delay(180, ct).ConfigureAwait(false);
+				await RefreshCoreAsync(ct).ConfigureAwait(false);
+			}
+			catch (OperationCanceledException)
+			{
+			}
+			catch
+			{
+			}
+		}, ct);
+	}
+
+	async Task RefreshCoreAsync(CancellationToken ct)
+	{
+		if (!await _loadGate.WaitAsync(0, ct).ConfigureAwait(false))
+			return;
+		try
+		{
+			var greeting = await _data.GetUserDisplayNameAsync(ct).ConfigureAwait(false) ?? string.Empty;
+			var plans = await _data.GetSavingPlansAsync(endedOnly: false, ct).ConfigureAwait(false);
+			var hasPlans = plans.Count > 0;
+
+			await MainThread.InvokeOnMainThreadAsync(() =>
+			{
+				if (ct.IsCancellationRequested) return;
+				UserGreeting = greeting;
+				Plans.Clear();
+				foreach (var p in plans)
+					Plans.Add(p);
+				HasPlans = hasPlans;
+			});
+		}
+		finally
+		{
+			_loadGate.Release();
+		}
 	}
 
 	[RelayCommand]

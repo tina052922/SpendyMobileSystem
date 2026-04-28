@@ -19,6 +19,7 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 		await EnsureTransactionsUserIdColumnAsync(db, cancellationToken);
 		await EnsureSavingGoalsUserIdColumnAsync(db, cancellationToken);
 		await EnsurePasswordResetTokensTableAsync(db, cancellationToken);
+		await EnsureIndexesAsync(db, cancellationToken);
 
 		if (await db.Categories.AnyAsync(cancellationToken))
 			return;
@@ -46,6 +47,18 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 			"CREATE INDEX IF NOT EXISTS IX_PasswordResetTokens_UserId ON PasswordResetTokens(UserId);", ct);
 		await db.Database.ExecuteSqlRawAsync(
 			"CREATE INDEX IF NOT EXISTS IX_PasswordResetTokens_ExpiresAtUtc ON PasswordResetTokens(ExpiresAtUtc);", ct);
+	}
+
+	static async Task EnsureIndexesAsync(SpendyDbContext db, CancellationToken ct)
+	{
+		// SQLite perf: ensure our common filter+sort patterns have supporting indexes,
+		// especially on existing DBs where EnsureCreated won't apply model changes.
+		await db.Database.ExecuteSqlRawAsync(
+			"CREATE INDEX IF NOT EXISTS IX_Transactions_UserId_Date_Type ON Transactions(UserId, Date, Type);", ct);
+		await db.Database.ExecuteSqlRawAsync(
+			"CREATE INDEX IF NOT EXISTS IX_SavingGoals_UserId_IsEnded_TargetDate ON SavingGoals(UserId, IsEnded, TargetDate);", ct);
+		await db.Database.ExecuteSqlRawAsync(
+			"CREATE INDEX IF NOT EXISTS IX_SavingTransactions_SavingGoalId_Date ON SavingTransactions(SavingGoalId, Date);", ct);
 	}
 
 	static async Task EnsureUserProfilePhotoPathColumnAsync(SpendyDbContext db, CancellationToken ct)

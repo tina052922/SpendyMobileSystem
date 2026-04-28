@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Solution>
   <!-- Spendy Budget Tracker — .NET MAUI app (SQLite/EF Core, MVVM). -->
+  <!-- Auth: cold start is Splash → Get Started → Sign In; main shell only after a valid session (see AppNavigation / MainShellPage). -->
   <!-- Open this file from the repo root. -->
   <Folder Name="/Spendy/">
     <Project Path="Spendy/Spendy.csproj" DisplayName="Spendy" />

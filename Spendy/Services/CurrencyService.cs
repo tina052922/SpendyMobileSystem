@@ -1,4 +1,5 @@
 using System.Globalization;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 
 namespace Spendy.Services;
@@ -28,7 +29,13 @@ public sealed class CurrencyService : ICurrencyService
 
 	AppCurrency _current;
 
-	public event EventHandler? Changed;
+	readonly WeakEventManager _changed = new();
+
+	public event EventHandler? Changed
+	{
+		add => _changed.AddEventHandler(value);
+		remove => _changed.RemoveEventHandler(value);
+	}
 
 	public CurrencyService()
 	{
@@ -49,7 +56,7 @@ public sealed class CurrencyService : ICurrencyService
 
 		_current = currency;
 		Preferences.Set(PrefKey, currency.ToString());
-		Changed?.Invoke(this, EventArgs.Empty);
+		_changed.HandleEvent(this, EventArgs.Empty, nameof(Changed));
 	}
 
 	public string Format(decimal amount, int decimals)

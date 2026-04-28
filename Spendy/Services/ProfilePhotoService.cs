@@ -17,7 +17,13 @@ public sealed class ProfilePhotoService : IProfilePhotoService
 	ImageSource _photo = ImageSource.FromFile("blankprofile.png");
 	string? _photoPath;
 
-	public event EventHandler? Changed;
+	readonly WeakEventManager _changed = new();
+
+	public event EventHandler? Changed
+	{
+		add => _changed.AddEventHandler(value);
+		remove => _changed.RemoveEventHandler(value);
+	}
 
 	public ImageSource Photo => _photo;
 	public string? PhotoPath => _photoPath;
@@ -29,7 +35,7 @@ public sealed class ProfilePhotoService : IProfilePhotoService
 
 		_photoPath = filePath.Trim();
 		_photo = ImageSource.FromFile(_photoPath);
-		Changed?.Invoke(this, EventArgs.Empty);
+		_changed.HandleEvent(this, EventArgs.Empty, nameof(Changed));
 	}
 
 	public async Task SyncFromCurrentUserAsync(ISpendyDataService data, CancellationToken cancellationToken = default)
@@ -47,7 +53,7 @@ public sealed class ProfilePhotoService : IProfilePhotoService
 			_photo = ImageSource.FromFile("blankprofile.png");
 		}
 
-		Changed?.Invoke(this, EventArgs.Empty);
+		_changed.HandleEvent(this, EventArgs.Empty, nameof(Changed));
 		await Task.CompletedTask;
 	}
 
@@ -55,6 +61,6 @@ public sealed class ProfilePhotoService : IProfilePhotoService
 	{
 		_photoPath = null;
 		_photo = ImageSource.FromFile("blankprofile.png");
-		Changed?.Invoke(this, EventArgs.Empty);
+		_changed.HandleEvent(this, EventArgs.Empty, nameof(Changed));
 	}
 }

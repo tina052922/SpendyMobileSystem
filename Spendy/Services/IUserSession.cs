@@ -5,7 +5,8 @@ public interface IUserSession
 {
 	int? CurrentUserId { get; }
 
-	void SetCurrentUser(int userId);
+	/// <param name="persistForNextLaunch">When false, session is in-memory only (no auto-login after app restart).</param>
+	void SetCurrentUser(int userId, bool persistForNextLaunch = true);
 
 	void Clear();
 

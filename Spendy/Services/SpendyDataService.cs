@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Maui.Controls;
 using Spendy.Data;
 using Spendy.Data.Entities;
 using Spendy.Models;
@@ -10,10 +11,16 @@ public sealed class SpendyDataService(
 	ICurrencyService currency,
 	IUserSession session) : ISpendyDataService
 {
-	public event EventHandler? DataChanged;
+	readonly WeakEventManager _dataChanged = new();
+
+	public event EventHandler? DataChanged
+	{
+		add => _dataChanged.AddEventHandler(value);
+		remove => _dataChanged.RemoveEventHandler(value);
+	}
 
 	public void NotifyDataChanged() =>
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 
 	int? CurrentUserIdOrNull() => session.CurrentUserId;
 
@@ -91,7 +98,7 @@ public sealed class SpendyDataService(
 			: user.ProfilePhotoPath.Trim();
 
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
 	public async Task<DashboardData> GetDashboardAsync(DateTime day, TransactionKind kind, CancellationToken cancellationToken = default)
@@ -193,6 +200,67 @@ public sealed class SpendyDataService(
 
 		var title = start.ToString("MMMM yyyy", currency.Culture);
 		return new StatisticsData(title, points, byCategory, barColor);
+	}
+
+	public async Task<DayBreakdownData> GetDayBreakdownAsync(DateTime day, TransactionKind kind, CancellationToken cancellationToken = default)
+	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return new DayBreakdownData(0, []);
+
+		var start = day.Date;
+		var end = start.AddDays(1);
+
+		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+		var rows = await db.Transactions.AsNoTracking()
+			.Include(t => t.Category)
+			.Where(t => t.UserId == uid && t.Date >= start && t.Date < end && t.Type == kind)
+			.ToListAsync(cancellationToken);
+
+		var total = rows.Sum(r => r.Amount);
+		var amountColor = kind == TransactionKind.Income
+			? Color.FromArgb("#00D4A5")
+			: Color.FromArgb("#FF0000");
+
+		var byCat = rows
+			.GroupBy(t => new { t.CategoryId, Name = t.Category?.Name ?? "?", Icon = t.Category?.Icon ?? "•" })
+			.OrderByDescending(g => g.Sum(x => x.Amount))
+			.Select((g, idx) => new CategoryStat
+			{
+				Name = g.Key.Name,
+				Icon = g.Key.Icon,
+				Amount = g.Sum(x => x.Amount),
+				CurrencySymbol = currency.Symbol,
+				AmountColor = amountColor,
+				IsTopCategory = idx == 0 && g.Sum(x => x.Amount) > 0
+			})
+			.ToList();
+
+		return new DayBreakdownData(total, byCat);
+	}
+
+	public async Task<IReadOnlyList<TransactionItem>> GetTransactionHistoryAsync(TransactionKind kind, CancellationToken cancellationToken = default)
+	{
+		var uid = CurrentUserIdOrNull();
+		if (uid is null)
+			return [];
+
+		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+		var rows = await db.Transactions.AsNoTracking()
+			.Include(t => t.Category)
+			.Where(t => t.UserId == uid && t.Type == kind)
+			.OrderByDescending(t => t.Date)
+			.ThenByDescending(t => t.Id)
+			.ToListAsync(cancellationToken);
+
+		return rows.Select(t => new TransactionItem
+		{
+			Category = t.Category?.Name ?? "?",
+			Icon = t.Category?.Icon ?? "•",
+			CurrencySymbol = currency.Symbol,
+			Amount = kind == TransactionKind.Expense ? -t.Amount : t.Amount,
+			Time = t.Date.ToString("MMM d, yyyy • HH:mm", currency.Culture),
+		}).ToList();
 	}
 
 	public async Task<IReadOnlyList<SavingPlan>> GetSavingPlansAsync(bool endedOnly, CancellationToken cancellationToken = default)
@@ -302,7 +370,7 @@ public sealed class SpendyDataService(
 			CreatedAt = DateTime.UtcNow
 		});
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
 	public async Task AddIncomeWithMandatorySavingsAsync(
@@ -372,7 +440,7 @@ public sealed class SpendyDataService(
 		});
 
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
 	public async Task<int> CreateSavingGoalAsync(string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default)
@@ -392,7 +460,7 @@ public sealed class SpendyDataService(
 		};
 		db.SavingGoals.Add(g);
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 		return g.Id;
 	}
 
@@ -408,7 +476,7 @@ public sealed class SpendyDataService(
 		g.TargetAmount = decimal.Round(targetAmount, 2);
 		g.TargetDate = targetDate.Date;
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
 	public async Task SetSavingGoalEndedAsync(int id, bool isEnded, CancellationToken cancellationToken = default)
@@ -421,7 +489,7 @@ public sealed class SpendyDataService(
 			?? throw new InvalidOperationException("Goal not found.");
 		g.IsEnded = isEnded;
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
 	public async Task AddSavingMovementAsync(int goalId, decimal amount, SavingMovement movement, DateTime date, string? notes, CancellationToken cancellationToken = default)
@@ -482,7 +550,7 @@ public sealed class SpendyDataService(
 		}
 
 		await db.SaveChangesAsync(cancellationToken);
-		DataChanged?.Invoke(this, EventArgs.Empty);
+		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
 	static async Task<CategoryEntity> GetOrCreateCategoryAsync(

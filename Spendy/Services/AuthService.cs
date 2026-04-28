@@ -4,6 +4,7 @@ using Spendy.Data.Entities;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace Spendy.Services;
 
@@ -12,8 +13,7 @@ public sealed class AuthService(
 	IUserSession session,
 	IPasswordHasher hasher,
 	IProfilePhotoService profilePhoto,
-	ISpendyDataService data,
-	IEmailSender emailSender) : IAuthService
+	ISpendyDataService data) : IAuthService
 {
 	public async Task<string?> RegisterAsync(
 		string firstName,
@@ -22,6 +22,7 @@ public sealed class AuthService(
 		DateTime birthday,
 		string password,
 		string confirmPassword,
+		bool persistForNextLaunch = true,
 		CancellationToken cancellationToken = default)
 	{
 		var fn = (firstName ?? string.Empty).Trim();
@@ -41,7 +42,7 @@ public sealed class AuthService(
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		if (await db.Users.AnyAsync(u => u.Email == normalized, cancellationToken))
-			return "This email is already in use. Please use another email or sign in.";
+			return "This email is already in use. Please sign in instead.";
 
 		var displayName = $"{fn} {ln}".Trim();
 		var user = new UserEntity
@@ -60,13 +61,17 @@ public sealed class AuthService(
 		db.Users.Add(user);
 		await db.SaveChangesAsync(cancellationToken);
 
-		session.SetCurrentUser(user.Id);
+		session.SetCurrentUser(user.Id, persistForNextLaunch);
 		await profilePhoto.SyncFromCurrentUserAsync(data, cancellationToken);
 		data.NotifyDataChanged();
 		return null;
 	}
 
-	public async Task<string?> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
+	public async Task<string?> LoginAsync(
+		string email,
+		string password,
+		bool persistForNextLaunch = true,
+		CancellationToken cancellationToken = default)
 	{
 		var normalized = NormalizeEmail(email);
 		if (normalized is null)
@@ -89,7 +94,7 @@ public sealed class AuthService(
 		else if (!hasher.Verify(password, user.PasswordHash))
 			return "Invalid email or password.";
 
-		session.SetCurrentUser(user.Id);
+		session.SetCurrentUser(user.Id, persistForNextLaunch);
 		await profilePhoto.SyncFromCurrentUserAsync(data, cancellationToken);
 		data.NotifyDataChanged();
 		return null;
@@ -162,58 +167,33 @@ public sealed class AuthService(
 		if (normalized is null)
 			return "Enter a valid email address.";
 
+		// Offline reset is handled by ResetPasswordByEmailAsync.
+		return "This app works offline. Please use the reset password screen to set a new password locally.";
+	}
+
+	public async Task<string?> ResetPasswordByEmailAsync(
+		string email,
+		string newPassword,
+		string confirmNewPassword,
+		CancellationToken cancellationToken = default)
+	{
+		var normalized = NormalizeEmail(email);
+		if (normalized is null)
+			return "Enter a valid email address.";
+
+		if (!string.Equals(newPassword, confirmNewPassword, StringComparison.Ordinal))
+			return "New password and confirmation must match.";
+
+		if (!PasswordPolicy.TryValidate(newPassword, out var policyErr))
+			return policyErr;
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-
-		// Rate limit: max 3 requests per hour per account.
 		var user = await db.Users.FirstOrDefaultAsync(u => u.Email == normalized, cancellationToken);
-		if (user is not null)
-		{
-			var since = DateTime.UtcNow.AddHours(-1);
-			var recentCount = await db.PasswordResetTokens.AsNoTracking()
-				.Where(t => t.UserId == user.Id && t.CreatedAtUtc >= since)
-				.CountAsync(cancellationToken);
-			if (recentCount >= 3)
-				return "Too many reset requests. Please try again later.";
+		if (user is null)
+			return "No account found for this email.";
 
-			var rawToken = GenerateToken();
-			var tokenHash = Sha256Hex(rawToken);
-			var now = DateTime.UtcNow;
-
-			db.PasswordResetTokens.Add(new PasswordResetTokenEntity
-			{
-				UserId = user.Id,
-				TokenHash = tokenHash,
-				CreatedAtUtc = now,
-				ExpiresAtUtc = now.AddHours(1),
-				UsedAtUtc = null
-			});
-			await db.SaveChangesAsync(cancellationToken);
-
-			var subject = "Spendy password reset";
-			var body =
-				$"""
-				Hi,
-
-				We received a request to reset your Spendy password.
-
-				Your reset code (valid for 1 hour):
-				{rawToken}
-
-				If you didn’t request this, you can ignore this email.
-				""";
-
-			try
-			{
-				await emailSender.SendAsync(normalized, subject, body, cancellationToken);
-			}
-			catch
-			{
-				// If email delivery isn't configured, don't leak internals here.
-				return "Password reset email could not be sent. Please contact support or try again later.";
-			}
-		}
-
-		// Avoid email enumeration: if user doesn't exist we still return success.
+		user.PasswordHash = hasher.Hash(newPassword);
+		await db.SaveChangesAsync(cancellationToken);
 		return null;
 	}
 

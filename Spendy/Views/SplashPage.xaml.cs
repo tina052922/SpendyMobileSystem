@@ -13,14 +13,22 @@ public partial class SplashPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await Ioc.Services.GetRequiredService<SpendyDbInitializer>().InitializeAsync();
-
-		var auth = Ioc.Services.GetRequiredService<IAuthService>();
-		if (await auth.TryRestoreSessionAsync())
+		// DB initialization can be slow on some devices (first launch / older storage).
+		// Start it in the background, but DO NOT block the splash UI/animation on it.
+		_ = Task.Run(async () =>
 		{
-			AppNavigation.GoToMainShell();
-			return;
-		}
+			try
+			{
+				var init = Ioc.Services.GetRequiredService<SpendyDbInitializer>();
+				await init.InitializeAsync();
+			}
+			catch
+			{
+				// If DB init fails, keep app responsive; subsequent screens can surface errors.
+			}
+		});
+
+		// Always show Splash → Get Started → Sign In. Restored sessions are applied on SignInPage (Remember me / saved user id).
 
 		// Animation: show big symbol, then slide left and reveal wordmark.
 		try
@@ -33,12 +41,16 @@ public partial class SplashPage : ContentPage
 			if (LogoRow is not null)
 				LogoRow.TranslationX = 0;
 
-			await Task.Delay(550);
+			// Keep the wordmark from "lagging" behind the logo.
+			await Task.Delay(150);
 			await MainThread.InvokeOnMainThreadAsync(async () =>
 			{
-				var slide = LogoRow.TranslateTo(-36, 0, 420, Easing.CubicOut);
-				var fadeIn = WordMark.FadeTo(1, 420, Easing.CubicOut);
-				var nudge = WordMark.TranslateTo(0, 0, 420, Easing.CubicOut);
+				if (LogoRow is null || WordMark is null)
+					return;
+
+				var slide = LogoRow.TranslateTo(-36, 0, 380, Easing.CubicOut);
+				var fadeIn = WordMark.FadeTo(1, 380, Easing.CubicOut);
+				var nudge = WordMark.TranslateTo(0, 0, 380, Easing.CubicOut);
 				await Task.WhenAll(slide, fadeIn, nudge);
 			});
 		}
@@ -47,7 +59,7 @@ public partial class SplashPage : ContentPage
 			// If animation fails on a platform, continue normally.
 		}
 
-		await Task.Delay(700);
+		await Task.Delay(350);
 		if (AppNavigation.TryGetRootNavigationPage() is { } nav)
 			await nav.PushAsync(new GetStartedPage());
 	}

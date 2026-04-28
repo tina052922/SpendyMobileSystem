@@ -12,6 +12,8 @@ public partial class SettingsViewModel : ObservableObject
 	readonly IProfilePhotoService _profilePhoto;
 	readonly ISpendyDataService _data;
 	readonly IAuthService _auth;
+	readonly SemaphoreSlim _loadGate = new(1, 1);
+	CancellationTokenSource? _loadCts;
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
 
@@ -41,23 +43,28 @@ public partial class SettingsViewModel : ObservableObject
 	[ObservableProperty]
 	private Color _newPasswordStrengthColor = Color.FromArgb("#888888");
 
-	public SettingsViewModel(ICurrencyService currency, IProfilePhotoService profilePhoto, ISpendyDataService data, IAuthService auth)
+	public SettingsViewModel(
+		ICurrencyService currency,
+		IProfilePhotoService profilePhoto,
+		ISpendyDataService data,
+		IAuthService auth)
 	{
 		_currency = currency;
 		_profilePhoto = profilePhoto;
 		_data = data;
 		_auth = auth;
+
 		_profilePhoto.Changed += (_, _) =>
 			MainThread.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(ProfilePhoto)));
 		_data.DataChanged += (_, _) =>
-			MainThread.BeginInvokeOnMainThread(() => _ = LoadUserGreetingAsync());
+			RequestGreetingRefresh();
 		_selectedCurrency = _currency.Current == AppCurrency.USD ? "USD" : "PHP";
 		_currency.Changed += (_, _) =>
 			MainThread.BeginInvokeOnMainThread(() =>
 			{
 				SelectedCurrency = _currency.Current == AppCurrency.USD ? "USD" : "PHP";
 			});
-		_ = LoadUserGreetingAsync();
+		RequestGreetingRefresh(immediate: true);
 	}
 
 	partial void OnNewPasswordChanged(string value)
@@ -93,8 +100,48 @@ public partial class SettingsViewModel : ObservableObject
 			await Shell.Current.DisplayAlert("Spendy", err, "OK");
 	}
 
-	async Task LoadUserGreetingAsync() =>
-		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+	void RequestGreetingRefresh(bool immediate = false)
+	{
+		_loadCts?.Cancel();
+		_loadCts?.Dispose();
+		_loadCts = new CancellationTokenSource();
+		var ct = _loadCts.Token;
+
+		_ = Task.Run(async () =>
+		{
+			try
+			{
+				if (!immediate)
+					await Task.Delay(180, ct).ConfigureAwait(false);
+				await RefreshGreetingCoreAsync(ct).ConfigureAwait(false);
+			}
+			catch (OperationCanceledException)
+			{
+			}
+			catch
+			{
+			}
+		}, ct);
+	}
+
+	async Task RefreshGreetingCoreAsync(CancellationToken ct)
+	{
+		if (!await _loadGate.WaitAsync(0, ct).ConfigureAwait(false))
+			return;
+		try
+		{
+			var greeting = await _data.GetUserDisplayNameAsync(ct).ConfigureAwait(false) ?? string.Empty;
+			await MainThread.InvokeOnMainThreadAsync(() =>
+			{
+				if (ct.IsCancellationRequested) return;
+				UserGreeting = greeting;
+			});
+		}
+		finally
+		{
+			_loadGate.Release();
+		}
+	}
 
 	[RelayCommand]
 	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());

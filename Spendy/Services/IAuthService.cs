@@ -10,10 +10,16 @@ public interface IAuthService
 		DateTime birthday,
 		string password,
 		string confirmPassword,
+		bool persistForNextLaunch = true,
 		CancellationToken cancellationToken = default);
 
 	/// <returns>Error message if failed, null if success.</returns>
-	Task<string?> LoginAsync(string email, string password, CancellationToken cancellationToken = default);
+	/// <param name="persistForNextLaunch">When false, sign-in is not restored after the app restarts.</param>
+	Task<string?> LoginAsync(
+		string email,
+		string password,
+		bool persistForNextLaunch = true,
+		CancellationToken cancellationToken = default);
 
 	void Logout();
 
@@ -39,6 +45,16 @@ public interface IAuthService
 	Task<string?> ConfirmPasswordResetAsync(
 		string email,
 		string token,
+		string newPassword,
+		string confirmNewPassword,
+		CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Offline-only password reset: sets a new password for an account identified by email in local SQLite.
+	/// </summary>
+	/// <returns>Error message if failed, null if success.</returns>
+	Task<string?> ResetPasswordByEmailAsync(
+		string email,
 		string newPassword,
 		string confirmNewPassword,
 		CancellationToken cancellationToken = default);

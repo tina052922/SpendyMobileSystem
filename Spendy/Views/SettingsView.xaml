@@ -168,46 +168,6 @@
 
 
 
-                        <!-- Language (English only) -->
-
-                        <Grid Padding="16" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="6">
-
-                            <Label Text="Language"
-
-                                   TextColor="{StaticResource SpendyNavy}"
-
-                                   FontFamily="OpenSansSemibold"
-
-                                   FontSize="15"
-
-                                   VerticalOptions="Center" />
-
-                            <Label Grid.Column="1"
-
-                                   Text="English"
-
-                                   TextColor="#667085"
-
-                                   FontSize="14"
-
-                                   VerticalOptions="Center" />
-
-                            <Label Grid.Column="2"
-
-                                   Text="›"
-
-                                   TextColor="#98A2B3"
-
-                                   FontSize="22"
-
-                                   VerticalOptions="Center" />
-
-                        </Grid>
-
-                        <BoxView HeightRequest="1" Color="#EEF2F6" />
-
-
-
                         <!-- Currency -->
 
                         <Grid Padding="16" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="6">
@@ -251,8 +211,6 @@
                         </Grid>
 
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
-
-
 
                         <!-- Update Password (expand/collapse) -->
 

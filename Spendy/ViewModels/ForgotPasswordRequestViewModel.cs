@@ -1,7 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Spendy.Services;
-using Spendy.Views;
 
 namespace Spendy.ViewModels;
 
@@ -10,7 +11,16 @@ public partial class ForgotPasswordRequestViewModel : ObservableObject
 	readonly IAuthService _auth;
 
 	[ObservableProperty]
+	private bool _isBusy;
+
+	[ObservableProperty]
 	private string _email = string.Empty;
+
+	[ObservableProperty]
+	private string _newPassword = string.Empty;
+
+	[ObservableProperty]
+	private string _confirmNewPassword = string.Empty;
 
 	public ForgotPasswordRequestViewModel(IAuthService auth)
 	{
@@ -20,20 +30,47 @@ public partial class ForgotPasswordRequestViewModel : ObservableObject
 	[RelayCommand]
 	async Task SendResetAsync()
 	{
+		if (IsBusy)
+			return;
+
 		var page = Application.Current?.Windows.FirstOrDefault()?.Page;
 		if (page is null)
 			return;
 
-		var err = await _auth.RequestPasswordResetAsync(Email);
-		if (err is not null)
+		IsBusy = true;
+		try
 		{
-			await page.DisplayAlert("Spendy", err, "OK");
-			return;
-		}
+			var err = await _auth.ResetPasswordByEmailAsync(Email, NewPassword, ConfirmNewPassword);
+			if (err is not null)
+			{
+				await page.DisplayAlert("Spendy", err, "OK");
+				return;
+			}
 
-		await page.DisplayAlert("Spendy", "If an account exists for this email, we sent a reset code.", "OK");
-		if (AppNavigation.TryGetRootNavigationPage() is { } nav)
-			await nav.PushAsync(new ForgotPasswordConfirmPage(Email.Trim()));
+			try
+			{
+				await Toast.Make("Password has been reset successfully", ToastDuration.Short).Show();
+			}
+			catch
+			{
+			}
+
+			await page.DisplayAlert(
+				"Spendy",
+				"Password has been reset successfully. You can now sign in with your new password.",
+				"OK");
+
+			// Clear fields and return to sign-in for a smooth flow.
+			Email = string.Empty;
+			NewPassword = string.Empty;
+			ConfirmNewPassword = string.Empty;
+			if (AppNavigation.TryGetRootNavigationPage() is { } nav)
+				await nav.PopAsync();
+		}
+		finally
+		{
+			IsBusy = false;
+		}
 	}
 }
 

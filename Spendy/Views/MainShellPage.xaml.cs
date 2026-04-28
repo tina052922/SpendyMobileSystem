@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Spendy.Data;
+using Spendy.Services;
+
 namespace Spendy.Views;
 
 public partial class MainShellPage : ContentPage
@@ -18,6 +22,35 @@ public partial class MainShellPage : ContentPage
 		_savings = new SavingsView();
 		_settings = new SettingsView();
 		SectionHost.Content = _dashboard;
+	}
+
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+		try
+		{
+			var session = Ioc.Services.GetRequiredService<IUserSession>();
+			// Only restore persisted session if we don't already have one (e.g., fresh sign-in).
+			if (session.CurrentUserId is null)
+				session.RestoreFromPreferences();
+			if (session.CurrentUserId is null)
+			{
+				AppNavigation.GoToSignInStack();
+				return;
+			}
+
+			await using var db = await Ioc.Services.GetRequiredService<IDbContextFactory<SpendyDbContext>>()
+				.CreateDbContextAsync();
+			if (!await db.Users.AnyAsync(u => u.Id == session.CurrentUserId.Value))
+			{
+				Ioc.Services.GetRequiredService<IAuthService>().Logout();
+				AppNavigation.GoToSignInStack();
+			}
+		}
+		catch
+		{
+			AppNavigation.GoToSignInStack();
+		}
 	}
 
 	/// <summary>Switch tab from code (e.g. after closing an overlay page).</summary>

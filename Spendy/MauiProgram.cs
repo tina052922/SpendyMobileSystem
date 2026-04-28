@@ -5,6 +5,7 @@ using SQLitePCL;
 using Spendy.Data;
 using Spendy.Services;
 using Spendy.ViewModels;
+using CommunityToolkit.Maui;
 
 namespace Spendy;
 
@@ -18,6 +19,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -34,8 +36,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ICurrencyService, CurrencyService>();
 		builder.Services.AddSingleton<ISpendyDataService, SpendyDataService>();
 		builder.Services.AddSingleton<IProfilePhotoService, ProfilePhotoService>();
-		builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
-		builder.Services.AddSingleton<IGoogleAuthService, NoopGoogleAuthService>();
+		// Offline app: no email sender / cloud sync / google sign-in.
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 
 		builder.Services.AddTransient<SignInViewModel>();
@@ -57,6 +58,7 @@ public static class MauiProgram
 
 		var app = builder.Build();
 		Ioc.Services = app.Services;
+
 		return app;
 	}
 }

@@ -93,7 +93,9 @@
 
                     <Grid ColumnDefinitions="*,Auto" Margin="0,2,0,0">
                         <HorizontalStackLayout Spacing="8">
-                            <CheckBox x:Name="RememberCheck" Color="#2563EB" />
+                            <CheckBox x:Name="RememberCheck"
+                                      Color="#2563EB"
+                                      IsChecked="{Binding RememberMe, Mode=TwoWay}" />
                             <Label Text="Remember me"
                                    TextColor="#374151"
                                    VerticalOptions="Center"
@@ -111,7 +113,8 @@
                         </Label>
                     </Grid>
 
-                    <Button Text="Sign in"
+                    <Button x:Name="SignInButton"
+                            Text="Sign in"
                             BackgroundColor="#001F54"
                             TextColor="White"
                             FontFamily="OpenSansSemibold"
@@ -119,26 +122,37 @@
                             CornerRadius="14"
                             HeightRequest="52"
                             Margin="0,8,0,0"
-                            Command="{Binding SignInCommand}" />
-
-                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10" Margin="0,4">
-                        <BoxView Grid.Column="0" HeightRequest="1" Color="#E5E7EB" VerticalOptions="Center" />
-                        <Label Grid.Column="1" Text="Or" TextColor="#9CA3AF" FontSize="13" />
-                        <BoxView Grid.Column="2" HeightRequest="1" Color="#E5E7EB" VerticalOptions="Center" />
-                    </Grid>
-
-                    <Button x:Name="GoogleButton"
-                            Text="Sign in with Google"
-                            ImageSource="google.png"
-                            ContentLayout="Left,12"
-                            BackgroundColor="White"
-                            TextColor="#0F172A"
-                            BorderColor="#D1D5DB"
-                            BorderWidth="1"
-                            CornerRadius="12"
-                            FontSize="15"
-                            HeightRequest="52"
-                            Clicked="OnGoogle" />
+                            Command="{Binding SignInCommand}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsBusy}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Opacity" Value="0.75" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="Scale" Value="1" />
+                                            <Setter Property="Opacity" Value="1" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="Scale" Value="0.98" />
+                                            <Setter Property="Opacity" Value="0.9" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Property="Opacity" Value="0.7" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                    </Button>
 
                     <Label HorizontalTextAlignment="Center"
                            FontSize="14"
