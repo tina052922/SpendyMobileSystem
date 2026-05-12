@@ -1,11 +1,10 @@
-using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Graphics;
 
 namespace Spendy.ViewModels;
 
-/// <summary>Shared start/end calendar UI for add and edit saving plan screens.</summary>
+/// <summary>Start/target dates, read-only duration text, and optional calendar overlay for add/edit plan screens.</summary>
 public abstract partial class SavingPlanCalendarViewModelBase : ObservableObject
 {
 	[ObservableProperty]
@@ -15,114 +14,67 @@ public abstract partial class SavingPlanCalendarViewModelBase : ObservableObject
 	private DateTime _endDate = DateTime.Today.AddMonths(1);
 
 	[ObservableProperty]
-	private DateTime _calendarMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
+	private bool _showStartDateOverlay;
 
 	[ObservableProperty]
-	private bool _isSelectingStartDate = true;
+	private bool _showEndDateOverlay;
 
-	[ObservableProperty]
-	private int _durationValue = 1;
+	public string StartDateDisplay =>
+		StartDate.ToString("dddd, MMM d, yyyy", CultureInfo.CurrentCulture);
 
-	[ObservableProperty]
-	private string _durationUnit = "Months";
+	public string EndDateDisplay =>
+		EndDate.ToString("dddd, MMM d, yyyy", CultureInfo.CurrentCulture);
 
-	public IReadOnlyList<string> DurationUnits => ["Months", "Years"];
+	public string PlanDurationText =>
+		SavingPlanDurationFormatter.Format(StartDate.Date, EndDate.Date);
 
-	public ObservableCollection<CalendarDayCell> CalendarDays { get; } = new();
-
-	public string CalendarTitle => CalendarMonth.ToString("MMMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
-
-	public string DurationText => SavingPlanDurationFormatter.Format(StartDate, EndDate);
-
-	public Color StartToggleBg =>
-		IsSelectingStartDate ? Color.FromArgb("00B2FF") : Color.FromArgb("3E4E65");
-
-	public Color EndToggleBg =>
-		!IsSelectingStartDate ? Color.FromArgb("00B2FF") : Color.FromArgb("3E4E65");
-
-	protected SavingPlanCalendarViewModelBase()
-	{
-		RebuildCalendar();
-	}
+	public bool ShowDateDimmer => ShowStartDateOverlay || ShowEndDateOverlay;
 
 	partial void OnStartDateChanged(DateTime value)
 	{
-		RebuildCalendar();
-		OnPropertyChanged(nameof(DurationText));
+		if (EndDate.Date < value.Date)
+			EndDate = value.Date;
+		NotifyDateBindings();
 	}
 
 	partial void OnEndDateChanged(DateTime value)
 	{
-		RebuildCalendar();
-		OnPropertyChanged(nameof(DurationText));
+		if (value.Date < StartDate.Date)
+			StartDate = value.Date;
+		NotifyDateBindings();
 	}
 
-	partial void OnDurationValueChanged(int value)
+	partial void OnShowStartDateOverlayChanged(bool value) =>
+		OnPropertyChanged(nameof(ShowDateDimmer));
+
+	partial void OnShowEndDateOverlayChanged(bool value) =>
+		OnPropertyChanged(nameof(ShowDateDimmer));
+
+	void NotifyDateBindings()
 	{
-		if (value < 1)
-			DurationValue = 1;
+		OnPropertyChanged(nameof(StartDateDisplay));
+		OnPropertyChanged(nameof(EndDateDisplay));
+		OnPropertyChanged(nameof(PlanDurationText));
 	}
 
 	[RelayCommand]
-	void ApplyDuration()
+	void OpenStartDatePicker()
 	{
-		var v = DurationValue;
-		if (v < 1)
-			v = 1;
-
-		EndDate = DurationUnit == "Years"
-			? StartDate.Date.AddYears(v)
-			: StartDate.Date.AddMonths(v);
+		ShowEndDateOverlay = false;
+		ShowStartDateOverlay = true;
 	}
 
-	partial void OnCalendarMonthChanged(DateTime value) => RebuildCalendar();
-
-	partial void OnIsSelectingStartDateChanged(bool value)
+	[RelayCommand]
+	void OpenEndDatePicker()
 	{
-		RebuildCalendar();
-		OnPropertyChanged(nameof(StartToggleBg));
-		OnPropertyChanged(nameof(EndToggleBg));
+		ShowStartDateOverlay = false;
+		ShowEndDateOverlay = true;
 	}
 
-	protected void RebuildCalendar()
+	[RelayCommand]
+	void CloseDateOverlay()
 	{
-		CalendarDays.Clear();
-		foreach (var c in SavingPlanCalendarHelper.BuildCells(CalendarMonth, StartDate, EndDate, IsSelectingStartDate))
-			CalendarDays.Add(c);
-	}
-
-	public void RefreshCalendar() => RebuildCalendar();
-
-	[RelayCommand]
-	void SelectStartMode() => IsSelectingStartDate = true;
-
-	[RelayCommand]
-	void SelectEndMode() => IsSelectingStartDate = false;
-
-	[RelayCommand]
-	void PrevMonth() => CalendarMonth = CalendarMonth.AddMonths(-1);
-
-	[RelayCommand]
-	void NextMonth() => CalendarMonth = CalendarMonth.AddMonths(1);
-
-	[RelayCommand]
-	void SelectDay(CalendarDayCell? cell)
-	{
-		if (cell is null || !cell.IsCurrentMonth)
-			return;
-
-		var d = cell.Date.Date;
-		if (IsSelectingStartDate)
-		{
-			StartDate = d;
-			if (EndDate.Date < StartDate.Date)
-				EndDate = StartDate;
-		}
-		else
-		{
-			EndDate = d;
-			if (EndDate.Date < StartDate.Date)
-				StartDate = EndDate;
-		}
+		ShowStartDateOverlay = false;
+		ShowEndDateOverlay = false;
 	}
 }

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:Spendy.ViewModels"
              x:Class="Spendy.Views.EditSavingPlanPage"
-             x:Name="PageRoot"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#01143D">
@@ -61,216 +59,225 @@
             </Grid>
         </Grid>
 
-        <Border Grid.Row="1"
-                BackgroundColor="{StaticResource SpendyDarkSheet}"
-                StrokeThickness="0"
-                Margin="0,-16,0,0"
-                Padding="16,18,16,20">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="28,28,0,0" />
-            </Border.StrokeShape>
-            <ScrollView Margin="0,0,2,0">
-                <VerticalStackLayout Spacing="16" Padding="0,0,0,18">
-                    <Border StrokeThickness="0"
-                            BackgroundColor="{StaticResource SpendyDarkInput}"
-                            Padding="16,0"
-                            HeightRequest="54">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="22" />
-                        </Border.StrokeShape>
-                        <Entry Placeholder="Plan name"
-                               PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
-                               Text="{Binding Name, Mode=TwoWay}"
-                               TextColor="{StaticResource SpendyDarkLabel}"
-                               BackgroundColor="Transparent"
-                               VerticalOptions="Center" />
-                    </Border>
-
-                    <Grid>
+        <Grid Grid.Row="1">
+            <Border BackgroundColor="{StaticResource SpendyDarkSheet}"
+                    StrokeThickness="0"
+                    Margin="0,-16,0,0"
+                    Padding="16,18,16,20">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="28,28,0,0" />
+                </Border.StrokeShape>
+                <ScrollView Margin="0,0,2,0">
+                    <VerticalStackLayout Spacing="16" Padding="0,0,0,18">
                         <Border StrokeThickness="0"
                                 BackgroundColor="{StaticResource SpendyDarkInput}"
-                                Padding="16,0,48,0"
+                                Padding="16,0"
                                 HeightRequest="54">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="22" />
                             </Border.StrokeShape>
-                            <Entry Placeholder="Amount"
-                                   Keyboard="Numeric"
+                            <Entry Placeholder="Plan name"
                                    PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
-                                   Text="{Binding TargetAmountText, Mode=TwoWay}"
+                                   Text="{Binding Name, Mode=TwoWay}"
                                    TextColor="{StaticResource SpendyDarkLabel}"
                                    BackgroundColor="Transparent"
                                    VerticalOptions="Center" />
                         </Border>
-                        <Border WidthRequest="40"
-                                HeightRequest="40"
-                                HorizontalOptions="End"
-                                VerticalOptions="Center"
-                                Margin="0,0,10,0"
-                                BackgroundColor="#0E1F3A"
-                                StrokeThickness="0">
-                            <Border.StrokeShape>
-                                <Ellipse />
-                            </Border.StrokeShape>
-                            <Label Text="₱"
-                                   TextColor="White"
-                                   FontAttributes="Bold"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   InputTransparent="True" />
-                        </Border>
-                    </Grid>
 
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Select Date"
-                               TextColor="{StaticResource SpendyDarkLabel}"
-                               FontSize="14"
-                               FontFamily="OpenSansSemibold" />
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            <Button Text="Start Date"
-                                    Command="{Binding SelectStartModeCommand}"
-                                    BackgroundColor="{Binding StartToggleBg}"
-                                    TextColor="White"
-                                    FontFamily="OpenSansSemibold"
-                                    CornerRadius="22"
-                                    HeightRequest="48" />
-                            <Button Grid.Column="1"
-                                    Text="End Date"
-                                    Command="{Binding SelectEndModeCommand}"
-                                    BackgroundColor="{Binding EndToggleBg}"
-                                    TextColor="White"
-                                    FontFamily="OpenSansSemibold"
-                                    CornerRadius="22"
-                                    HeightRequest="48" />
-                        </Grid>
-
-                        <Border BackgroundColor="{StaticResource SpendyDarkInput}"
-                                StrokeThickness="0"
-                                Padding="12,14">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="20" />
-                            </Border.StrokeShape>
-                            <VerticalStackLayout Spacing="10">
-                                <Grid ColumnDefinitions="Auto,*,Auto">
-                                    <Button Text="&#x2039;"
-                                            Command="{Binding PrevMonthCommand}"
-                                            BackgroundColor="Transparent"
-                                            TextColor="White"
-                                            FontSize="22"
-                                            WidthRequest="44"
-                                            Padding="0" />
-                                    <Label Grid.Column="1"
-                                           Text="{Binding CalendarTitle}"
-                                           TextColor="{StaticResource SpendyDarkLabel}"
-                                           FontFamily="OpenSansSemibold"
-                                           FontSize="16"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalOptions="Center" />
-                                    <Button Grid.Column="2"
-                                            Text="&#x203A;"
-                                            Command="{Binding NextMonthCommand}"
-                                            BackgroundColor="Transparent"
-                                            TextColor="White"
-                                            FontSize="22"
-                                            WidthRequest="44"
-                                            Padding="0" />
-                                </Grid>
-                                <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="0">
-                                    <Label Text="Sun" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                    <Label Grid.Column="1" Text="Mon" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                    <Label Grid.Column="2" Text="Tue" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                    <Label Grid.Column="3" Text="Wed" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                    <Label Grid.Column="4" Text="Thu" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                    <Label Grid.Column="5" Text="Fri" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                    <Label Grid.Column="6" Text="Sat" FontSize="11" TextColor="{StaticResource SpendyDarkMuted}" HorizontalTextAlignment="Center" />
-                                </Grid>
-                                <CollectionView ItemsSource="{Binding CalendarDays}"
-                                                SelectionMode="None"
-                                                HeightRequest="252">
-                                    <CollectionView.ItemsLayout>
-                                        <GridItemsLayout Orientation="Vertical"
-                                                         Span="7"
-                                                         HorizontalItemSpacing="2"
-                                                         VerticalItemSpacing="4" />
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="vm:CalendarDayCell">
-                                            <Button Text="{Binding DayText}"
-                                                    TextColor="{Binding TextColor}"
-                                                    BackgroundColor="{Binding CellBackground}"
-                                                    FontSize="14"
-                                                    HeightRequest="40"
-                                                    CornerRadius="20"
-                                                    Padding="0"
-                                                    Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.SelectDayCommand}"
-                                                    CommandParameter="{Binding .}" />
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </VerticalStackLayout>
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Duration"
-                               TextColor="{StaticResource SpendyDarkLabel}"
-                               FontSize="14"
-                               FontFamily="OpenSansSemibold" />
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                            <Border Grid.Column="0"
-                                    StrokeThickness="0"
+                        <Grid>
+                            <Border StrokeThickness="0"
                                     BackgroundColor="{StaticResource SpendyDarkInput}"
-                                    Padding="16,0"
+                                    Padding="16,0,48,0"
                                     HeightRequest="54">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="22" />
                                 </Border.StrokeShape>
-                                <Entry Placeholder="e.g. 6"
+                                <Entry Placeholder="Target amount"
                                        Keyboard="Numeric"
-                                       Text="{Binding DurationValue, Mode=TwoWay}"
                                        PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+                                       Text="{Binding TargetAmountText, Mode=TwoWay}"
                                        TextColor="{StaticResource SpendyDarkLabel}"
                                        BackgroundColor="Transparent"
                                        VerticalOptions="Center" />
                             </Border>
-                            <Border Grid.Column="1"
-                                    StrokeThickness="0"
-                                    BackgroundColor="{StaticResource SpendyDarkInput}"
-                                    Padding="14,0"
-                                    HeightRequest="54"
-                                    WidthRequest="120">
+                            <Border WidthRequest="40"
+                                    HeightRequest="40"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    Margin="0,0,10,0"
+                                    BackgroundColor="#0E1F3A"
+                                    StrokeThickness="0">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="22" />
+                                    <Ellipse />
                                 </Border.StrokeShape>
-                                <Picker ItemsSource="{Binding DurationUnits}"
-                                        SelectedItem="{Binding DurationUnit, Mode=TwoWay}"
-                                        TextColor="{StaticResource SpendyDarkLabel}"
-                                        BackgroundColor="Transparent"
-                                        VerticalOptions="Center" />
+                                <Label Text="₱"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       InputTransparent="True" />
                             </Border>
                         </Grid>
-                        <Button Text="Apply duration"
-                                Command="{Binding ApplyDurationCommand}"
-                                BackgroundColor="#0E1F3A"
-                                TextColor="White"
-                                CornerRadius="18"
-                                HeightRequest="46" />
-                        <Label Text="{Binding DurationText}"
-                               TextColor="{StaticResource SpendyDarkSubtext}"
-                               FontSize="13" />
-                    </VerticalStackLayout>
 
-                    <Button Text="Save Plan"
-                            Command="{Binding SaveCommand}"
+                        <Label Text="Start date"
+                               Margin="0,4,0,0"
+                               TextColor="{StaticResource SpendyDarkLabel}"
+                               FontSize="14"
+                               FontFamily="OpenSansSemibold" />
+                        <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                StrokeThickness="0"
+                                Padding="16,12"
+                                HeightRequest="54">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="22" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenStartDatePickerCommand}" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding StartDateDisplay}"
+                                       TextColor="{StaticResource SpendyDarkLabel}"
+                                       FontSize="15"
+                                       VerticalOptions="Center"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="1"
+                                       Text="&#x1F4C5;"
+                                       FontSize="20"
+                                       VerticalOptions="Center"
+                                       Margin="8,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <Label Text="Target date"
+                               Margin="0,4,0,0"
+                               TextColor="{StaticResource SpendyDarkLabel}"
+                               FontSize="14"
+                               FontFamily="OpenSansSemibold" />
+                        <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                StrokeThickness="0"
+                                Padding="16,12"
+                                HeightRequest="54">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="22" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenEndDatePickerCommand}" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding EndDateDisplay}"
+                                       TextColor="{StaticResource SpendyDarkLabel}"
+                                       FontSize="15"
+                                       VerticalOptions="Center"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="1"
+                                       Text="&#x1F4C5;"
+                                       FontSize="20"
+                                       VerticalOptions="Center"
+                                       Margin="8,0,0,0" />
+                            </Grid>
+                        </Border>
+
+                        <Border BackgroundColor="#0E1F3A"
+                                StrokeThickness="0"
+                                Padding="16,14">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="18" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Duration"
+                                       TextColor="{StaticResource SpendyDarkMuted}"
+                                       FontSize="12"
+                                       FontFamily="OpenSansSemibold" />
+                                <Label Text="{Binding PlanDurationText}"
+                                       TextColor="{StaticResource SpendyDarkSubtext}"
+                                       FontSize="15"
+                                       FontFamily="OpenSansSemibold" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Button Text="Save Plan"
+                                Command="{Binding SaveCommand}"
+                                BackgroundColor="{StaticResource SpendyBlueDeep}"
+                                TextColor="White"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="16"
+                                CornerRadius="26"
+                                HeightRequest="54"
+                                Margin="0,8,0,0" />
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+
+            <Border BackgroundColor="#CC000000"
+                    StrokeThickness="0"
+                    IsVisible="{Binding ShowDateDimmer}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseDateOverlayCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
+
+            <Border IsVisible="{Binding ShowStartDateOverlay}"
+                    StrokeThickness="0"
+                    BackgroundColor="{StaticResource SpendyDarkSheet}"
+                    Margin="28,0"
+                    Padding="20,18"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Fill">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Start date"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="18"
+                           HorizontalTextAlignment="Center" />
+                    <DatePicker Date="{Binding StartDate, Mode=TwoWay}"
+                                Format="dddd, MMM d, yyyy"
+                                TextColor="{StaticResource SpendyDarkLabel}"
+                                BackgroundColor="{StaticResource SpendyDarkInput}"
+                                MinimumHeightRequest="48" />
+                    <Button Text="Done"
+                            Command="{Binding CloseDateOverlayCommand}"
                             BackgroundColor="{StaticResource SpendyBlueDeep}"
                             TextColor="White"
                             FontFamily="OpenSansSemibold"
-                            FontSize="16"
-                            CornerRadius="26"
-                            HeightRequest="54"
-                            Margin="0,8,0,0" />
+                            CornerRadius="22"
+                            HeightRequest="48" />
                 </VerticalStackLayout>
-            </ScrollView>
-        </Border>
+            </Border>
+
+            <Border IsVisible="{Binding ShowEndDateOverlay}"
+                    StrokeThickness="0"
+                    BackgroundColor="{StaticResource SpendyDarkSheet}"
+                    Margin="28,0"
+                    Padding="20,18"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Fill">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Target date"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="18"
+                           HorizontalTextAlignment="Center" />
+                    <DatePicker Date="{Binding EndDate, Mode=TwoWay}"
+                                Format="dddd, MMM d, yyyy"
+                                MinimumDate="{Binding StartDate}"
+                                TextColor="{StaticResource SpendyDarkLabel}"
+                                BackgroundColor="{StaticResource SpendyDarkInput}"
+                                MinimumHeightRequest="48" />
+                    <Button Text="Done"
+                            Command="{Binding CloseDateOverlayCommand}"
+                            BackgroundColor="{StaticResource SpendyBlueDeep}"
+                            TextColor="White"
+                            FontFamily="OpenSansSemibold"
+                            CornerRadius="22"
+                            HeightRequest="48" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

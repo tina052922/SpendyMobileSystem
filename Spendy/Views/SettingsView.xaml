@@ -236,7 +236,7 @@
 
                                    Grid.Column="1"
 
-                                   Text="›"
+                                   Text="⌄"
 
                                    TextColor="#98A2B3"
 
@@ -248,191 +248,307 @@
 
 
 
-                        <!-- Dark panel: high-contrast light text on dark blue (matches Add Transaction) -->
+                        <!-- Update password: light fields aligned with white settings card -->
 
                         <VerticalStackLayout x:Name="PasswordFields"
 
-                                             IsVisible="False"
+                                             IsVisible="True"
 
-                                             BackgroundColor="{StaticResource SpendyDarkSheet}"
+                                             BackgroundColor="White"
 
-                                             Padding="16,14,16,18"
+                                             Padding="16,10,16,20"
 
-                                             Spacing="12">
+                                             Spacing="16">
 
-                            <Label Text="Current password"
+                            <BoxView HeightRequest="1" Color="#EEF2F6" />
 
-                                   TextColor="{StaticResource SpendyDarkLabel}"
+                            <VerticalStackLayout Spacing="6">
 
-                                   FontFamily="OpenSansSemibold"
+                                <Label Text="Current password"
 
-                                   FontSize="14" />
+                                       TextColor="{StaticResource SpendyNavy}"
 
-                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                       FontFamily="OpenSansSemibold"
 
-                                    StrokeThickness="0"
+                                       FontSize="14" />
 
-                                    Padding="14,0"
+                                <Border BackgroundColor="#F9FAFB"
 
-                                    HeightRequest="48">
+                                        Stroke="#E4E7EC"
 
-                                <Border.StrokeShape>
+                                        StrokeThickness="1"
 
-                                    <RoundRectangle CornerRadius="22" />
+                                        Padding="12,0,8,0"
 
-                                </Border.StrokeShape>
+                                        MinimumHeightRequest="52">
 
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                                    <Border.StrokeShape>
 
-                                    <Entry x:Name="CurrentPassword"
+                                        <RoundRectangle CornerRadius="14" />
 
-                                           Text="{Binding CurrentPassword}"
+                                    </Border.StrokeShape>
 
-                                           IsPassword="True"
+                                    <Grid ColumnDefinitions="*,Auto"
 
-                                           Placeholder="Enter current password"
+                                          ColumnSpacing="10"
 
-                                           PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+                                          VerticalOptions="Center"
 
-                                           TextColor="{StaticResource SpendyDarkLabel}"
+                                          Padding="0,8">
 
-                                           BackgroundColor="Transparent"
+                                        <Entry x:Name="CurrentPassword"
 
-                                           HeightRequest="44" />
+                                               Text="{Binding CurrentPassword}"
 
-                                    <ImageButton Grid.Column="1"
+                                               IsPassword="True"
 
-                                                 Source="unhide.png"
+                                               Placeholder="Enter current password"
 
-                                                 BackgroundColor="Transparent"
+                                               PlaceholderColor="#98A2B3"
 
-                                                 WidthRequest="28"
+                                               TextColor="{StaticResource SpendyNavy}"
 
-                                                 HeightRequest="28"
+                                               FontSize="15"
 
-                                                 Clicked="OnToggleCurrent" />
+                                               BackgroundColor="Transparent"
 
-                                </Grid>
+                                               VerticalOptions="Center"
 
-                            </Border>
+                                               MinimumHeightRequest="40" />
 
+                                        <Border Grid.Column="1"
 
+                                                BackgroundColor="#EEF2F6"
 
-                            <Label Text="New password"
+                                                StrokeThickness="0"
 
-                                   TextColor="{StaticResource SpendyDarkLabel}"
+                                                WidthRequest="40"
 
-                                   FontFamily="OpenSansSemibold"
+                                                HeightRequest="40"
 
-                                   FontSize="14" />
+                                                VerticalOptions="Center">
 
-                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                            <Border.StrokeShape>
 
-                                    StrokeThickness="0"
+                                                <RoundRectangle CornerRadius="12" />
 
-                                    Padding="14,0"
+                                            </Border.StrokeShape>
 
-                                    HeightRequest="48">
+                                            <ImageButton Source="unhide.png"
 
-                                <Border.StrokeShape>
+                                                         BackgroundColor="Transparent"
 
-                                    <RoundRectangle CornerRadius="22" />
+                                                         Padding="8"
 
-                                </Border.StrokeShape>
+                                                         WidthRequest="40"
 
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                                                         HeightRequest="40"
 
-                                    <Entry x:Name="NewPassword"
+                                                         VerticalOptions="Center"
 
-                                           Text="{Binding NewPassword}"
+                                                         HorizontalOptions="Center"
 
-                                           IsPassword="True"
+                                                         Clicked="OnToggleCurrent" />
 
-                                           Placeholder="Enter new password"
+                                        </Border>
 
-                                           PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+                                    </Grid>
 
-                                           TextColor="{StaticResource SpendyDarkLabel}"
+                                </Border>
 
-                                           BackgroundColor="Transparent"
+                            </VerticalStackLayout>
 
-                                           HeightRequest="44" />
+                            <VerticalStackLayout Spacing="6">
 
-                                    <ImageButton Grid.Column="1"
+                                <Label Text="New password"
 
-                                                 Source="unhide.png"
+                                       TextColor="{StaticResource SpendyNavy}"
 
-                                                 BackgroundColor="Transparent"
+                                       FontFamily="OpenSansSemibold"
 
-                                                 WidthRequest="28"
+                                       FontSize="14" />
 
-                                                 HeightRequest="28"
+                                <Border BackgroundColor="#F9FAFB"
 
-                                                 Clicked="OnToggleNew" />
+                                        Stroke="#E4E7EC"
 
-                                </Grid>
+                                        StrokeThickness="1"
 
-                            </Border>
+                                        Padding="12,0,8,0"
 
+                                        MinimumHeightRequest="52">
 
+                                    <Border.StrokeShape>
 
-                            <Label Text="Confirm new password"
+                                        <RoundRectangle CornerRadius="14" />
 
-                                   TextColor="{StaticResource SpendyDarkLabel}"
+                                    </Border.StrokeShape>
 
-                                   FontFamily="OpenSansSemibold"
+                                    <Grid ColumnDefinitions="*,Auto"
 
-                                   FontSize="14" />
+                                          ColumnSpacing="10"
 
-                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                          VerticalOptions="Center"
 
-                                    StrokeThickness="0"
+                                          Padding="0,8">
 
-                                    Padding="14,0"
+                                        <Entry x:Name="NewPassword"
 
-                                    HeightRequest="48">
+                                               Text="{Binding NewPassword}"
 
-                                <Border.StrokeShape>
+                                               IsPassword="True"
 
-                                    <RoundRectangle CornerRadius="22" />
+                                               Placeholder="Enter new password"
 
-                                </Border.StrokeShape>
+                                               PlaceholderColor="#98A2B3"
 
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                                               TextColor="{StaticResource SpendyNavy}"
 
-                                    <Entry x:Name="ConfirmPassword"
+                                               FontSize="15"
 
-                                           Text="{Binding ConfirmNewPassword}"
+                                               BackgroundColor="Transparent"
 
-                                           IsPassword="True"
+                                               VerticalOptions="Center"
 
-                                           Placeholder="Re-enter new password"
+                                               MinimumHeightRequest="40" />
 
-                                           PlaceholderColor="{StaticResource SpendyDarkPlaceholder}"
+                                        <Border Grid.Column="1"
 
-                                           TextColor="{StaticResource SpendyDarkLabel}"
+                                                BackgroundColor="#EEF2F6"
 
-                                           BackgroundColor="Transparent"
+                                                StrokeThickness="0"
 
-                                           HeightRequest="44" />
+                                                WidthRequest="40"
 
-                                    <ImageButton Grid.Column="1"
+                                                HeightRequest="40"
 
-                                                 Source="unhide.png"
+                                                VerticalOptions="Center">
 
-                                                 BackgroundColor="Transparent"
+                                            <Border.StrokeShape>
 
-                                                 WidthRequest="28"
+                                                <RoundRectangle CornerRadius="12" />
 
-                                                 HeightRequest="28"
+                                            </Border.StrokeShape>
 
-                                                 Clicked="OnToggleConfirm" />
+                                            <ImageButton Source="unhide.png"
 
-                                </Grid>
+                                                         BackgroundColor="Transparent"
 
-                            </Border>
+                                                         Padding="8"
 
+                                                         WidthRequest="40"
 
+                                                         HeightRequest="40"
+
+                                                         VerticalOptions="Center"
+
+                                                         HorizontalOptions="Center"
+
+                                                         Clicked="OnToggleNew" />
+
+                                        </Border>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+
+                                <Label Text="Confirm new password"
+
+                                       TextColor="{StaticResource SpendyNavy}"
+
+                                       FontFamily="OpenSansSemibold"
+
+                                       FontSize="14" />
+
+                                <Border BackgroundColor="#F9FAFB"
+
+                                        Stroke="#E4E7EC"
+
+                                        StrokeThickness="1"
+
+                                        Padding="12,0,8,0"
+
+                                        MinimumHeightRequest="52">
+
+                                    <Border.StrokeShape>
+
+                                        <RoundRectangle CornerRadius="14" />
+
+                                    </Border.StrokeShape>
+
+                                    <Grid ColumnDefinitions="*,Auto"
+
+                                          ColumnSpacing="10"
+
+                                          VerticalOptions="Center"
+
+                                          Padding="0,8">
+
+                                        <Entry x:Name="ConfirmPassword"
+
+                                               Text="{Binding ConfirmNewPassword}"
+
+                                               IsPassword="True"
+
+                                               Placeholder="Confirm new password"
+
+                                               PlaceholderColor="#98A2B3"
+
+                                               TextColor="{StaticResource SpendyNavy}"
+
+                                               FontSize="15"
+
+                                               BackgroundColor="Transparent"
+
+                                               VerticalOptions="Center"
+
+                                               MinimumHeightRequest="40" />
+
+                                        <Border Grid.Column="1"
+
+                                                BackgroundColor="#EEF2F6"
+
+                                                StrokeThickness="0"
+
+                                                WidthRequest="40"
+
+                                                HeightRequest="40"
+
+                                                VerticalOptions="Center">
+
+                                            <Border.StrokeShape>
+
+                                                <RoundRectangle CornerRadius="12" />
+
+                                            </Border.StrokeShape>
+
+                                            <ImageButton Source="unhide.png"
+
+                                                         BackgroundColor="Transparent"
+
+                                                         Padding="8"
+
+                                                         WidthRequest="40"
+
+                                                         HeightRequest="40"
+
+                                                         VerticalOptions="Center"
+
+                                                         HorizontalOptions="Center"
+
+                                                         Clicked="OnToggleConfirm" />
+
+                                        </Border>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
 
                             <Label Text="{Binding NewPasswordStrengthLabel}"
 
@@ -440,9 +556,9 @@
 
                                    FontFamily="OpenSansSemibold"
 
-                                   TextColor="{Binding NewPasswordStrengthColor}" />
+                                   TextColor="{Binding NewPasswordStrengthColor}"
 
-
+                                   Margin="0,2,0,0" />
 
                             <Button Text="Update Password"
 
@@ -452,9 +568,13 @@
 
                                     FontFamily="OpenSansSemibold"
 
+                                    FontSize="16"
+
                                     CornerRadius="26"
 
-                                    HeightRequest="48"
+                                    HeightRequest="54"
+
+                                    Margin="0,4,0,0"
 
                                     Command="{Binding UpdatePasswordCommand}" />
 
@@ -462,7 +582,95 @@
 
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
 
+                        <!-- Database: one spendy.db per install (AppData); copy/share to move between devices -->
 
+                        <Grid Padding="16,12,16,12" ColumnDefinitions="*,Auto">
+
+                            <Grid.GestureRecognizers>
+
+                                <TapGestureRecognizer Command="{Binding CopyDatabasePathCommand}" />
+
+                            </Grid.GestureRecognizers>
+
+                            <VerticalStackLayout Spacing="2">
+
+                                <Label Text="Copy database path"
+
+                                       TextColor="{StaticResource SpendyNavy}"
+
+                                       FontFamily="OpenSansSemibold"
+
+                                       FontSize="15"
+
+                                       VerticalOptions="Center" />
+
+                                <Label Text="Full path to spendy.db (clipboard)"
+
+                                       TextColor="#667085"
+
+                                       FontSize="12"
+
+                                       VerticalOptions="Center" />
+
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="1"
+
+                                   Text="›"
+
+                                   TextColor="#98A2B3"
+
+                                   FontSize="22"
+
+                                   VerticalOptions="Center" />
+
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#EEF2F6" />
+
+                        <Grid Padding="16,12,16,12" ColumnDefinitions="*,Auto">
+
+                            <Grid.GestureRecognizers>
+
+                                <TapGestureRecognizer Command="{Binding ShareDatabaseBackupCommand}" />
+
+                            </Grid.GestureRecognizers>
+
+                            <VerticalStackLayout Spacing="2">
+
+                                <Label Text="Share database backup"
+
+                                       TextColor="{StaticResource SpendyNavy}"
+
+                                       FontFamily="OpenSansSemibold"
+
+                                       FontSize="15"
+
+                                       VerticalOptions="Center" />
+
+                                <Label Text="Export spendy.db for another device"
+
+                                       TextColor="#667085"
+
+                                       FontSize="12"
+
+                                       VerticalOptions="Center" />
+
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="1"
+
+                                   Text="›"
+
+                                   TextColor="#98A2B3"
+
+                                   FontSize="22"
+
+                                   VerticalOptions="Center" />
+
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#EEF2F6" />
 
                         <!-- Log out (neutral) -->
 

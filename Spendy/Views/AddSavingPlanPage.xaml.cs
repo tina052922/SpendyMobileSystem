@@ -11,13 +11,6 @@ public partial class AddSavingPlanPage : ContentPage
 		BindingContext = Ioc.Services.GetRequiredService<AddSavingPlanViewModel>();
 	}
 
-	protected override void OnAppearing()
-	{
-		base.OnAppearing();
-		if (BindingContext is AddSavingPlanViewModel vm)
-			vm.RefreshCalendar();
-	}
-
 	async void OnBack(object? sender, EventArgs e) => await AppNavigation.PopAsync();
 
 	async void OnNotificationsTapped(object? sender, TappedEventArgs e) =>

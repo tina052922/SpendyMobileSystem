@@ -2,6 +2,7 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Spendy.Services;
+using Spendy.Views;
 
 namespace Spendy.ViewModels;
 
@@ -24,11 +25,16 @@ public partial class AddSavingPlanViewModel : SavingPlanCalendarViewModelBase
 		_profilePhoto = Ioc.Services.GetRequiredService<IProfilePhotoService>();
 		_profilePhoto.Changed += (_, _) =>
 			MainThread.BeginInvokeOnMainThread(() => OnPropertyChanged(nameof(ProfilePhoto)));
+		StartDate = DateTime.Today;
+		EndDate = DateTime.Today.AddMonths(1);
 	}
 
 	[RelayCommand]
 	async Task CreateAsync()
 	{
+		ShowStartDateOverlay = false;
+		ShowEndDateOverlay = false;
+
 		if (string.IsNullOrWhiteSpace(PlanName))
 		{
 			if (Shell.Current is not null)
@@ -56,11 +62,33 @@ public partial class AddSavingPlanViewModel : SavingPlanCalendarViewModelBase
 		if (EndDate.Date < StartDate.Date)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlert("Spendy", "End date must be on or after the start date.", "OK");
+				await Shell.Current.DisplayAlert("Spendy", "Target date must be on or after the start date.", "OK");
 			return;
 		}
 
-		await _data.CreateSavingGoalAsync(PlanName.Trim(), target, EndDate.Date);
-		await AppNavigation.PopAsync();
+		try
+		{
+			await _data.CreateSavingGoalAsync(PlanName.Trim(), target, EndDate.Date).ConfigureAwait(false);
+		}
+		catch (Exception ex)
+		{
+			await MainThread.InvokeOnMainThreadAsync(async () =>
+			{
+				if (Shell.Current is not null)
+					await Shell.Current.DisplayAlert(
+						"Spendy",
+						$"Could not create plan.\n\n{ExceptionDetailFormatter.DescribeForAlert(ex)}",
+						"OK");
+			});
+			return;
+		}
+
+		await MainThread.InvokeOnMainThreadAsync(async () =>
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", "Saving plan created successfully!", "OK");
+			await AppNavigation.PopAsync();
+			MainShellPage.Instance?.SelectTab(2);
+		});
 	}
 }

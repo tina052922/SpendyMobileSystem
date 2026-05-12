@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -58,6 +59,10 @@ public partial class StatisticsViewModel : ObservableObject
 	[ObservableProperty]
 	private string _userGreeting = "";
 
+	/// <summary>First day of the month/year used for statistics queries.</summary>
+	[ObservableProperty]
+	private DateTime _selectedStatisticsMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
+
 	public ObservableCollection<CategoryStat> Categories { get; } = new();
 
 	public ObservableCollection<ChartBarDisplay> Bars { get; } = new();
@@ -103,68 +108,108 @@ public partial class StatisticsViewModel : ObservableObject
 
 	async Task LoadAsync()
 	{
-		UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
-
-		var bal = await _data.GetBalanceAsync();
-		AvailableBalance = $"{_currency.Symbol}{bal.ToString("N2", _currency.Culture)}";
-
-		var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
-		var now = DateTime.Now;
-		var data = await _data.GetStatisticsAsync(now.Year, now.Month, kind);
-
-		ChartTitle = kind == TransactionKind.Expense
-			? "Spending by category"
-			: "Income by category";
-		MonthLabel = now.ToString("MMMM yyyy", _currency.Culture).ToUpperInvariant();
-		OnPropertyChanged(nameof(CurrencySymbol));
-
-		Categories.Clear();
-		foreach (var c in data.Categories)
-			Categories.Add(c);
-
-		HasCategoryBreakdown = Categories.Count > 0;
-		TopCategoryHint = Categories.Count > 0 && Categories[0].Amount > 0
-			? $"Highest: {Categories[0].Name} · {Categories[0].FormattedAmount}"
-			: "";
-
-		Bars.Clear();
-		var catList = data.Categories.Take(8).ToList();
-		var maxAmt = catList.Count == 0 ? 1m : catList.Max(c => c.Amount);
-		if (maxAmt <= 0)
-			maxAmt = 1;
-		const double chartHeight = 140;
-		var expenseBar = Color.FromArgb("#01143D");
-		var incomeBar = Color.FromArgb("#00D4A5");
-		var topExpense = Color.FromArgb("#43B3EF");
-		var topIncome = Color.FromArgb("#43B3EF");
-		foreach (var c in catList)
+		try
 		{
-			var h = 0d;
-			if (c.Amount > 0)
+			UserGreeting = await _data.GetUserDisplayNameAsync() ?? string.Empty;
+
+			var bal = await _data.GetBalanceAsync();
+			AvailableBalance = $"{_currency.Symbol}{bal.ToString("N2", _currency.Culture)}";
+
+			var kind = IsExpenseMode ? TransactionKind.Expense : TransactionKind.Income;
+			var month = SelectedStatisticsMonth;
+			var data = await _data.GetStatisticsAsync(month.Year, month.Month, kind);
+
+			ChartTitle = kind == TransactionKind.Expense
+				? "Spending by category"
+				: "Income by category";
+			MonthLabel = month.ToString("MMMM yyyy", _currency.Culture).ToUpperInvariant();
+			OnPropertyChanged(nameof(CurrencySymbol));
+
+			Categories.Clear();
+			foreach (var c in data.Categories)
+				Categories.Add(c);
+
+			HasCategoryBreakdown = Categories.Count > 0;
+			TopCategoryHint = Categories.Count > 0 && Categories[0].Amount > 0
+				? $"Highest: {Categories[0].Name} · {Categories[0].FormattedAmount}"
+				: "";
+
+			Bars.Clear();
+			var catList = data.Categories.Take(8).ToList();
+			var maxAmt = catList.Count == 0 ? 1m : catList.Max(c => c.Amount);
+			if (maxAmt <= 0)
+				maxAmt = 1;
+			const double chartHeight = 140;
+			var expenseBar = Color.FromArgb("#01143D");
+			var incomeBar = Color.FromArgb("#00D4A5");
+			var topExpense = Color.FromArgb("#43B3EF");
+			var topIncome = Color.FromArgb("#43B3EF");
+			foreach (var c in catList)
 			{
-				h = (double)(c.Amount / maxAmt) * chartHeight;
-				h = Math.Max(h, 4);
+				var h = 0d;
+				if (c.Amount > 0)
+				{
+					h = (double)(c.Amount / maxAmt) * chartHeight;
+					h = Math.Max(h, 4);
+				}
+
+				var caption = c.Name.Length > 10 ? c.Name[..7] + "…" : c.Name;
+				var isTop = c.IsTopCategory && c.Amount > 0;
+				var barColor = kind == TransactionKind.Expense
+					? (isTop ? topExpense : expenseBar)
+					: (isTop ? topIncome : incomeBar);
+				Bars.Add(new ChartBarDisplay
+				{
+					Icon = c.Icon,
+					Caption = caption,
+					BarHeight = h,
+					BarColor = barColor
+				});
 			}
 
-			var caption = c.Name.Length > 10 ? c.Name[..7] + "…" : c.Name;
-			var isTop = c.IsTopCategory && c.Amount > 0;
-			var barColor = kind == TransactionKind.Expense
-				? (isTop ? topExpense : expenseBar)
-				: (isTop ? topIncome : incomeBar);
-			Bars.Add(new ChartBarDisplay
-			{
-				Icon = c.Icon,
-				Caption = caption,
-				BarHeight = h,
-				BarColor = barColor
-			});
+			YAxisZeroLabel = FormatAxis(0);
+			YAxisLowLabel = FormatAxis(maxAmt * 0.25m);
+			YAxisMidLabel = FormatAxis(maxAmt * 0.5m);
+			YAxisHighLabel = FormatAxis(maxAmt * 0.75m);
+			YAxisMaxLabel = FormatAxis(maxAmt);
+		}
+		catch (Exception)
+		{
+			// Keep UI stable; next refresh may succeed.
+		}
+	}
+
+	[RelayCommand]
+	async Task PickStatisticsMonthAsync()
+	{
+		if (Shell.Current is null)
+			return;
+
+		var months = new List<string>();
+		var refs = new List<DateTime>();
+		var cursor = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+		for (var i = 0; i < 48; i++)
+		{
+			refs.Add(cursor);
+			months.Add(cursor.ToString("MMMM yyyy", _currency.Culture));
+			cursor = cursor.AddMonths(-1);
 		}
 
-		YAxisZeroLabel = FormatAxis(0);
-		YAxisLowLabel = FormatAxis(maxAmt * 0.25m);
-		YAxisMidLabel = FormatAxis(maxAmt * 0.5m);
-		YAxisHighLabel = FormatAxis(maxAmt * 0.75m);
-		YAxisMaxLabel = FormatAxis(maxAmt);
+		var pick = await Shell.Current.DisplayActionSheet(
+			"Choose month for statistics",
+			"Cancel",
+			null,
+			months.ToArray());
+
+		if (pick is null || pick == "Cancel")
+			return;
+
+		var ix = months.IndexOf(pick);
+		if (ix < 0 || ix >= refs.Count)
+			return;
+
+		SelectedStatisticsMonth = new DateTime(refs[ix].Year, refs[ix].Month, 1);
+		await LoadAsync();
 	}
 
 	[RelayCommand]

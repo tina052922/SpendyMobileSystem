@@ -3,13 +3,15 @@ using Microsoft.Maui.Controls;
 using Spendy.Data;
 using Spendy.Data.Entities;
 using Spendy.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Spendy.Services;
 
 public sealed class SpendyDataService(
 	IDbContextFactory<SpendyDbContext> dbFactory,
 	ICurrencyService currency,
-	IUserSession session) : ISpendyDataService
+	IUserSession session,
+	ILogger<SpendyDataService> logger) : ISpendyDataService
 {
 	readonly WeakEventManager _dataChanged = new();
 
@@ -448,18 +450,54 @@ public sealed class SpendyDataService(
 		var uid = CurrentUserIdOrNull()
 			?? throw new InvalidOperationException("Not signed in.");
 
+		var trimmed = (name ?? string.Empty).Trim();
+		if (string.IsNullOrEmpty(trimmed))
+			throw new ArgumentException("Plan name is required.", nameof(name));
+		if (targetAmount <= 0)
+			throw new ArgumentOutOfRangeException(nameof(targetAmount), "Target amount must be greater than zero.");
+		if (targetDate == default)
+			throw new ArgumentOutOfRangeException(nameof(targetDate), "Target date is required.");
+
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+
+		// Stale session (e.g. prefs restored but DB file replaced) causes FOREIGN KEY constraint failures on insert.
+		var userExists = await db.Users.AsNoTracking()
+			.AnyAsync(u => u.Id == uid, cancellationToken);
+		if (!userExists)
+		{
+			logger.LogWarning(
+				"CreateSavingGoalAsync: session UserId {UserId} not found in SQLite at {DbPath}",
+				uid,
+				SpendyDatabasePaths.SqliteDatabasePath);
+			throw new InvalidOperationException(
+				"This device’s database has no account matching your session. Sign out, then sign in again (each platform uses its own database file).");
+		}
+
 		var g = new SavingGoalEntity
 		{
 			UserId = uid,
-			Name = name.Trim(),
+			Name = trimmed,
 			TargetAmount = decimal.Round(targetAmount, 2),
 			CurrentAmount = 0,
 			TargetDate = targetDate.Date,
 			IsEnded = false
 		};
 		db.SavingGoals.Add(g);
-		await db.SaveChangesAsync(cancellationToken);
+		try
+		{
+			await db.SaveChangesAsync(cancellationToken);
+		}
+		catch (DbUpdateException ex)
+		{
+			logger.LogError(ex,
+				"CreateSavingGoalAsync SaveChanges failed (UserId={UserId}, Db={Db})",
+				uid,
+				SpendyDatabasePaths.SqliteDatabasePath);
+			throw new InvalidOperationException(
+				"Could not save the savings goal. " + ExceptionDetailFormatter.DescribeChain(ex),
+				ex);
+		}
+
 		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 		return g.Id;
 	}
@@ -519,8 +557,7 @@ public sealed class SpendyDataService(
 		});
 
 		var expenseCat = await GetOrCreateCategoryAsync(db, "Savings goal", "🎯", CategoryScope.Expense, cancellationToken);
-		var incomeSavingsCat = await db.Categories.FirstAsync(
-			c => c.Scope == CategoryScope.Income && c.Name == "Savings", cancellationToken);
+		var incomeSavingsCat = await GetOrCreateCategoryAsync(db, "Savings", "🏦", CategoryScope.Income, cancellationToken);
 
 		if (movement == SavingMovement.Save)
 		{

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Spendy.Data;
@@ -14,6 +15,9 @@ public partial class AddTransactionViewModel : ObservableObject
 {
 	public const decimal MandatorySavingsIncomeThreshold = 20_000m;
 	public const decimal MandatorySavingsRate = 0.02m;
+
+	/// <summary>Expense category created by the app for allocations into savings goals (see SpendyDataService).</summary>
+	public const string SavingsGoalExpenseCategoryName = "Savings goal";
 
 	readonly ISpendyDataService _data;
 	readonly IProfilePhotoService _profilePhoto;
@@ -170,6 +174,86 @@ public partial class AddTransactionViewModel : ObservableObject
 		var dim = DateTime.DaysInMonth(y, m);
 		var day = Math.Clamp(SelectedDay, 1, dim);
 		var date = new DateTime(y, m, day, 12, 0, 0, DateTimeKind.Local);
+
+		// Expense → Savings goal category: allocate into a chosen savings goal (same ledger as Save Money).
+		if (kind == TransactionKind.Expense
+		    && string.Equals(cat.Name, SavingsGoalExpenseCategoryName, StringComparison.OrdinalIgnoreCase))
+		{
+			IReadOnlyList<SavingPlan> goals;
+			try
+			{
+				goals = await _data.GetSavingPlansAsync(endedOnly: false);
+			}
+			catch (Exception ex)
+			{
+				if (Shell.Current is not null)
+					await Shell.Current.DisplayAlert("Spendy", $"Could not load savings goals: {ex.Message}", "OK");
+				return;
+			}
+
+			if (goals.Count == 0)
+			{
+				if (Shell.Current is not null)
+					await Shell.Current.DisplayAlert(
+						"Spendy",
+						"Create a savings goal on the Savings tab first.",
+						"OK");
+				return;
+			}
+
+			var available = await _data.GetBalanceAsync();
+			if (amt > available)
+			{
+				if (Shell.Current is not null)
+					await Shell.Current.DisplayAlert(
+						"Spendy",
+						"You cannot save more than your available balance.",
+						"OK");
+				return;
+			}
+
+			var labels = goals
+				.Select(g =>
+					$"#{g.Id} {g.Name}  ({g.CurrencySymbol}{g.Current:N0} / {g.CurrencySymbol}{g.Target:N0})")
+				.ToArray();
+
+			if (Shell.Current is null)
+				return;
+
+			var pick = await Shell.Current.DisplayActionSheet(
+				"Savings goal — where should this go?",
+				"Cancel",
+				null,
+				labels);
+
+			if (pick is null || pick == "Cancel")
+				return;
+
+			var ix = Array.IndexOf(labels, pick);
+			if (ix < 0 || ix >= goals.Count)
+				return;
+
+			var goalId = goals[ix].Id;
+			var noteText = string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim();
+
+			try
+			{
+				await _data.AddSavingMovementAsync(
+					goalId,
+					amt,
+					SavingMovement.Save,
+					date,
+					noteText);
+			}
+			catch (Exception ex)
+			{
+				await Shell.Current.DisplayAlert("Spendy", $"Could not save to goal: {ex.Message}", "OK");
+				return;
+			}
+
+			await AppNavigation.PopAsync();
+			return;
+		}
 
 		if (kind == TransactionKind.Income && amt >= MandatorySavingsIncomeThreshold)
 		{

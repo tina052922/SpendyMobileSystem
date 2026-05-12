@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Solution>
-  <!-- Spendy Budget Tracker — .NET MAUI app (SQLite/EF Core, MVVM). -->
-  <!-- Auth: cold start is Splash → Get Started → Sign In; main shell only after a valid session (see AppNavigation / MainShellPage). -->
-  <!-- Open this file from the repo root. -->
+  <!-- Spendy – Budget Tracker (.NET MAUI, SQLite/EF Core, MVVM). Open from repo root. -->
+  <!-- UI: Settings password panel (dark inputs), Add/Edit savings plan date overlays + duration, -->
+  <!-- Statistics month picker (calendar icon), Add Transaction expense → Savings goal allocation. -->
+  <!-- Draw/Save Plan “Save money → choose goal” behavior unchanged in SavePlanDetailViewModel. -->
+  <!-- Classic Visual Studio: Spendy.sln references the same project. -->
   <Folder Name="/Spendy/">
     <Project Path="Spendy/Spendy.csproj" DisplayName="Spendy" />
   </Folder>

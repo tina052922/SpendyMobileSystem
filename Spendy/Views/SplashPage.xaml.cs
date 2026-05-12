@@ -13,20 +13,16 @@ public partial class SplashPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		// DB initialization can be slow on some devices (first launch / older storage).
-		// Start it in the background, but DO NOT block the splash UI/animation on it.
-		_ = Task.Run(async () =>
+		// Complete SQLite migration/seed before login — avoids races where SavingGoals inserts hit an unfinished schema.
+		try
 		{
-			try
-			{
-				var init = Ioc.Services.GetRequiredService<SpendyDbInitializer>();
-				await init.InitializeAsync();
-			}
-			catch
-			{
-				// If DB init fails, keep app responsive; subsequent screens can surface errors.
-			}
-		});
+			var init = Ioc.Services.GetRequiredService<SpendyDbInitializer>();
+			await init.InitializeAsync();
+		}
+		catch (Exception ex)
+		{
+			System.Diagnostics.Debug.WriteLine($"[Spendy] Database initialization failed: {ex}");
+		}
 
 		// Always show Splash → Get Started → Sign In. Restored sessions are applied on SignInPage (Remember me / saved user id).
 

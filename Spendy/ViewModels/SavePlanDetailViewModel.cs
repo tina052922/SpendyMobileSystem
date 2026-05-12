@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Spendy.Data;
@@ -52,30 +53,38 @@ public partial class SavePlanDetailViewModel : ObservableObject
 
 	public async Task LoadAsync()
 	{
-		HasIncome = await _data.HasAnyIncomeAsync();
-		var plan = await _data.GetSavingPlanAsync(_planId);
-		if (plan is null)
+		try
+		{
+			HasIncome = await _data.HasAnyIncomeAsync();
+			var plan = await _data.GetSavingPlanAsync(_planId);
+			if (plan is null)
+			{
+				if (Shell.Current is not null)
+					await Shell.Current.DisplayAlert("Spendy", "Plan not found.", "OK");
+				await AppNavigation.PopAsync();
+				return;
+			}
+
+			PlanTitle = plan.Name;
+			AmountLine = plan.AmountLine;
+			Progress = plan.Progress;
+			_currentBalance = plan.Current;
+
+			CanTransact = !plan.IsEnded && HasIncome;
+			ShowRestoreGoal = plan.IsEnded;
+
+			History.Clear();
+			foreach (var line in await _data.GetSavingHistoryAsync(_planId))
+				History.Add(line);
+
+			SaveMoneyCommand.NotifyCanExecuteChanged();
+			WithdrawCommand.NotifyCanExecuteChanged();
+		}
+		catch (Exception ex)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlert("Spendy", "Plan not found.", "OK");
-			await AppNavigation.PopAsync();
-			return;
+				await Shell.Current.DisplayAlert("Spendy", $"Unable to load plan: {ex.Message}", "OK");
 		}
-
-		PlanTitle = plan.Name;
-		AmountLine = plan.AmountLine;
-		Progress = plan.Progress;
-		_currentBalance = plan.Current;
-
-		CanTransact = !plan.IsEnded && HasIncome;
-		ShowRestoreGoal = plan.IsEnded;
-
-		History.Clear();
-		foreach (var line in await _data.GetSavingHistoryAsync(_planId))
-			History.Add(line);
-
-		SaveMoneyCommand.NotifyCanExecuteChanged();
-		WithdrawCommand.NotifyCanExecuteChanged();
 	}
 
 	[RelayCommand]
@@ -102,7 +111,58 @@ public partial class SavePlanDetailViewModel : ObservableObject
 			return;
 		}
 
-		await _data.AddSavingMovementAsync(_planId, amt, SavingMovement.Save, DateTime.Now, null);
+		IReadOnlyList<SavingPlan> goals;
+		try
+		{
+			goals = await _data.GetSavingPlansAsync(endedOnly: false);
+		}
+		catch (Exception ex)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", $"Could not load goals: {ex.Message}", "OK");
+			return;
+		}
+
+		if (goals.Count == 0)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", "No active savings goals.", "OK");
+			return;
+		}
+
+		var labels = goals
+			.Select(g =>
+				$"#{g.Id} {g.Name}  ({g.CurrencySymbol}{g.Current:N0} / {g.CurrencySymbol}{g.Target:N0})")
+			.ToArray();
+
+		if (Shell.Current is null)
+			return;
+
+		var pick = await Shell.Current.DisplayActionSheet(
+			"Choose savings goal",
+			"Cancel",
+			null,
+			labels);
+
+		if (pick is null || pick == "Cancel")
+			return;
+
+		var idx = Array.IndexOf(labels, pick);
+		if (idx < 0 || idx >= goals.Count)
+			return;
+
+		var goalId = goals[idx].Id;
+
+		try
+		{
+			await _data.AddSavingMovementAsync(goalId, amt, SavingMovement.Save, DateTime.Now, null);
+		}
+		catch (Exception ex)
+		{
+			await Shell.Current.DisplayAlert("Spendy", $"Could not save: {ex.Message}", "OK");
+			return;
+		}
+
 		await LoadAsync();
 		AmountInput = string.Empty;
 	}
@@ -127,7 +187,17 @@ public partial class SavePlanDetailViewModel : ObservableObject
 			return;
 		}
 
-		await _data.AddSavingMovementAsync(_planId, amt, SavingMovement.Withdraw, DateTime.Now, null);
+		try
+		{
+			await _data.AddSavingMovementAsync(_planId, amt, SavingMovement.Withdraw, DateTime.Now, null);
+		}
+		catch (Exception ex)
+		{
+			if (Shell.Current is not null)
+				await Shell.Current.DisplayAlert("Spendy", $"Could not withdraw: {ex.Message}", "OK");
+			return;
+		}
+
 		await LoadAsync();
 		AmountInput = string.Empty;
 	}
@@ -167,7 +237,16 @@ public partial class SavePlanDetailViewModel : ObservableObject
 		if (!ok)
 			return;
 
-		await _data.SetSavingGoalEndedAsync(_planId, true);
+		try
+		{
+			await _data.SetSavingGoalEndedAsync(_planId, true);
+		}
+		catch (Exception ex)
+		{
+			await Shell.Current.DisplayAlert("Spendy", ex.Message, "OK");
+			return;
+		}
+
 		await AppNavigation.PopAsync();
 	}
 
@@ -184,7 +263,16 @@ public partial class SavePlanDetailViewModel : ObservableObject
 		if (!ok)
 			return;
 
-		await _data.SetSavingGoalEndedAsync(_planId, false);
+		try
+		{
+			await _data.SetSavingGoalEndedAsync(_planId, false);
+		}
+		catch (Exception ex)
+		{
+			await Shell.Current.DisplayAlert("Spendy", ex.Message, "OK");
+			return;
+		}
+
 		await AppNavigation.PopAsync();
 	}
 }

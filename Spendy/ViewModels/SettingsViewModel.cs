@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.Maui.Controls;
 using Spendy.Services;
 using Spendy.Views;
@@ -145,6 +146,52 @@ public partial class SettingsViewModel : ObservableObject
 
 	[RelayCommand]
 	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());
+
+	/// <summary>Copies absolute path of spendy.db (same folder across restarts; differs per device/OS).</summary>
+	[RelayCommand]
+	async Task CopyDatabasePathAsync()
+	{
+		if (Shell.Current is null)
+			return;
+
+		var path = string.IsNullOrEmpty(SpendyDatabasePaths.SqliteDatabasePath)
+			? SpendyDbPathResolver.ResolveSqlitePath()
+			: SpendyDatabasePaths.SqliteDatabasePath;
+
+		await Clipboard.Default.SetTextAsync(path);
+
+		await Shell.Current.DisplayAlert(
+			"Spendy · Database path",
+			"Copied to clipboard:\n\n" + path +
+			"\n\nEach phone/PC keeps its own app data folder. To use the same data on Windows and Android, copy this file after closing the app, or use Share database backup.",
+			"OK");
+	}
+
+	[RelayCommand]
+	async Task ShareDatabaseBackupAsync()
+	{
+		if (Shell.Current is null)
+			return;
+
+		var path = string.IsNullOrEmpty(SpendyDatabasePaths.SqliteDatabasePath)
+			? SpendyDbPathResolver.ResolveSqlitePath()
+			: SpendyDatabasePaths.SqliteDatabasePath;
+
+		if (!File.Exists(path))
+		{
+			await Shell.Current.DisplayAlert(
+				"Spendy",
+				"No database file yet. Sign in and add data first.",
+				"OK");
+			return;
+		}
+
+		await Share.Default.RequestAsync(new ShareFileRequest
+		{
+			Title = "Spendy database backup (spendy.db)",
+			File = new ShareFile(path)
+		});
+	}
 
 	partial void OnSelectedCurrencyChanged(string value)
 	{

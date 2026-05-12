@@ -1,227 +1,115 @@
-# Spendy — Testing Guide
+# Spendy – Budget Tracker  
+## Feature & functionality test checklist
 
-This document describes how to build Spendy, verify core behavior, and run structured tests for the **.NET MAUI** app (`Spendy/Spendy.csproj`). Use it for QA, release checks, and regression testing after changes.
-
----
-
-## 1. Prerequisites
-
-| Requirement | Notes |
-|-------------|--------|
-| **.NET SDK** | Matches the project (e.g. .NET 9 per `Spendy.csproj` `TargetFrameworks`). Run `dotnet --version`. |
-| **Workload** | MAUI: `dotnet workload install maui` (or install via Visual Studio Installer). |
-| **IDE** (optional) | Visual Studio 2022+ with MAUI, or VS Code + CLI. |
-| **Device / emulator** | Android emulator or device, Windows (WinUI target), iOS/Mac only on macOS with Xcode. |
-
-**Build (example — Windows):**
-
-```bash
-dotnet build Spendy/Spendy.csproj -f net9.0-windows10.0.19041.0
-```
-
-**Build Android (example):**
-
-```bash
-dotnet build Spendy/Spendy.csproj -f net9.0-android
-```
-
-Adjust target framework names if your `Spendy.csproj` differs.
+Use this list for manual QA before demos, thesis defense, or releases. Check each item on **Windows** and **Android** (or your target platforms).  
 
 ---
 
-## 2. First launch & database
+### 1. Launch & database
 
-1. Install and open the app (debug or release).
-2. **Splash** runs, initializes SQLite (`spendy.db` under app data), seeds **categories** if empty, and applies any **schema migrations** (e.g. user-scoped columns).
-3. If a **saved session** exists (signed-in user id in preferences), the app may go straight to the **main shell**; otherwise you see **Get Started → Sign In**.
-
-**Checks:**
-
-- [ ] App starts without crash.
-- [ ] Cold start: unauthenticated flow reaches Sign In / Sign Up.
-- [ ] No unhandled exception dialogs during DB init.
+| # | Test | Expected |
+|---|------|----------|
+| 1.1 | Cold start app | Splash appears; navigation reaches Get Started / Sign In flow without crash |
+| 1.2 | Second launch | Data from previous session still present (same device) |
+| 1.3 | Debug / logs | Startup logs show SQLite path, file exists flag, and size for `spendy.db` |
 
 ---
 
-## 3. Authentication
+### 2. Authentication
 
-### 3.1 Sign up (register)
-
-**Path:** Sign In → Sign up (or equivalent navigation).
-
-**Password rules (enforced):**
-
-- Minimum **8** characters  
-- At least **one uppercase** letter  
-- At least **one digit**  
-- At least **one special character**  
-- **Confirm password** must match  
-
-**Checks:**
-
-- [ ] Empty or weak password shows a clear error (alert).
-- [ ] Mismatched confirm password is rejected.
-- [ ] Terms checkbox required before successful sign-up (if implemented).
-- [ ] Successful sign-up creates the user with **hashed** password (not plain text) and navigates to the **main app** (shell).
-- [ ] **Birthday** `DatePicker` cannot pick a date **after today** (`MaximumDate`).
-
-### 3.2 Sign in
-
-**Checks:**
-
-- [ ] Wrong email/password shows an error; no navigation to shell.
-- [ ] Correct credentials reach the main shell.
-- [ ] **Legacy accounts** without a stored hash: first successful login with a **policy-valid** password can establish the hash (migration path).
-
-### 3.3 Session & logout
-
-**Checks:**
-
-- [ ] **Log out** (e.g. Settings) clears session and returns to the **Sign In** stack.
-- [ ] After logout, **profile photo** resets appropriately (no other user’s image).
-- [ ] **Remember me** (if only UI today): verify behavior matches product spec when implemented.
-
-### 3.4 Optional: session restore
-
-After a successful login, kill the app and relaunch.
-
-- [ ] If session persistence is enabled, user may return to shell without signing in again (verify against current implementation).
+| # | Test | Expected |
+|---|------|----------|
+| 2.1 | Sign up new account | Success; lands in main app; user row in local DB |
+| 2.2 | Sign in correct credentials | Success; session restored |
+| 2.3 | Sign in wrong password | Clear error (e.g. incorrect password / no account on device) |
+| 2.4 | Sign in unknown email | Message indicates no account on this device (offline model) |
+| 2.5 | Sign out | Returns to sign-in stack; session cleared |
+| 2.6 | Forgot / offline password reset | Flow completes per implemented screens |
 
 ---
 
-## 4. Per-user data isolation (critical)
+### 3. Dashboard & calendar
 
-Use **two distinct test accounts**, e.g.:
-
-- `user-a@example.com`
-- `user-b@example.com`
-
-**Procedure:**
-
-1. Register and sign in as **User A**. Add a **transaction**, a **savings goal**, and set **profile** fields (name, photo if applicable).
-2. **Log out**.
-3. Register and sign in as **User B**.
-
-**Checks:**
-
-- [ ] **Dashboard / Statistics / Transactions** show **no** data from User A (empty or only B’s data).
-- [ ] **Savings** lists only User B’s goals.
-- [ ] **Profile** shows only User B’s profile; switching back to User A after logout/login shows only A’s data.
-- [ ] No mixing of balances, goals, or profile between users.
+| # | Test | Expected |
+|---|------|----------|
+| 3.1 | View summary / greeting | Reflects signed-in user |
+| 3.2 | Open monthly / day views (if applicable) | Correct dates and totals |
+| 3.3 | Toggle expense/income views | UI updates without crash |
 
 ---
 
-## 5. Profile
+### 4. Transactions (add & history)
 
-**Checks:**
-
-- [ ] Load profile: fields match the **current** user in SQLite.
-- [ ] Save profile: updates persist after navigating away and app restart (same user).
-- [ ] Email change: if allowed, duplicate email used by another account should fail with a clear message.
-- [ ] Profile image (if used): path stored per user; correct image after user switch.
-
----
-
-## 6. Settings
-
-**Checks:**
-
-- [ ] **Currency** selection updates formatting where applicable.
-- [ ] **Update Password** (expand section):  
-  - [ ] Current / new / confirm fields are readable (contrast).  
-  - [ ] Same password policy as registration.  
-  - [ ] Success message after a valid change.  
-  - [ ] Wrong current password rejected.
+| # | Test | Expected |
+|---|------|----------|
+| 4.1 | Add income | Amount appears in balance / history |
+| 4.2 | Add expense (category) | Deducts from available balance; appears in list |
+| 4.3 | Expense before any income | Blocked or warned per app rules |
+| 4.4 | Add expense → **Savings goal** category | Action sheet lists goals; allocation saves to chosen goal |
+| 4.5 | Mandatory savings on large income | Allocation flow opens and completes when applicable |
 
 ---
 
-## 7. Dashboard & transactions
+### 5. Statistics
 
-**Checks:**
-
-- [ ] **Expense / Income** toggle loads the correct summary for **today**.
-- [ ] **Add Transaction**: amount, category, date, save — appears in dashboard list and affects **balance**.
-- [ ] **Mandatory savings** flow (if used from income): allocates to selected goal per app rules.
-- [ ] Data scoped to **logged-in user** only (see §4).
+| # | Test | Expected |
+|---|------|----------|
+| 5.1 | View chart / totals | Matches transactions for selected period |
+| 5.2 | Calendar / month control | Changing month refreshes chart and category breakdown |
 
 ---
 
-## 8. Statistics
+### 6. Savings goals & plans
 
-**Checks:**
-
-- [ ] Month chart and category breakdown match transactions for the selected month and mode (expense/income).
-- [ ] Empty month shows sensible empty state (no crash).
-
----
-
-## 9. Savings
-
-**Checks:**
-
-- [ ] **Add savings plan**: name, amount, dates — saves and appears in list.
-- [ ] **Edit** / **detail** / **ended** flows open correct goal **for current user**.
-- [ ] Movements (save/withdraw) update goal balance and related notifications if implemented.
+| # | Test | Expected |
+|---|------|----------|
+| 6.1 | Add savings plan | Name, target amount, start/end dates; duration text updates |
+| 6.2 | Date pickers | Start / target date overlays open, dark theme, Done closes overlay |
+| 6.3 | Edit savings plan | Changes persist |
+| 6.4 | Save money from plan detail | Amount updates goal balance (Draw/Save plan flow) |
+| 6.5 | End / restore ended goals | Behaves as implemented |
 
 ---
 
-## 10. Notifications (in-app)
+### 7. Profile & settings
 
-**Checks:**
-
-- [ ] Items derive from **current user’s** goals/balance rules (e.g. upcoming deadlines).
-
----
-
-## 11. UI / UX smoke (auth & settings)
-
-**Checks:**
-
-- [ ] **Sign In / Sign Up**: labels, placeholders, and buttons readable on white card; navy header readable.
-- [ ] **Add / Edit savings plan** screens: layout consistent with **Add Transaction** dark sheet styling (no broken gradients).
-- [ ] **Settings** → Update Password: dark inset section readable.
+| # | Test | Expected |
+|---|------|----------|
+| 7.1 | Edit profile | Name/email/etc. save and reload |
+| 7.2 | Currency (PHP/USD) | Amounts and symbols update |
+| 7.3 | Update password | Current/new/confirm fields visible; validation works |
+| 7.4 | Copy database path | Path copied; alert explains per-device storage |
+| 7.5 | Share database backup | `spendy.db` share sheet opens when file exists |
 
 ---
 
-## 12. Regression checklist (short)
+### 8. Notifications
 
-Run before a release:
-
-| Area | Pass |
-|------|------|
-| Build (target platform) | ☐ |
-| Sign up + sign in + logout | ☐ |
-| Two-user isolation | ☐ |
-| Profile save / load | ☐ |
-| Password change in Settings | ☐ |
-| Add transaction + balance | ☐ |
-| Savings CRUD | ☐ |
-| Statistics month view | ☐ |
+| # | Test | Expected |
+|---|------|----------|
+| 8.1 | Open notifications screen | Loads without crash; content consistent with goals/deadlines if seeded |
 
 ---
 
-## 13. Troubleshooting
+### 9. Regression & stability
 
-| Symptom | Things to check |
-|---------|------------------|
-| Old user’s data visible for new user | Log out fully; confirm `IUserSession` / DB `UserId` on rows; reinstall only as last resort (clears local DB). |
-| Login fails after DB upgrade | Email normalization (lowercase); legacy account may need first-time password set per migration rules. |
-| Build fails | `dotnet workload install maui`; correct TFM; Android SDK / JDK for Android. |
-| UI not updating | `DataChanged` / navigation after auth; binding context on pages. |
-
----
-
-## 14. Automated tests (future)
-
-The solution may not include a unit test project yet. Recommended additions:
-
-- **Unit tests** for `PasswordPolicy`, password hashing, and email normalization.
-- **Integration tests** for `AuthService` + in-memory SQLite (EF Core).
-
-Track these as separate tasks when introducing a test project.
+| # | Test | Expected |
+|---|------|----------|
+| 9.1 | Rotate / resize window (desktop) | No overlapping broken layout on Settings cards |
+| 9.2 | Back navigation | Returns without losing unsaved critical state incorrectly |
+| 9.3 | Airplane mode | Core features still work (offline-first) |
 
 ---
 
-## Document history
+### 10. Cross-platform note (evaluation)
 
-- Created for manual QA and GitHub documentation of the Spendy MAUI application.
+| # | Test | Expected |
+|---|------|----------|
+| 10.1 | Same login on **two devices** without copying DB | **Not** expected: each device has its own `spendy.db`; document for thesis |
+| 10.2 | Copy backup to second device | Manual transfer only; verify after documented procedure |
+
+---
+
+**Tester:** _______________  
+**Date:** _______________  
+**Build / commit:** _______________  

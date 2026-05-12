@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Spendy.Data;
 using Spendy.Data.Entities;
 using System.Globalization;
@@ -13,7 +14,8 @@ public sealed class AuthService(
 	IUserSession session,
 	IPasswordHasher hasher,
 	IProfilePhotoService profilePhoto,
-	ISpendyDataService data) : IAuthService
+	ISpendyDataService data,
+	ILogger<AuthService> logger) : IAuthService
 {
 	public async Task<string?> RegisterAsync(
 		string firstName,
@@ -81,8 +83,15 @@ public sealed class AuthService(
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 		var user = await db.Users.FirstOrDefaultAsync(u => u.Email == normalized, cancellationToken);
+#if DEBUG
+		logger.LogDebug(
+			"Login debug: email normalized={Email}, userExists={Exists}, db={Db}",
+			normalized,
+			user is not null,
+			SpendyDatabasePaths.SqliteDatabasePath);
+#endif
 		if (user is null)
-			return "Invalid email or password.";
+			return "No account found for this email on this device. Sign up first, or use the device where you created the account.";
 
 		if (string.IsNullOrWhiteSpace(user.PasswordHash))
 		{
@@ -90,9 +99,19 @@ public sealed class AuthService(
 				return err;
 			user.PasswordHash = hasher.Hash(password);
 			await db.SaveChangesAsync(cancellationToken);
+#if DEBUG
+			logger.LogDebug("Login debug: set initial PasswordHash for user id {UserId}", user.Id);
+#endif
 		}
-		else if (!hasher.Verify(password, user.PasswordHash))
-			return "Invalid email or password.";
+		else
+		{
+			var passwordOk = hasher.Verify(password, user.PasswordHash);
+#if DEBUG
+			logger.LogDebug("Login debug: password hash matches={Ok} for user id {UserId}", passwordOk, user.Id);
+#endif
+			if (!passwordOk)
+				return "Incorrect password.";
+		}
 
 		session.SetCurrentUser(user.Id, persistForNextLaunch);
 		await profilePhoto.SyncFromCurrentUserAsync(data, cancellationToken);

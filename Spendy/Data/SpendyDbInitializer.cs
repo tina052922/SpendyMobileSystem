@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Maui.Storage;
 using Spendy.Data.Entities;
+using Spendy.Services;
 
 namespace Spendy.Data;
 
@@ -12,6 +13,7 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 	public async Task InitializeAsync(CancellationToken cancellationToken = default)
 	{
 		await using var db = await factory.CreateDbContextAsync(cancellationToken);
+		// Creates schema only when spendy.db does not exist yet; never deletes an existing database file.
 		await db.Database.EnsureCreatedAsync(cancellationToken);
 
 		await EnsureUserProfilePhotoPathColumnAsync(db, cancellationToken);
@@ -22,9 +24,15 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 		await EnsureIndexesAsync(db, cancellationToken);
 
 		if (await db.Categories.AnyAsync(cancellationToken))
+		{
+			System.Diagnostics.Debug.WriteLine(
+				$"[Spendy.Database] Ready (categories exist). SQLite: {SpendyDatabasePaths.SqliteDatabasePath}");
 			return;
+		}
 
 		await SeedCategoriesOnlyAsync(db, cancellationToken);
+		System.Diagnostics.Debug.WriteLine(
+			$"[Spendy.Database] Ready (seeded categories). SQLite: {SpendyDatabasePaths.SqliteDatabasePath}");
 	}
 
 	static async Task EnsurePasswordResetTokensTableAsync(SpendyDbContext db, CancellationToken ct)

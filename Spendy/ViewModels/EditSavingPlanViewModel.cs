@@ -47,12 +47,14 @@ public partial class EditSavingPlanViewModel : SavingPlanCalendarViewModelBase
 		if (start >= end)
 			start = end.AddDays(-14);
 		StartDate = start;
-		CalendarMonth = new DateTime(end.Year, end.Month, 1);
 	}
 
 	[RelayCommand]
 	async Task SaveAsync()
 	{
+		ShowStartDateOverlay = false;
+		ShowEndDateOverlay = false;
+
 		if (string.IsNullOrWhiteSpace(Name))
 		{
 			if (Shell.Current is not null)
