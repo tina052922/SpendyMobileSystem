@@ -55,9 +55,9 @@ public interface ISpendyDataService
 		decimal mandatorySavingsAmount,
 		CancellationToken cancellationToken = default);
 
-	Task<int> CreateSavingGoalAsync(string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default);
+	Task<int> CreateSavingGoalAsync(string name, decimal targetAmount, DateTime startDate, DateTime targetDate, CancellationToken cancellationToken = default);
 
-	Task UpdateSavingGoalAsync(int id, string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default);
+	Task UpdateSavingGoalAsync(int id, string name, decimal targetAmount, DateTime startDate, DateTime targetDate, CancellationToken cancellationToken = default);
 
 	Task SetSavingGoalEndedAsync(int id, bool isEnded, CancellationToken cancellationToken = default);
 

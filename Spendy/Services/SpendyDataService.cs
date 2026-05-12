@@ -326,6 +326,7 @@ public sealed class SpendyDataService(
 	SavingPlan MapPlan(SavingGoalEntity g)
 	{
 		var finished = g.TargetAmount > 0 && g.CurrentAmount >= g.TargetAmount;
+		var start = g.StartDate != default ? g.StartDate.Date : g.TargetDate.Date;
 		return new SavingPlan
 		{
 			Id = g.Id,
@@ -333,6 +334,7 @@ public sealed class SpendyDataService(
 			Current = g.CurrentAmount,
 			Target = g.TargetAmount,
 			TargetDate = g.TargetDate.ToString("MMM d, yyyy", currency.Culture),
+			StartDateValue = start,
 			TargetDateValue = g.TargetDate.Date,
 			IsEnded = g.IsEnded,
 			IsFinished = finished,
@@ -445,7 +447,7 @@ public sealed class SpendyDataService(
 		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));
 	}
 
-	public async Task<int> CreateSavingGoalAsync(string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default)
+	public async Task<int> CreateSavingGoalAsync(string name, decimal targetAmount, DateTime startDate, DateTime targetDate, CancellationToken cancellationToken = default)
 	{
 		var uid = CurrentUserIdOrNull()
 			?? throw new InvalidOperationException("Not signed in.");
@@ -455,8 +457,12 @@ public sealed class SpendyDataService(
 			throw new ArgumentException("Plan name is required.", nameof(name));
 		if (targetAmount <= 0)
 			throw new ArgumentOutOfRangeException(nameof(targetAmount), "Target amount must be greater than zero.");
+		if (startDate == default)
+			throw new ArgumentOutOfRangeException(nameof(startDate), "Start date is required.");
 		if (targetDate == default)
 			throw new ArgumentOutOfRangeException(nameof(targetDate), "Target date is required.");
+		if (targetDate.Date < startDate.Date)
+			throw new ArgumentOutOfRangeException(nameof(targetDate), "Target date must be on or after the start date.");
 
 		await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 
@@ -479,6 +485,7 @@ public sealed class SpendyDataService(
 			Name = trimmed,
 			TargetAmount = decimal.Round(targetAmount, 2),
 			CurrentAmount = 0,
+			StartDate = startDate.Date,
 			TargetDate = targetDate.Date,
 			IsEnded = false
 		};
@@ -502,7 +509,7 @@ public sealed class SpendyDataService(
 		return g.Id;
 	}
 
-	public async Task UpdateSavingGoalAsync(int id, string name, decimal targetAmount, DateTime targetDate, CancellationToken cancellationToken = default)
+	public async Task UpdateSavingGoalAsync(int id, string name, decimal targetAmount, DateTime startDate, DateTime targetDate, CancellationToken cancellationToken = default)
 	{
 		var uid = CurrentUserIdOrNull()
 			?? throw new InvalidOperationException("Not signed in.");
@@ -512,6 +519,7 @@ public sealed class SpendyDataService(
 			?? throw new InvalidOperationException("Goal not found.");
 		g.Name = name.Trim();
 		g.TargetAmount = decimal.Round(targetAmount, 2);
+		g.StartDate = startDate.Date;
 		g.TargetDate = targetDate.Date;
 		await db.SaveChangesAsync(cancellationToken);
 		_dataChanged.HandleEvent(this, EventArgs.Empty, nameof(DataChanged));

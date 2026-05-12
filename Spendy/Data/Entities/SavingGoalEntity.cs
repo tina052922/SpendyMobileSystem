@@ -6,6 +6,8 @@ public sealed class SavingGoalEntity
 	public string Name { get; set; } = string.Empty;
 	public decimal TargetAmount { get; set; }
 	public decimal CurrentAmount { get; set; }
+	/// <summary>Plan start (SQLite column required on existing deployments).</summary>
+	public DateTime StartDate { get; set; }
 	public DateTime TargetDate { get; set; }
 	public bool IsEnded { get; set; }
 

@@ -41,12 +41,8 @@ public partial class EditSavingPlanViewModel : SavingPlanCalendarViewModelBase
 
 		Name = plan.Name;
 		TargetAmountText = plan.Target.ToString("0.##", CultureInfo.InvariantCulture);
-		var end = plan.TargetDateValue.Date;
-		EndDate = end;
-		var start = end.AddMonths(-1);
-		if (start >= end)
-			start = end.AddDays(-14);
-		StartDate = start;
+		EndDate = plan.TargetDateValue.Date;
+		StartDate = plan.StartDateValue.Date;
 	}
 
 	[RelayCommand]
@@ -86,7 +82,7 @@ public partial class EditSavingPlanViewModel : SavingPlanCalendarViewModelBase
 			return;
 		}
 
-		await _data.UpdateSavingGoalAsync(_planId, Name.Trim(), target, EndDate.Date);
+		await _data.UpdateSavingGoalAsync(_planId, Name.Trim(), target, StartDate.Date, EndDate.Date);
 		await AppNavigation.PopAsync();
 	}
 }

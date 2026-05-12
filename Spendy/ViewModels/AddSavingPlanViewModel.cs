@@ -68,7 +68,8 @@ public partial class AddSavingPlanViewModel : SavingPlanCalendarViewModelBase
 
 		try
 		{
-			await _data.CreateSavingGoalAsync(PlanName.Trim(), target, EndDate.Date).ConfigureAwait(false);
+			await _data.CreateSavingGoalAsync(PlanName.Trim(), target, StartDate.Date, EndDate.Date)
+				.ConfigureAwait(false);
 		}
 		catch (Exception ex)
 		{

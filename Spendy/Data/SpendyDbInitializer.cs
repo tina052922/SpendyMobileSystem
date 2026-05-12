@@ -20,6 +20,7 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 		await EnsureUserPasswordHashColumnAsync(db, cancellationToken);
 		await EnsureTransactionsUserIdColumnAsync(db, cancellationToken);
 		await EnsureSavingGoalsUserIdColumnAsync(db, cancellationToken);
+		await EnsureSavingGoalsStartDateColumnAsync(db, cancellationToken);
 		await EnsurePasswordResetTokensTableAsync(db, cancellationToken);
 		await EnsureIndexesAsync(db, cancellationToken);
 
@@ -146,6 +147,27 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 			"""
 			DELETE FROM SavingTransactions
 			WHERE SavingGoalId NOT IN (SELECT Id FROM SavingGoals);
+			""", ct);
+	}
+
+	static async Task EnsureSavingGoalsStartDateColumnAsync(SpendyDbContext db, CancellationToken ct)
+	{
+		// Older DBs may lack StartDate; newer schemas expect it (NOT NULL on some deployments).
+		try
+		{
+			await db.Database.ExecuteSqlRawAsync(
+				"ALTER TABLE SavingGoals ADD COLUMN StartDate TEXT NULL;", ct);
+		}
+		catch (Exception ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)
+		                           || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+		{
+		}
+
+		await db.Database.ExecuteSqlRawAsync(
+			"""
+			UPDATE SavingGoals
+			SET StartDate = TargetDate
+			WHERE StartDate IS NULL;
 			""", ct);
 	}
 

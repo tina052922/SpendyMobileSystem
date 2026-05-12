@@ -59,6 +59,8 @@ public sealed class SavingPlan
 	public decimal Target { get; init; }
 	public required string TargetDate { get; init; }
 	public string CurrencySymbol { get; init; } = "₱";
+	/// <summary>Start date for edit forms / duration (falls back to target if legacy row).</summary>
+	public DateTime StartDateValue { get; init; }
 	/// <summary>Target date for edit forms / date pickers.</summary>
 	public DateTime TargetDateValue { get; init; }
 	public bool IsEnded { get; init; }
