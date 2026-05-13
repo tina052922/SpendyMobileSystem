@@ -30,6 +30,21 @@ public static class MauiProgram
 		// EnsureCreated only creates tables when the file is new — existing spendy.db is never replaced here.
 		var dbPath = SpendyDbPathResolver.ResolveSqlitePath();
 		SpendyDatabasePaths.SqliteDatabasePath = dbPath;
+		var existsBefore = File.Exists(dbPath);
+		long sz0 = 0;
+		if (existsBefore)
+		{
+			try
+			{
+				sz0 = new FileInfo(dbPath).Length;
+			}
+			catch
+			{
+			}
+		}
+
+		SpendyDatabaseDiagnostics.LogPath(dbPath, existsBefore, sz0);
+
 		builder.Services.AddDbContextFactory<SpendyDbContext>(options =>
 			options.UseSqlite($"Data Source={dbPath}"));
 
@@ -58,6 +73,8 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+		// Show Information-level logs from our category in Debug Output (some templates default to Warning).
+		builder.Logging.AddFilter("Spendy.Database", LogLevel.Information);
 
 		var app = builder.Build();
 		Ioc.Services = app.Services;
@@ -86,13 +103,14 @@ public static class MauiProgram
 				exists,
 				bytes);
 			log.LogInformation(
-				"Note: Windows vs Android use different device sandboxes; use Copy DB path in Settings or adb/USB to move spendy.db between machines for demos.");
+				"Note: Windows vs Android use different sandboxes. DB Browser on PC cannot open Android internal paths; pull spendy.db first (adb or Device File Explorer).");
 		}
 		catch
 		{
-			// Logging must never prevent startup.
-			System.Diagnostics.Debug.WriteLine(
-				$"[Spendy.Database] SQLite path: {SpendyDatabasePaths.SqliteDatabasePath}");
+			SpendyDatabaseDiagnostics.LogPath(
+				SpendyDatabasePaths.SqliteDatabasePath,
+				File.Exists(SpendyDatabasePaths.SqliteDatabasePath),
+				0);
 		}
 
 		return app;

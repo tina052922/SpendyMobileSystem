@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Spendy.Data;
@@ -63,6 +63,20 @@ public partial class StatisticsViewModel : ObservableObject
 	[ObservableProperty]
 	private DateTime _selectedStatisticsMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
 
+	/// <summary>Overlay month/year picker (calendar icon).</summary>
+	[ObservableProperty]
+	private bool _showStatisticsMonthPicker;
+
+	[ObservableProperty]
+	private int _selectedPickerMonthIndex;
+
+	[ObservableProperty]
+	private int _selectedPickerYear;
+
+	public ObservableCollection<string> MonthPickerItems { get; } = new();
+
+	public ObservableCollection<int> YearPickerItems { get; } = new();
+
 	public ObservableCollection<CategoryStat> Categories { get; } = new();
 
 	public ObservableCollection<ChartBarDisplay> Bars { get; } = new();
@@ -79,6 +93,14 @@ public partial class StatisticsViewModel : ObservableObject
 
 		_data.DataChanged += (_, _) =>
 			MainThread.BeginInvokeOnMainThread(() => _ = LoadAsync());
+
+		for (var m = 1; m <= 12; m++)
+			MonthPickerItems.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m));
+
+		var y0 = DateTime.Today.Year;
+		for (var y = y0 - 15; y <= y0 + 2; y++)
+			YearPickerItems.Add(y);
+
 		_ = LoadAsync();
 	}
 
@@ -180,37 +202,36 @@ public partial class StatisticsViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	async Task PickStatisticsMonthAsync()
+	void PickStatisticsMonth()
 	{
-		if (Shell.Current is null)
-			return;
-
-		var months = new List<string>();
-		var refs = new List<DateTime>();
-		var cursor = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-		for (var i = 0; i < 48; i++)
+		var m = SelectedStatisticsMonth;
+		SelectedPickerMonthIndex = Math.Clamp(m.Month - 1, 0, 11);
+		var y = m.Year;
+		if (YearPickerItems.Count > 0)
 		{
-			refs.Add(cursor);
-			months.Add(cursor.ToString("MMMM yyyy", _currency.Culture));
-			cursor = cursor.AddMonths(-1);
+			if (y < YearPickerItems[0])
+				y = YearPickerItems[0];
+			else if (y > YearPickerItems[^1])
+				y = YearPickerItems[^1];
 		}
 
-		var pick = await Shell.Current.DisplayActionSheet(
-			"Choose month for statistics",
-			"Cancel",
-			null,
-			months.ToArray());
+		SelectedPickerYear = y;
+		ShowStatisticsMonthPicker = true;
+	}
 
-		if (pick is null || pick == "Cancel")
-			return;
-
-		var ix = months.IndexOf(pick);
-		if (ix < 0 || ix >= refs.Count)
-			return;
-
-		SelectedStatisticsMonth = new DateTime(refs[ix].Year, refs[ix].Month, 1);
+	[RelayCommand]
+	async Task ApplyStatisticsMonthPickerAsync()
+	{
+		ShowStatisticsMonthPicker = false;
+		var month = Math.Clamp(SelectedPickerMonthIndex, 0, 11) + 1;
+		var year = SelectedPickerYear;
+		SelectedStatisticsMonth = new DateTime(year, month, 1);
 		await LoadAsync();
 	}
+
+	[RelayCommand]
+	void CancelStatisticsMonthPicker() =>
+		ShowStatisticsMonthPicker = false;
 
 	[RelayCommand]
 	void SelectExpense() => IsExpenseMode = true;

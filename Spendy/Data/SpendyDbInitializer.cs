@@ -70,42 +70,58 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 			"CREATE INDEX IF NOT EXISTS IX_SavingTransactions_SavingGoalId_Date ON SavingTransactions(SavingGoalId, Date);", ct);
 	}
 
-	static async Task EnsureUserProfilePhotoPathColumnAsync(SpendyDbContext db, CancellationToken ct)
+	/// <summary>Avoids redundant ALTERs so EF Core does not log failed commands when columns already exist.</summary>
+	static async Task<bool> SqliteColumnExistsAsync(SpendyDbContext db, string table, string column, CancellationToken ct)
 	{
+		if (!IsSafeSqlIdentifier(table) || !IsSafeSqlIdentifier(column))
+			return false;
+
+		var connection = db.Database.GetDbConnection();
+		var shouldClose = connection.State != System.Data.ConnectionState.Open;
+		if (shouldClose)
+			await connection.OpenAsync(ct);
 		try
 		{
-			await db.Database.ExecuteSqlRawAsync(
-				"ALTER TABLE Users ADD COLUMN ProfilePhotoPath TEXT NULL;", ct);
+			await using var cmd = connection.CreateCommand();
+			cmd.CommandText =
+				$"SELECT COUNT(*) FROM pragma_table_info('{table}') WHERE name = '{column}';";
+			var result = await cmd.ExecuteScalarAsync(ct);
+			return result is not null && Convert.ToInt64(result) > 0;
 		}
-		catch (Exception ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)
-		                           || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+		finally
 		{
+			if (shouldClose)
+				await connection.CloseAsync();
 		}
+	}
+
+	static bool IsSafeSqlIdentifier(string name) =>
+		name.Length > 0 && name.All(c => char.IsLetterOrDigit(c) || c == '_');
+
+	static async Task EnsureUserProfilePhotoPathColumnAsync(SpendyDbContext db, CancellationToken ct)
+	{
+		if (await SqliteColumnExistsAsync(db, "Users", "ProfilePhotoPath", ct))
+			return;
+
+		await db.Database.ExecuteSqlRawAsync(
+			"ALTER TABLE Users ADD COLUMN ProfilePhotoPath TEXT NULL;", ct);
 	}
 
 	static async Task EnsureUserPasswordHashColumnAsync(SpendyDbContext db, CancellationToken ct)
 	{
-		try
-		{
-			await db.Database.ExecuteSqlRawAsync(
-				"ALTER TABLE Users ADD COLUMN PasswordHash TEXT NULL;", ct);
-		}
-		catch (Exception ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)
-		                           || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
-		{
-		}
+		if (await SqliteColumnExistsAsync(db, "Users", "PasswordHash", ct))
+			return;
+
+		await db.Database.ExecuteSqlRawAsync(
+			"ALTER TABLE Users ADD COLUMN PasswordHash TEXT NULL;", ct);
 	}
 
 	static async Task EnsureTransactionsUserIdColumnAsync(SpendyDbContext db, CancellationToken ct)
 	{
-		try
+		if (!await SqliteColumnExistsAsync(db, "Transactions", "UserId", ct))
 		{
 			await db.Database.ExecuteSqlRawAsync(
 				"ALTER TABLE Transactions ADD COLUMN UserId INTEGER NULL;", ct);
-		}
-		catch (Exception ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)
-		                           || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
-		{
 		}
 
 		await db.Database.ExecuteSqlRawAsync(
@@ -122,14 +138,10 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 
 	static async Task EnsureSavingGoalsUserIdColumnAsync(SpendyDbContext db, CancellationToken ct)
 	{
-		try
+		if (!await SqliteColumnExistsAsync(db, "SavingGoals", "UserId", ct))
 		{
 			await db.Database.ExecuteSqlRawAsync(
 				"ALTER TABLE SavingGoals ADD COLUMN UserId INTEGER NULL;", ct);
-		}
-		catch (Exception ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)
-		                           || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
-		{
 		}
 
 		await db.Database.ExecuteSqlRawAsync(
@@ -153,14 +165,10 @@ public sealed class SpendyDbInitializer(IDbContextFactory<SpendyDbContext> facto
 	static async Task EnsureSavingGoalsStartDateColumnAsync(SpendyDbContext db, CancellationToken ct)
 	{
 		// Older DBs may lack StartDate; newer schemas expect it (NOT NULL on some deployments).
-		try
+		if (!await SqliteColumnExistsAsync(db, "SavingGoals", "StartDate", ct))
 		{
 			await db.Database.ExecuteSqlRawAsync(
 				"ALTER TABLE SavingGoals ADD COLUMN StartDate TEXT NULL;", ct);
-		}
-		catch (Exception ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)
-		                           || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
-		{
 		}
 
 		await db.Database.ExecuteSqlRawAsync(

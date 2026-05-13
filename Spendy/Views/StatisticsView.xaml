@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Spendy.Views.StatisticsView">
+    <Grid>
     <ScrollView BackgroundColor="{StaticResource SpendyPageBg}">
         <VerticalStackLayout x:Name="StatsRoot"
                              Spacing="0"
@@ -111,11 +112,6 @@
                            FontSize="11"
                            HorizontalTextAlignment="Center"
                            IsVisible="{Binding HasCategoryBreakdown}" />
-                    <Label Text="Tap calendar to change month"
-                           TextColor="#98A2B3"
-                           FontSize="10"
-                           HorizontalTextAlignment="Center"
-                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
                 <Border Grid.Column="2"
                         WidthRequest="42"
@@ -271,4 +267,91 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
+
+        <!-- Month/year picker (calendar icon) — dark sheet, minimal scrolling -->
+        <Grid IsVisible="{Binding ShowStatisticsMonthPicker}"
+              BackgroundColor="#CC000000"
+              ZIndex="100">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CancelStatisticsMonthPickerCommand}" />
+            </Grid.GestureRecognizers>
+            <Border Margin="28,24"
+                    Padding="22,20"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Fill"
+                    MaximumWidthRequest="400"
+                    BackgroundColor="{StaticResource SpendyDarkSheet}"
+                    StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Statistics period"
+                           TextColor="White"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="18"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="Choose month and year"
+                           TextColor="{StaticResource SpendyDarkMuted}"
+                           FontSize="13"
+                           HorizontalTextAlignment="Center" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Month"
+                                   TextColor="{StaticResource SpendyDarkMuted}"
+                                   FontSize="12" />
+                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                    StrokeThickness="0"
+                                    Padding="12,4">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Picker ItemsSource="{Binding MonthPickerItems}"
+                                        SelectedIndex="{Binding SelectedPickerMonthIndex}"
+                                        TextColor="White"
+                                        TitleColor="#8FA1B5"
+                                        FontSize="15"
+                                        BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Year"
+                                   TextColor="{StaticResource SpendyDarkMuted}"
+                                   FontSize="12" />
+                            <Border BackgroundColor="{StaticResource SpendyDarkInput}"
+                                    StrokeThickness="0"
+                                    Padding="12,4">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Picker ItemsSource="{Binding YearPickerItems}"
+                                        SelectedItem="{Binding SelectedPickerYear}"
+                                        TextColor="White"
+                                        TitleColor="#8FA1B5"
+                                        FontSize="15"
+                                        BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Button Text="Cancel"
+                                TextColor="White"
+                                BackgroundColor="#3E4E65"
+                                FontFamily="OpenSansSemibold"
+                                CornerRadius="22"
+                                HeightRequest="48"
+                                Command="{Binding CancelStatisticsMonthPickerCommand}" />
+                        <Button Grid.Column="1"
+                                Text="Apply"
+                                TextColor="White"
+                                BackgroundColor="{StaticResource SpendyBlueDeep}"
+                                FontFamily="OpenSansSemibold"
+                                CornerRadius="22"
+                                HeightRequest="48"
+                                Command="{Binding ApplyStatisticsMonthPickerCommand}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
 </ContentView>

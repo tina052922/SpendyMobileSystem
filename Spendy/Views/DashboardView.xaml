@@ -229,7 +229,7 @@
                 WidthRequest="56"
                 HeightRequest="56"
                 CornerRadius="28"
-                BackgroundColor="{StaticResource SpendyAccent}"
+                BackgroundColor="{StaticResource SpendyBlueDeep}"
                 HorizontalOptions="End"
                 VerticalOptions="End"
                 Margin="0,0,24,96"

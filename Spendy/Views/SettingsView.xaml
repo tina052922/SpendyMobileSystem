@@ -582,95 +582,45 @@
 
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
 
-                        <!-- Database: one spendy.db per install (AppData); copy/share to move between devices -->
+                        <!-- Debug builds only: how to inspect SQLite for demos / grading -->
+                        <VerticalStackLayout Padding="16,14,16,14"
+                                           Spacing="10"
+                                           BackgroundColor="#F8FAFC"
+                                           IsVisible="{Binding ShowDeveloperDatabaseSection}">
 
-                        <Grid Padding="16,12,16,12" ColumnDefinitions="*,Auto">
+                            <Label Text="Developer (Debug)"
 
-                            <Grid.GestureRecognizers>
+                                   TextColor="#667085"
 
-                                <TapGestureRecognizer Command="{Binding CopyDatabasePathCommand}" />
+                                   FontFamily="OpenSansSemibold"
 
-                            </Grid.GestureRecognizers>
+                                   FontSize="12" />
 
-                            <VerticalStackLayout Spacing="2">
+                            <Label Text="View spendy.db: install DB Browser for SQLite (sqlitebrowser.org). On Windows runs, paste the copied path in File Explorer. On Android, copy the file off the device first (Device File Explorer or adb). Visual Studio Output (Debug) shows a line starting with [Spendy.Database]."
 
-                                <Label Text="Copy database path"
+                                   TextColor="{StaticResource SpendyNavy}"
 
-                                       TextColor="{StaticResource SpendyNavy}"
+                                   FontSize="12"
 
-                                       FontFamily="OpenSansSemibold"
+                                   LineBreakMode="WordWrap" />
 
-                                       FontSize="15"
+                            <Button Text="Copy database path (debug)"
 
-                                       VerticalOptions="Center" />
+                                    BackgroundColor="{StaticResource SpendyNavy}"
 
-                                <Label Text="Full path to spendy.db (clipboard)"
+                                    TextColor="White"
 
-                                       TextColor="#667085"
+                                    FontFamily="OpenSansSemibold"
 
-                                       FontSize="12"
+                                    HeightRequest="46"
 
-                                       VerticalOptions="Center" />
+                                    CornerRadius="22"
 
-                            </VerticalStackLayout>
+                                    Command="{Binding CopyDatabasePathForDebugCommand}" />
 
-                            <Label Grid.Column="1"
+                        </VerticalStackLayout>
 
-                                   Text="›"
-
-                                   TextColor="#98A2B3"
-
-                                   FontSize="22"
-
-                                   VerticalOptions="Center" />
-
-                        </Grid>
-
-                        <BoxView HeightRequest="1" Color="#EEF2F6" />
-
-                        <Grid Padding="16,12,16,12" ColumnDefinitions="*,Auto">
-
-                            <Grid.GestureRecognizers>
-
-                                <TapGestureRecognizer Command="{Binding ShareDatabaseBackupCommand}" />
-
-                            </Grid.GestureRecognizers>
-
-                            <VerticalStackLayout Spacing="2">
-
-                                <Label Text="Share database backup"
-
-                                       TextColor="{StaticResource SpendyNavy}"
-
-                                       FontFamily="OpenSansSemibold"
-
-                                       FontSize="15"
-
-                                       VerticalOptions="Center" />
-
-                                <Label Text="Export spendy.db for another device"
-
-                                       TextColor="#667085"
-
-                                       FontSize="12"
-
-                                       VerticalOptions="Center" />
-
-                            </VerticalStackLayout>
-
-                            <Label Grid.Column="1"
-
-                                   Text="›"
-
-                                   TextColor="#98A2B3"
-
-                                   FontSize="22"
-
-                                   VerticalOptions="Center" />
-
-                        </Grid>
-
-                        <BoxView HeightRequest="1" Color="#EEF2F6" />
+                        <BoxView HeightRequest="1" Color="#EEF2F6" IsVisible="{Binding ShowDeveloperDatabaseSection}" />
 
                         <!-- Log out (neutral) -->
 
