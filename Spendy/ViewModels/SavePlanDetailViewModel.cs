@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Spendy.Data;
@@ -111,56 +112,27 @@ public partial class SavePlanDetailViewModel : ObservableObject
 			return;
 		}
 
-		IReadOnlyList<SavingPlan> goals;
+		var goalName = PlanTitle.Trim();
+		if (string.IsNullOrEmpty(goalName))
+			goalName = "goal";
+
 		try
 		{
-			goals = await _data.GetSavingPlansAsync(endedOnly: false);
+			await _data.AddSavingMovementAsync(_planId, amt, SavingMovement.Save, DateTime.Now, null);
 		}
 		catch (Exception ex)
 		{
 			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlert("Spendy", $"Could not load goals: {ex.Message}", "OK");
+				await Shell.Current.DisplayAlert("Spendy", $"Could not save: {ex.Message}", "OK");
 			return;
 		}
-
-		if (goals.Count == 0)
-		{
-			if (Shell.Current is not null)
-				await Shell.Current.DisplayAlert("Spendy", "No active savings goals.", "OK");
-			return;
-		}
-
-		var labels = goals
-			.Select(g =>
-				$"#{g.Id} {g.Name}  ({g.CurrencySymbol}{g.Current:N0} / {g.CurrencySymbol}{g.Target:N0})")
-			.ToArray();
-
-		if (Shell.Current is null)
-			return;
-
-		var pick = await Shell.Current.DisplayActionSheet(
-			"Choose savings goal",
-			"Cancel",
-			null,
-			labels);
-
-		if (pick is null || pick == "Cancel")
-			return;
-
-		var idx = Array.IndexOf(labels, pick);
-		if (idx < 0 || idx >= goals.Count)
-			return;
-
-		var goalId = goals[idx].Id;
 
 		try
 		{
-			await _data.AddSavingMovementAsync(goalId, amt, SavingMovement.Save, DateTime.Now, null);
+			await Toast.Make($"Successfully saved to {goalName}", ToastDuration.Short).Show();
 		}
-		catch (Exception ex)
+		catch
 		{
-			await Shell.Current.DisplayAlert("Spendy", $"Could not save: {ex.Message}", "OK");
-			return;
 		}
 
 		await LoadAsync();
@@ -187,6 +159,10 @@ public partial class SavePlanDetailViewModel : ObservableObject
 			return;
 		}
 
+		var goalName = PlanTitle.Trim();
+		if (string.IsNullOrEmpty(goalName))
+			goalName = "goal";
+
 		try
 		{
 			await _data.AddSavingMovementAsync(_planId, amt, SavingMovement.Withdraw, DateTime.Now, null);
@@ -196,6 +172,14 @@ public partial class SavePlanDetailViewModel : ObservableObject
 			if (Shell.Current is not null)
 				await Shell.Current.DisplayAlert("Spendy", $"Could not withdraw: {ex.Message}", "OK");
 			return;
+		}
+
+		try
+		{
+			await Toast.Make($"Successfully withdrawn from {goalName}", ToastDuration.Short).Show();
+		}
+		catch
+		{
 		}
 
 		await LoadAsync();

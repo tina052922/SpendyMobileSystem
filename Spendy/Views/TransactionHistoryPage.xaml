@@ -76,6 +76,11 @@
                                     <Label Text="{Binding Category}"
                                            TextColor="{StaticResource SpendyNavy}"
                                            FontAttributes="Bold" />
+                                    <Label Text="{Binding DetailNote}"
+                                           IsVisible="{Binding HasDetailNote}"
+                                           TextColor="{StaticResource SpendyMutedText}"
+                                           FontSize="12"
+                                           LineBreakMode="WordWrap" />
                                     <Label Text="{Binding Time}"
                                            TextColor="{StaticResource SpendyMutedText}"
                                            FontSize="12" />

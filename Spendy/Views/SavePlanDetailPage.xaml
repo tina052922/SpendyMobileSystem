@@ -32,8 +32,8 @@
                     <Border Grid.Column="2"
                             WidthRequest="44"
                             HeightRequest="44"
+                            BackgroundColor="Transparent"
                             StrokeThickness="0"
-                            BackgroundColor="White"
                             VerticalOptions="Center">
                         <Border.StrokeShape>
                             <Ellipse />
@@ -41,7 +41,7 @@
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnNotificationsTapped" />
                         </Border.GestureRecognizers>
-                        <Image Source="darkbluenotificon.png"
+                        <Image Source="whitenotificon.png"
                                WidthRequest="24"
                                HeightRequest="24"
                                Aspect="AspectFit"

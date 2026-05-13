@@ -21,6 +21,11 @@ public sealed class TransactionItem
 	public required string Time { get; init; }
 	public string CurrencySymbol { get; init; } = "₱";
 
+	/// <summary>Optional line from DB Notes (e.g. savings goal save/withdraw).</summary>
+	public string? DetailNote { get; init; }
+
+	public bool HasDetailNote => !string.IsNullOrWhiteSpace(DetailNote);
+
 	public string FormattedAmount =>
 		Amount < 0 ? $"-{CurrencySymbol}{Math.Abs(Amount):N0}" : $"+{CurrencySymbol}{Amount:N0}";
 

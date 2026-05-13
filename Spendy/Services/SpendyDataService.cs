@@ -135,7 +135,8 @@ public sealed class SpendyDataService(
 			Icon = t.Category?.Icon ?? "•",
 			CurrencySymbol = currency.Symbol,
 			Amount = kind == TransactionKind.Expense ? -t.Amount : t.Amount,
-			Time = t.Date.ToString("HH:mm", currency.Culture)
+			Time = t.Date.ToString("HH:mm", currency.Culture),
+			DetailNote = string.IsNullOrWhiteSpace(t.Notes) ? null : t.Notes.Trim()
 		}).ToList();
 
 		var dateLabel = start.ToString("ddd, d MMMM", currency.Culture);
@@ -262,6 +263,7 @@ public sealed class SpendyDataService(
 			CurrencySymbol = currency.Symbol,
 			Amount = kind == TransactionKind.Expense ? -t.Amount : t.Amount,
 			Time = t.Date.ToString("MMM d, yyyy • HH:mm", currency.Culture),
+			DetailNote = string.IsNullOrWhiteSpace(t.Notes) ? null : t.Notes.Trim()
 		}).ToList();
 	}
 

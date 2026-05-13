@@ -52,19 +52,36 @@
                         </Border>
                     </Grid>
                 </Grid>
-                <Grid Padding="16,8,16,10">
-                    <Label Text="Ended"
-                           TextColor="{StaticResource SpendyRed}"
-                           FontAttributes="Bold"
-                           FontSize="13"
-                           HorizontalOptions="End">
-                        <Label.GestureRecognizers>
+                <Grid Padding="16,12,16,16"
+                      ColumnDefinitions="*,Auto">
+                    <Border Grid.Column="1"
+                            BackgroundColor="#FFF5F5"
+                            Stroke="{StaticResource SpendyRed}"
+                            StrokeThickness="1.5"
+                            Padding="16,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="22" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnEndedTapped" />
-                        </Label.GestureRecognizers>
-                    </Label>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="6"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center">
+                            <Label Text="Ended plans"
+                                   TextColor="{StaticResource SpendyRed}"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="14"
+                                   VerticalOptions="Center" />
+                            <Label Text="›"
+                                   TextColor="{StaticResource SpendyRed}"
+                                   FontSize="16"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
                 </Grid>
 
-                <Grid Margin="24,-10,24,0">
+                <Grid Margin="24,0,24,0">
                     <VerticalStackLayout IsVisible="{Binding ShowEmptyState}"
                                          Padding="0,32,0,24"
                                          Spacing="12">

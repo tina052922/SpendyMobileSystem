@@ -582,46 +582,6 @@
 
                         <BoxView HeightRequest="1" Color="#EEF2F6" />
 
-                        <!-- Debug builds only: how to inspect SQLite for demos / grading -->
-                        <VerticalStackLayout Padding="16,14,16,14"
-                                           Spacing="10"
-                                           BackgroundColor="#F8FAFC"
-                                           IsVisible="{Binding ShowDeveloperDatabaseSection}">
-
-                            <Label Text="Developer (Debug)"
-
-                                   TextColor="#667085"
-
-                                   FontFamily="OpenSansSemibold"
-
-                                   FontSize="12" />
-
-                            <Label Text="View spendy.db: install DB Browser for SQLite (sqlitebrowser.org). On Windows runs, paste the copied path in File Explorer. On Android, copy the file off the device first (Device File Explorer or adb). Visual Studio Output (Debug) shows a line starting with [Spendy.Database]."
-
-                                   TextColor="{StaticResource SpendyNavy}"
-
-                                   FontSize="12"
-
-                                   LineBreakMode="WordWrap" />
-
-                            <Button Text="Copy database path (debug)"
-
-                                    BackgroundColor="{StaticResource SpendyNavy}"
-
-                                    TextColor="White"
-
-                                    FontFamily="OpenSansSemibold"
-
-                                    HeightRequest="46"
-
-                                    CornerRadius="22"
-
-                                    Command="{Binding CopyDatabasePathForDebugCommand}" />
-
-                        </VerticalStackLayout>
-
-                        <BoxView HeightRequest="1" Color="#EEF2F6" IsVisible="{Binding ShowDeveloperDatabaseSection}" />
-
                         <!-- Log out (neutral) -->
 
                         <Grid Padding="16" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">

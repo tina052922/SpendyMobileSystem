@@ -50,6 +50,7 @@ Use this list for manual QA before demos, thesis defense, or **final project eva
 | 4.2 | Add expense | Balance decreases; blocked/warned if **no income exists yet** |
 | 4.3 | Expense → **Savings goal** category | Action sheet lists active goals; deposit respects available balance; goal **CurrentAmount** updates |
 | 4.4 | Income ≥ **₱20,000** | **Mandatory savings** modal opens (2% rule); completing allocation saves income + mandatory movement |
+| 4.5 | **History** (expense / income) | Rows with savings flows show subtitle from notes when present (e.g. **Saved to …** / **Withdrawn from …**) |
 
 ---
 
@@ -69,7 +70,7 @@ Use this list for manual QA before demos, thesis defense, or **final project eva
 |---|------|----------|
 | 6.1 | Add savings plan | Name, target, **start date**, **target date** persist |
 | 6.2 | Edit plan | Changes saved |
-| 6.3 | Plan detail | Progress line correct; **save** / **withdraw** update balance when income prerequisite met |
+| 6.3 | Plan detail | **Save Money** / **Withdraw** apply to **this goal only** (no extra “choose goal” prompt); toasts on success; dashboard available balance updates |
 | 6.4 | Ended link | **Ended savings** shows ended goals as implemented |
 | 6.5 | Restore ended goal | **Show restore** behavior matches implementation |
 
@@ -82,7 +83,6 @@ Use this list for manual QA before demos, thesis defense, or **final project eva
 | 7.1 | Profile | Name, email, phone, photo path sync; edits persist in SQLite |
 | 7.2 | Currency **PHP / USD** | Symbols and formatting update across Home, Statistics, Savings |
 | 7.3 | Change password | Strength indicator; validation; success message |
-| 7.4 | Copy database path (**Debug** only) | Path copied; alert explains Windows vs Android access to `spendy.db` |
 
 ---
 

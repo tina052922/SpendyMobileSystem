@@ -1,8 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
 using Spendy.Services;
 using Spendy.Views;
 
@@ -18,14 +16,6 @@ public partial class SettingsViewModel : ObservableObject
 	CancellationTokenSource? _loadCts;
 
 	public ImageSource ProfilePhoto => _profilePhoto.Photo;
-
-	/// <summary>Debug-only UI for inspecting SQLite (hidden in Release).</summary>
-	public bool ShowDeveloperDatabaseSection =>
-#if DEBUG
-		true;
-#else
-		false;
-#endif
 
 	[ObservableProperty]
 	private string _selectedCurrency = "PHP";
@@ -155,49 +145,6 @@ public partial class SettingsViewModel : ObservableObject
 
 	[RelayCommand]
 	Task OpenNotificationsAsync() => AppNavigation.PushAsync(new NotificationPage());
-
-	[RelayCommand]
-	async Task CopyDatabasePathForDebugAsync()
-	{
-#if DEBUG
-		if (Shell.Current is null)
-			return;
-
-		var path = string.IsNullOrEmpty(SpendyDatabasePaths.SqliteDatabasePath)
-			? SpendyDbPathResolver.ResolveSqlitePath()
-			: SpendyDatabasePaths.SqliteDatabasePath;
-
-		await Clipboard.Default.SetTextAsync(path);
-
-		var nl = Environment.NewLine;
-		var onAndroid = DeviceInfo.Current.Platform == DevicePlatform.Android;
-		string hint;
-		if (onAndroid)
-		{
-			hint =
-				"DB Browser on Windows cannot open this Android-only folder." + nl + nl +
-				"Copy the database to your PC first, then open the copy:" + nl +
-				"- Android Studio: View → Tool Windows → Device File Explorer → …/files/spendy.db → Save As." + nl +
-				"- Or (USB debugging): adb pull \"" + path + "\" C:\\Temp\\spendy.db" + nl + nl +
-				"In DB Browser use File → Open Database and select that saved spendy.db file.";
-		}
-		else
-		{
-			hint =
-				"In DB Browser: File → Open Database, browse to the folder above and pick spendy.db " +
-				"(use the full file name ending in .db, not only \"spendy\")." + nl + nl +
-				"You can paste the path into Windows File Explorer’s address bar to open the folder.";
-		}
-
-		await Shell.Current.DisplayAlert(
-			"Spendy (debug)",
-			"Path copied to clipboard." + nl + nl + path + nl + nl + hint + nl + nl +
-			"Visual Studio: set Output to Show output from: Debug — search for [Spendy.Database].",
-			"OK");
-#else
-		await Task.CompletedTask;
-#endif
-	}
 
 	partial void OnSelectedCurrencyChanged(string value)
 	{
