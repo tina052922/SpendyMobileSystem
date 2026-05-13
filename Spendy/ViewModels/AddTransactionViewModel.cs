@@ -13,8 +13,9 @@ namespace Spendy.ViewModels;
 
 public partial class AddTransactionViewModel : ObservableObject
 {
-	public const decimal MandatorySavingsIncomeThreshold = 20_000m;
-	public const decimal MandatorySavingsRate = 0.02m;
+	/// <summary>Income at or above this amount (same numeric value in app currency) triggers mandatory savings before the income is saved.</summary>
+	public const decimal MandatorySavingsIncomeThreshold = 500_000m;
+	public const decimal MandatorySavingsRate = 0.10m;
 
 	/// <summary>Expense category created by the app for allocations into savings goals (see SpendyDataService).</summary>
 	public const string SavingsGoalExpenseCategoryName = "Savings goal";

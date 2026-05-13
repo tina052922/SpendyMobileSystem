@@ -442,7 +442,7 @@ public sealed class SpendyDataService(
 			Amount = dep,
 			Type = SavingMovement.Save,
 			Date = date,
-			Notes = "Mandatory 2% income allocation"
+			Notes = "Mandatory savings allocation (policy)"
 		});
 
 		await db.SaveChangesAsync(cancellationToken);

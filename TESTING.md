@@ -49,7 +49,7 @@ Use this list for manual QA before demos, thesis defense, or **final project eva
 | 4.1 | Add income | Balance increases; appears in list/history |
 | 4.2 | Add expense | Balance decreases; blocked/warned if **no income exists yet** |
 | 4.3 | Expense → **Savings goal** category | Action sheet lists active goals; deposit respects available balance; goal **CurrentAmount** updates |
-| 4.4 | Income ≥ **₱20,000** | **Mandatory savings** modal opens (2% rule); completing allocation saves income + mandatory movement |
+| 4.4 | Income ≥ **₱500,000** | **Mandatory savings** modal opens (**10%** rule); completing allocation saves income + mandatory movement |
 | 4.5 | **History** (expense / income) | Rows with savings flows show subtitle from notes when present (e.g. **Saved to …** / **Withdrawn from …**) |
 
 ---
@@ -190,7 +190,7 @@ Spendy is an offline-first personal finance mobile application built with **.NET
 - **Offline-first architecture:** All core features operate without network connectivity; data remains on-device in SQLite.  
 - **Hybrid navigation model:** Pre-auth **NavigationPage** stack for onboarding and login; post-auth **Shell** with a **custom four-tab bar** and pushed modal/pages for depth—demonstrates intentional UX separation between guest and signed-in states.  
 - **Calendar-based transaction viewer:** Month grid with per-day totals and drill-down to category breakdown for the selected income/expense mode—focused on **auditability** rather than generic charts only.  
-- **Mandatory savings policy:** Configurable threshold income triggers a **modal allocation** workflow (e.g., 2% rule), integrating budgeting discipline with the savings subsystem.  
+- **Mandatory savings policy:** High-threshold income triggers a **modal allocation** workflow (**10%** of income at **₱500,000** or above), integrating budgeting discipline with the savings subsystem.  
 - **Unified savings ledger:** Expenses routed through a **“Savings goal”** category tie directly to goal balances, keeping **available balance**, transactions, and goals consistent.  
 - **In-app intelligence layer:** Notifications synthesize **deadline proximity**, **balance risk**, and **monthly overspending** without push infrastructure—appropriate for an offline academic prototype.  
 - **MVVM discipline:** ViewModels encapsulate state and commands; services abstract data access—supporting testability and maintainability expected in capstone evaluation.  

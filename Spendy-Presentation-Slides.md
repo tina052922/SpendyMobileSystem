@@ -70,7 +70,7 @@ Offline-first personal finance mobile application
 ### Slide 8 — Transactions & business rules  
 - Add income/expense: **category, amount, date, notes**  
 - **Rule:** expenses blocked until **first income** is recorded  
-- **Large income:** mandatory savings allocation (threshold / %)  
+- **Large income:** mandatory savings allocation (**10%** when income ≥ **₱500,000**)  
 - **Savings goal** as expense category → pick goal and deposit  
 
 ---

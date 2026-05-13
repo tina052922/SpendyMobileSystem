@@ -55,7 +55,7 @@
                            TextColor="White"
                            FontFamily="OpenSansSemibold"
                            FontSize="20" />
-                    <Label Text="Required for income ₱20,000 or more"
+                    <Label Text="{Binding RequiredIncomeRuleHint}"
                            TextColor="#B3FFFFFF"
                            FontSize="13" />
                 </VerticalStackLayout>

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
@@ -38,6 +39,9 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 	[ObservableProperty]
 	private string _subtitleText = string.Empty;
 
+	/// <summary>Short header line for the modal (threshold is defined in <see cref="AddTransactionViewModel.MandatorySavingsIncomeThreshold"/>).</summary>
+	public string RequiredIncomeRuleHint { get; }
+
 	[ObservableProperty]
 	private bool _hasGoals;
 
@@ -74,9 +78,13 @@ public partial class MandatorySavingsAllocationViewModel : ObservableObject
 		_categoryId = categoryId;
 		_transactionDate = transactionDate;
 		_notes = notes;
+		var pctLabel = (AddTransactionViewModel.MandatorySavingsRate * 100m).ToString("0.#", CultureInfo.InvariantCulture);
+
 		MessageText = $"{_currency.Symbol}{mandatoryAmount.ToString("N2", _currency.Culture)} must be allocated to savings.";
 		SubtitleText =
-			$"2% of your {_currency.Symbol}{incomeAmount.ToString("N2", _currency.Culture)} income (required when income is {_currency.Symbol}{AddTransactionViewModel.MandatorySavingsIncomeThreshold.ToString("N0", _currency.Culture)} or more).";
+			$"{pctLabel}% of your {_currency.Symbol}{incomeAmount.ToString("N2", _currency.Culture)} income ({_currency.Symbol}{mandatoryAmount.ToString("N2", _currency.Culture)}) must be allocated to savings when gross income is {_currency.Symbol}{AddTransactionViewModel.MandatorySavingsIncomeThreshold.ToString("N0", _currency.Culture)} or more.";
+		RequiredIncomeRuleHint =
+			$"Required for income {_currency.Symbol}{AddTransactionViewModel.MandatorySavingsIncomeThreshold.ToString("N0", _currency.Culture)} or more";
 	}
 
 	partial void OnSelectedRowChanged(MandatoryGoalPickRow? value)

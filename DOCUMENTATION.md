@@ -58,7 +58,7 @@ Spendy is a **budget tracking system** that helps users:
 - **Add plan:** name, target amount, **start date** and **target date** (calendar-based selection).
 - **Edit plan** from the list row.
 - **Ended:** link to **Ended savings** for goals marked ended/finished.
-- **Mandatory savings (linked from income):** when **income** is at or above the app threshold (**₱20,000** in code), saving **2%** of that income is required before the income is finalized; a **modal allocation** flow lets the user pick which active goal receives the mandatory amount (implemented via `AddIncomeWithMandatorySavingsAsync`).
+- **Mandatory savings (linked from income):** when **income** is at or above **₱500,000** (see `AddTransactionViewModel.MandatorySavingsIncomeThreshold`), **10%** of that income must be allocated to a savings goal before the income is finalized; a **modal allocation** flow lets the user pick which active goal receives the mandatory amount (implemented via `AddIncomeWithMandatorySavingsAsync`).
 
 #### Transactions (Add transaction page)
 - **Modes:** expense vs income; **category** pickers per kind.
@@ -226,7 +226,7 @@ flowchart LR
   - Tap a plan → **save** or **withdraw**, view history; use **Edit** or **Ended** as needed.
 
 - **Large income**
-  - If income ≥ **₱20,000**, complete the **mandatory 2%** allocation modal toward a goal before the entry is saved.
+  - If income ≥ **₱500,000**, complete the **mandatory 10%** allocation modal toward a goal before the entry is saved.
 
 - **Settings**
   - **Profile**, **currency**, **password**, **logout**; in Debug, optional SQLite path copy.
