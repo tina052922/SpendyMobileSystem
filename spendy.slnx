@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Solution>
-  <!-- Spendy – Budget Tracker (.NET MAUI, SQLite/EF Core, MVVM). Open from repo root. -->
-  <!-- UI: Statistics dark month/year picker overlay (calendar icon); FAB uses SpendyBlueDeep; -->
-  <!-- Settings: Release-safe UI; Debug-only SQLite path hint + DB Browser instructions; -->
-  <!-- Savings plans date overlays, expense→goal allocation; SavePlanDetail save-money flow unchanged. -->
-  <!-- Classic Visual Studio: Spendy.sln references the same project. -->
-  <Folder Name="/Spendy/">
-    <Project Path="Spendy/Spendy.csproj" DisplayName="Spendy" />
-  </Folder>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Spendy/Spendy.csproj" />
 </Solution>
