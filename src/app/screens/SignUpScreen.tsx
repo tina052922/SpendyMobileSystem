@@ -1,13 +1,16 @@
 import { Eye } from 'lucide-react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import StatusBar from '../components/StatusBar';
 
 export default function SignUpScreen() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/dashboard');
+    navigate('/signin', { state: { email: email.trim(), password } });
   };
 
   return (
@@ -73,6 +76,8 @@ export default function SignUpScreen() {
               <input
                 type="email"
                 placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-[#F5F5F5] rounded-xl outline-none focus:ring-2 focus:ring-[#00B2FF] text-[14px]"
               />
             </div>
@@ -82,6 +87,8 @@ export default function SignUpScreen() {
               <input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-[#F5F5F5] rounded-xl outline-none focus:ring-2 focus:ring-[#00B2FF] text-[14px]"
               />
               <Eye className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

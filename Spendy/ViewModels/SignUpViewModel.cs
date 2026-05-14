@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Spendy.Services;
+using Spendy.Views;
 
 namespace Spendy.ViewModels;
 
@@ -104,15 +105,31 @@ public partial class SignUpViewModel : ObservableObject
 				return;
 			}
 
+			var registeredEmail = (Email ?? string.Empty).Trim();
+			var registeredPassword = Password;
+
+			// Registration establishes a session; send the user to sign-in so they log in explicitly.
+			_auth.Logout();
+
 			try
 			{
-				await Toast.Make("Registered successfully", ToastDuration.Short).Show();
+				await Toast.Make("Account created — please sign in.", ToastDuration.Short).Show();
 			}
 			catch
 			{
 			}
 
-			AppNavigation.GoToMainShell();
+			var nav = AppNavigation.TryGetRootNavigationPage();
+			if (nav is not null)
+			{
+				await nav.PopAsync(animated: true);
+				if (nav.CurrentPage is SignInPage signInPage
+				    && signInPage.BindingContext is SignInViewModel signInVm)
+				{
+					signInVm.Email = registeredEmail;
+					signInVm.Password = registeredPassword;
+				}
+			}
 		}
 		finally
 		{
